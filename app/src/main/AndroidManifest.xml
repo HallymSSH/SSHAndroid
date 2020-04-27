@@ -38,17 +38,6 @@
             </intent-filter>
 
         </activity>
-
-        <activity
-            android:name=".listview_add"
-            android:theme="@android:style/Theme.Dialog">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
 <!--        찬우-->
 <!--        시호-->
         <activity android:name=".PreferenceActivity"/>

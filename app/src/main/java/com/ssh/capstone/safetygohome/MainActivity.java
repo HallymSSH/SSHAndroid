@@ -47,11 +47,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // 권한부분
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1); //위치권한 탐색 허용 관련 내용
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1); //위치권한 탐색 허용 관련 내용
             }
             return;
         }
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         */
 
         // tmap 그리기
-        LinearLayout linearLayoutTmap = (LinearLayout)findViewById(R.id.linearLayoutTmap);
+        LinearLayout linearLayoutTmap = (LinearLayout) findViewById(R.id.linearLayoutTmap);
 
         tMapView = new TMapView(this);
         gps = new TMapGpsManager(this);
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         // tmap api key
         tMapView.setSKTMapApiKey("l7xx184eefe2e110491b9ff59f533d66b17b");
-        linearLayoutTmap.addView( tMapView );
+        linearLayoutTmap.addView(tMapView);
 
         //현재위치 표시될 아이콘
         tMapView.setIconVisibility(true);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setGps();
-                Toast.makeText(getApplicationContext(),"현재위치",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "현재위치", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,1000,1,mLocationListener); // gps로 하기
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // gps로 하기
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 tMapView.setLocationPoint(longitude, latitude); // 현재위치로 표시될 좌표의 위도, 경도를 설정합니다.
                 //tMapView.setIconVisibility(true);
                 //tMapView.setCenterPoint(longitude, latitude,true); // 현재 위치로 이동
-                tMapView.setCenterPoint(longitude, latitude,true); // 현재 위치로 이동
+                tMapView.setCenterPoint(longitude, latitude, true); // 현재 위치로 이동
             }
 
         }
@@ -150,20 +150,17 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    protected void show(View view)
-    {
+    protected void show(View view) {
         String dialogTitle;
         String dialogText;
 
         if (view.getId() == R.id.imageButton1) {
             dialogTitle = "사이렌";
             dialogText = "사이렌 ㄱㄱ?";
-        }
-        else if (view.getId() == R.id.imageButton2) {
+        } else if (view.getId() == R.id.imageButton2) {
             dialogTitle = "긴급상황";
             dialogText = "긴급상황 ㄱㄱ?";
-        }
-        else {
+        } else {
             dialogTitle = "경찰서 연락";
             dialogText = "경찰서 ㄱㄱ?";
         }
@@ -174,13 +171,13 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("예",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(),"예",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "예", Toast.LENGTH_LONG).show();
                     }
                 });
         builder.setNegativeButton("아니오",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(),"아니오",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "아니오", Toast.LENGTH_LONG).show();
                     }
                 });
         builder.show();
@@ -188,9 +185,9 @@ public class MainActivity extends AppCompatActivity {
 
     // 황찬우
     //Button과 Intent 세팅
-    public void setting(){
+    public void setting() {
         //FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton2);
-        btn_ToPopUp = (FloatingActionButton)findViewById(R.id.floatingActionButton);
+        btn_ToPopUp = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         imageButton5 = (ImageButton) findViewById(R.id.imageButton5);
         Intent_ToPopUp = new Intent(MainActivity.this, com.ssh.capstone.safetygohome.popup_window.class);
 
@@ -199,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //button listener 세팅
-    public void setlistener(){
+    public void setlistener() {
         btn_ToPopUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
