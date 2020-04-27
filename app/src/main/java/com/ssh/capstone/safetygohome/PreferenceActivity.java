@@ -28,7 +28,9 @@ public class PreferenceActivity extends AppCompatActivity {
     public void setting() {
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_address = (Button) findViewById(R.id.btn_address);
+        btn_info = (Button) findViewById(R.id.btn_info);
         To_address = new Intent(getApplicationContext(),SearchAddress.class);
+        To_info = new Intent(getApplicationContext(),profile.class);
     }
 
     public void setListener() {
@@ -43,6 +45,13 @@ public class PreferenceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(To_address);
+            }
+        });
+
+        btn_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(To_info);
             }
         });
     }
