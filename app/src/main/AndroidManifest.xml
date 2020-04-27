@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-<!--        찬우-->
+        <!--찬우-->
         <activity android:name=".contactbook_window" />
         <activity
             android:name=".popup_window"
@@ -37,10 +37,13 @@
             </intent-filter>
 
         </activity>
-<!--        찬우-->
-<!--        시호-->
+        <!--찬우-->
+
+        <!--시호-->
         <activity android:name=".PreferenceActivity"/>
-        <!--        시호-->
+        <!--시호-->
+
+        <activity android:name=".DestinationList"/>
     </application>
 
 </manifest>
