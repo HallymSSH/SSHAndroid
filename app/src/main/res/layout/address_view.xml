@@ -9,23 +9,23 @@
     <WebView
         android:id="@+id/daum_webview"
         android:layout_width="match_parent"
-        android:layout_height="389dp"
-        android:layout_marginTop="76dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_height="386dp"
+        android:layout_marginTop="114dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/daum_result"
-        android:layout_width="296dp"
-        android:layout_height="16dp"
-        android:layout_marginTop="136dp"
-        android:layout_marginEnd="68dp"
-        android:layout_marginRight="68dp"
-        android:autoSizeTextType="uniform"
-        android:gravity="center"
+        android:layout_width="305dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginLeft="53dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="53dp"
+        android:layout_marginRight="53dp"
         android:text="TextView"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/daum_webview" />
 </androidx.constraintlayout.widget.ConstraintLayout>
