@@ -24,6 +24,16 @@
         android:text="목적지 입력부분"
         tools:ignore="MissingConstraints" />
 
+    <Button
+        android:id="@+id/search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="@id/guideline2"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/destSearchText"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ListView
         android:id="@+id/addressList"
         android:layout_width="wrap_content"

@@ -16,5 +16,7 @@ public class contactbook_window extends AppCompatActivity {
         // requestWindowFeature(Window.FEATURE_NO_TITLE);  //타이틀바 없애기
         setContentView(R.layout.layout_contactbook);
 
+
+
     }
 }

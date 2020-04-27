@@ -3,10 +3,19 @@ package com.ssh.capstone.safetygohome;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,54 +29,68 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DestinationList extends AppCompatActivity {
+    private EditText destination;
+    private ListView listView;
+    private AddressListViewAdapter adapter;
+    private String address;
+    private Button search_button;
+    String[] temp = new String[100];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_destlist);
-    }
 
-    public void findAllPoi() {
+        adapter = new AddressListViewAdapter();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("POI 통합 검색");
+        destination = (EditText) findViewById(R.id.destSearchText);
+        listView = (ListView) findViewById(R.id.addressList);
+        listView.setAdapter(adapter);
 
-        final EditText input = new EditText(this);
-        builder.setView(input);
+        search_button = (Button) findViewById(R.id.search_button);
 
-        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+
+        search_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String strData = input.getText().toString();
-                TMapData tmapdata = new TMapData();
-
-                tmapdata.findAllPOI(strData, new TMapData.FindAllPOIListenerCallback() {
-                    @Override
-                    public void onFindAllPOI(ArrayList<TMapPOIItem> poiItem) {
-                        for (int i = 0; i < poiItem.size(); i++) {
-                            TMapPOIItem  item = poiItem.get(i);
-/*
-                            LogManager.printLog("POI Name: " + item.getPOIName().toString() + ", " +
-                                    "Address: " + item.getPOIAddress().replace("null", "")  + ", " +
-                                    "Point: " + item.getPOIPoint().toString());
-
- */
-                        }
-                    }
-                });
+            public void onClick(View v) {
+                adapter.clear();
+                adapter.notifyDataSetChanged();
+                address = destination.getText().toString();
+                if (address.getBytes().length <= 0) {
+                    Toast.makeText(getApplicationContext(), "값 없음", Toast.LENGTH_SHORT).show();
+                } else {
+                    findAllPoi(v, address);
+                }
             }
         });
-        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-
     }
 
+    Handler myHandler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            adapter.notifyDataSetChanged();
+        }
+    };
+
+    public void findAllPoi(View view, final String address) {
+        TMapData tmapdata = new TMapData();
+
+        tmapdata.findAllPOI(address, new TMapData.FindAllPOIListenerCallback() {
+            @Override
+            public void onFindAllPOI(ArrayList<TMapPOIItem> poiItem) {
+
+                for (int i = 0; i < poiItem.size(); i++) {
+                    TMapPOIItem item = poiItem.get(i);
+                    // Log.d("ABABABAB", "" + item.name);
+                    adapter.addItem(item.name);
+                    Message msg = myHandler.obtainMessage();
+                    myHandler.sendMessage(msg);
+                }
+            }
+        });
+    }
 }
