@@ -72,6 +72,7 @@ public class contactbook_window extends AppCompatActivity {
         name = FromAdd.getStringExtra("name");
         num = FromAdd.getStringExtra("num");
         Log.i("name : "+name,"num : "+ num);
+        edit_search.setText("name : "+name+", num : "+num);
 
         if(name != null && num != null){
             int count = adapter.getCount();
