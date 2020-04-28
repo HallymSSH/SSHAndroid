@@ -65,7 +65,7 @@ public class listview_add extends Activity {
 
                 ToBook.putExtra("name", name);
                 ToBook.putExtra("num", num);
-
+                ToBook.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(ToBook);
                 overridePendingTransition(0, 0);
             }
