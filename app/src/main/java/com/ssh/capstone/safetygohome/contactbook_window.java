@@ -56,6 +56,7 @@ public class contactbook_window extends AppCompatActivity {
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ToAdd.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(ToAdd);
             }
         });
