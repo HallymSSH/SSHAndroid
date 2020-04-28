@@ -67,6 +67,7 @@ public class listview_add extends Activity {
                 ToBook.putExtra("num", num);
 
                 startActivity(ToBook);
+                overridePendingTransition(0, 0);
             }
         });
 
