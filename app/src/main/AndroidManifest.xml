@@ -24,6 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DestinationList"/>
 
 <!--        찬우-->
         <activity android:name=".contactbook_window" />
@@ -53,6 +54,7 @@
 <!--        시호-->
         <activity android:name=".PreferenceActivity"/>
         <activity android:name=".SearchAddress"/>
+        <activity android:name=".profile"/>
         <!--        시호-->
     </application>
 
