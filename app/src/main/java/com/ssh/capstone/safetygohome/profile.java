@@ -3,6 +3,7 @@ package com.ssh.capstone.safetygohome;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,16 +16,22 @@ import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AlertDialogLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -41,8 +48,7 @@ public class profile extends AppCompatActivity {
     private final int GET_GALLERY_IMAGE = 200;
 
 
-
-    @Override
+   @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_view);
@@ -175,23 +181,33 @@ public class profile extends AppCompatActivity {
     }
 
     public void inputname() {
+
+        FrameLayout container = new FrameLayout(this);
         final EditText editText = new EditText(this);
+        FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+        params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+        editText.setLayoutParams(params);
+        container.addView(editText);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(container);
         builder.setTitle("이름 변경");
         builder.setMessage("변경할 이름을 입력하세요");
-        builder.setView(editText);
+
         builder.setPositiveButton("입력", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 text_name.setText(editText.getText().toString());
             }
+
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                dialog.dismiss();
             }
         });
         builder.show();
     }
+
 }
