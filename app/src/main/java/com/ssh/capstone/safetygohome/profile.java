@@ -35,11 +35,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class profile extends AppCompatActivity {
 
     Button btn_profileback, btn_birthday, btn_sex;
-    ImageView profile_view;
+    CircleImageView profile_view;
     TextView textView_Date, textView_sex;
     private DatePickerDialog.OnDateSetListener listener;
     private final int GET_GALLERY_IMAGE = 200;
@@ -59,7 +61,7 @@ public class profile extends AppCompatActivity {
         btn_profileback = (Button) findViewById(R.id.btn_profileback);
         btn_birthday = (Button) findViewById(R.id.btn_birthday);
         btn_sex = (Button) findViewById(R.id.btn_sex);
-        profile_view = (ImageView) findViewById((R.id.profile_image));
+        profile_view = (CircleImageView) findViewById((R.id.profile_image));
         textView_Date = (TextView)findViewById(R.id.birthday);
         textView_sex = (TextView) findViewById(R.id.textView_sex);
 
@@ -160,7 +162,7 @@ public class profile extends AppCompatActivity {
                         Bitmap img = BitmapFactory.decodeStream(in);
                         in.close();
                         profile_view.setImageBitmap(img);
-                        profile_view.setClipToOutline(true);
+
 
                     } catch (Exception e)
                     {
