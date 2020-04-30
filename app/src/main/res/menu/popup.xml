@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id = "@+id/Album"
+        android:title="앨범에서 사진 선택"/>
+    <item android:id="@+id/basic"
+        android:title="기본이미지 선택"/>
+</menu>
