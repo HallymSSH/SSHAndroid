@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -23,13 +24,17 @@ public class RouteActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_route);
 
+        intent = getIntent();
+        String temp = intent.getStringExtra("destpoint");
+
+        Toast.makeText(getApplicationContext(), temp, Toast.LENGTH_LONG).show();
+
 
     }
 
 
     public void drawPedestrianPath() {
-        intent = getIntent();
-        intent.getStringExtra("destpoint");
+
 
         tMapView = new TMapView(this);
         TMapPoint point1 = tMapView.getLocationPoint(); // 출발점

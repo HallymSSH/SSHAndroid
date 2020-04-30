@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".DestinationList" />
+        <activity android:name=".RouteActivity" />
         <!--찬우-->
         <activity android:name=".contactbook_window" />
         <activity
