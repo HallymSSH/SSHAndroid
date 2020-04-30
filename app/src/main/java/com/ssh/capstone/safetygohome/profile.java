@@ -5,14 +5,10 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
-import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,15 +18,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -42,9 +36,11 @@ public class profile extends AppCompatActivity {
 
     Button btn_profileback, btn_birthday, btn_sex;
     CircleImageView profile_view;
-    TextView textView_Date, textView_sex;
+    TextView textView_Date, textView_sex, text_name;
     private DatePickerDialog.OnDateSetListener listener;
     private final int GET_GALLERY_IMAGE = 200;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +60,7 @@ public class profile extends AppCompatActivity {
         profile_view = (CircleImageView) findViewById((R.id.profile_image));
         textView_Date = (TextView)findViewById(R.id.birthday);
         textView_sex = (TextView) findViewById(R.id.textView_sex);
-
+        text_name = (TextView) findViewById(R.id.text_name);
         listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -72,6 +68,7 @@ public class profile extends AppCompatActivity {
 
             }
         };
+
     }
 
     public void setListener() {
@@ -131,6 +128,12 @@ public class profile extends AppCompatActivity {
             }
         });
 
+        text_name.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputname();
+            }
+        });
     }
 
     @Override
@@ -170,5 +173,26 @@ public class profile extends AppCompatActivity {
                     }
                 }
             }
+    }
+
+    public void inputname() {
+        final EditText editText = new EditText(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("이름 변경");
+        builder.setMessage("변경할 이름을 입력하세요");
+        builder.setView(editText);
+        builder.setPositiveButton("입력", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                text_name.setText(editText.getText().toString());
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
     }
 }
