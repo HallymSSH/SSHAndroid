@@ -70,7 +70,8 @@ public class DestinationList extends AppCompatActivity {
         listView.setOnItemClickListener((new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
-                intent.putExtra("destpoint", adapter.getItem(position).getPoint().toString());
+                intent.putExtra("getLat", adapter.getItem(position).getPoint().getLatitude());
+                intent.putExtra("getLon", adapter.getItem(position).getPoint().getLongitude());
                 startActivity(intent);
             }
         }));

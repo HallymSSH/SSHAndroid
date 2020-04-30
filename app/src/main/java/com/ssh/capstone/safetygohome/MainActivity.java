@@ -33,7 +33,7 @@ import com.skt.Tmap.TMapView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
+    View view;
     TMapView tMapView;
     TMapGpsManager gps;
 
@@ -212,4 +212,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

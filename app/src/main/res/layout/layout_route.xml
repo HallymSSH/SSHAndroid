@@ -1,35 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-<android.widget.LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.skt.tmapsample.tmapview.MapDraw">
 
-    <LinearLayout
-        android:id="@+id/linearLayoutTmap"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-    </LinearLayout>
-</android.widget.LinearLayout></code>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
--->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:orientation="vertical">
     <!--tools:context=".MainActivity"> -->
 
     <LinearLayout
-        android:id="@+id/linearLayoutTmap"
+        android:id="@+id/routeLayoutTmap"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -91,7 +72,7 @@
         android:clickable="true"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="@+id/linearLayoutTmap"
+        app:layout_constraintStart_toStartOf="@+id/routeLayoutTmap"
         app:srcCompat="@drawable/ic_near_me_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
