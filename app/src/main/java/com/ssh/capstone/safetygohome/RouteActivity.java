@@ -16,17 +16,20 @@ import com.skt.Tmap.TMapView;
 
 public class RouteActivity extends Activity {
     TMapView tMapView;
+    Intent intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_route);
-        Intent intent = getIntent();
-        String point2 = intent.getStringExtra("dest");
+
+
     }
 
 
     public void drawPedestrianPath() {
+        intent = getIntent();
+        intent.getStringExtra("destpoint");
 
         tMapView = new TMapView(this);
         TMapPoint point1 = tMapView.getLocationPoint(); // 출발점
