@@ -43,7 +43,8 @@ public class RouteActivity extends Activity {
         routelayoutTmap.addView(tMapView);
         setContentView(routelayoutTmap);
         tMapView.setIconVisibility(true);
-        setNowLocation();
+
+        // setNowLocation(); // 현재위치로 중심점 옮김
 
         //LinearLayout routelayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
         //routelayoutTmap.addView(tMapView);
