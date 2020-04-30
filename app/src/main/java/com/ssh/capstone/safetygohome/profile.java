@@ -96,7 +96,6 @@ public class profile extends AppCompatActivity {
                                 profile_view.setImageResource(R.drawable.profile_icon);
                                 break;
                         }
-
                         return false;
                     }
                 });
