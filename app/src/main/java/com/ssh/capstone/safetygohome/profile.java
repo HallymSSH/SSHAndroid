@@ -4,19 +4,35 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 
 
@@ -26,7 +42,7 @@ public class profile extends AppCompatActivity {
     ImageView profile_view;
     TextView textView_Date, textView_sex;
     private DatePickerDialog.OnDateSetListener listener;
-
+    private final int GET_GALLERY_IMAGE = 200;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,22 +73,39 @@ public class profile extends AppCompatActivity {
     }
 
     public void setListener() {
-        btn_profileback.setOnClickListener(new View.OnClickListener() {
+        btn_profileback.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        profile_view.setOnClickListener(new View.OnClickListener() {
+        profile_view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(getApplicationContext(), v);
+                PopupMenu popupMenu = new PopupMenu(getApplicationContext(),v);
+                getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.Album:
+                                Intent intent = new Intent(Intent.ACTION_PICK);
+                                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                                startActivityForResult(intent, GET_GALLERY_IMAGE);
+                                break;
+                            case R.id.basic:
+                                profile_view.setImageResource(R.drawable.profile_icon);
+                                break;
+                        }
 
-                getMenuInflater().inflate(R.menu.popup, popup.getMenu());
-
+                        return false;
+                    }
+                });
+                popupMenu.show();
             }
         });
-        btn_birthday.setOnClickListener(new View.OnClickListener() {
+
+        btn_birthday.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
@@ -89,7 +122,7 @@ public class profile extends AppCompatActivity {
             }
         });
 
-        btn_sex.setOnClickListener(new View.OnClickListener() {
+        btn_sex.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(1);
@@ -111,5 +144,29 @@ public class profile extends AppCompatActivity {
             }
         });
         return builder.create();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == GET_GALLERY_IMAGE)
+            {
+                if(resultCode == RESULT_OK)
+                {
+                    try{
+                        InputStream in = getContentResolver().openInputStream(data.getData());
+                        Bitmap img = BitmapFactory.decodeStream(in);
+                        in.close();
+                        profile_view.setImageBitmap(img);
+                        profile_view.setClipToOutline(true);
+
+                    } catch (Exception e)
+                    {
+
+                    }
+                }
+            }
     }
 }
