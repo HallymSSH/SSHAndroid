@@ -34,8 +34,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     View view;
-    TMapView tMapView;
-    TMapGpsManager gps;
+    TMapView tMapView = null;
+    TMapGpsManager gps = null;
 
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
@@ -122,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // gps로 하기
+        // lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener); // 휴대폰으로 옮길 때 활성화 하기
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener);
+
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -211,6 +213,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(Intent_DestList);
             }
         });
+    }
+
+    // 지도 중심점 가져오기
+    public TMapPoint getCenterPoint() {
+        TMapPoint point = tMapView.getCenterPoint();
+        return point;
     }
 
 }

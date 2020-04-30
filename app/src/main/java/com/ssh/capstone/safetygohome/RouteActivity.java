@@ -42,6 +42,9 @@ public class RouteActivity extends Activity {
         routelayoutTmap.addView(tMapView);
         setContentView(routelayoutTmap);
         tMapView.setIconVisibility(true);
+        setNowLocation();
+
+
 
         //LinearLayout routelayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
         //routelayoutTmap.addView(tMapView);
@@ -54,11 +57,17 @@ public class RouteActivity extends Activity {
 
         drawPedestrianPath();
 
+
+    }
+
+    public void setNowLocation() {
+        TMapPoint point = mainActivity.getCenterPoint();
+        tMapView.setLocationPoint(point.getLatitude(), point.getLongitude()); // 현재위치로 표시될 좌표의 위도, 경도를 설정합니다.
+        tMapView.setCenterPoint(point.getLatitude(), point.getLongitude(), false); // 현재 위치로 이동
     }
 
 
     public void drawPedestrianPath() {
-        setGps();
 
         TMapPoint point1 = tMapView.getLocationPoint(); // 출발점
         // TMapPoint point1 = new TMapPoint(37.56420451, 126.98113196);
