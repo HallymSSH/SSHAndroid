@@ -39,12 +39,11 @@ public class RouteActivity extends Activity {
 
         LinearLayout routelayoutTmap = new LinearLayout(this);
         tMapView = new TMapView(this);
+
         routelayoutTmap.addView(tMapView);
         setContentView(routelayoutTmap);
         tMapView.setIconVisibility(true);
         setNowLocation();
-
-
 
         //LinearLayout routelayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
         //routelayoutTmap.addView(tMapView);
@@ -61,9 +60,10 @@ public class RouteActivity extends Activity {
     }
 
     public void setNowLocation() {
-        TMapPoint point = mainActivity.getCenterPoint();
-        tMapView.setLocationPoint(point.getLatitude(), point.getLongitude()); // 현재위치로 표시될 좌표의 위도, 경도를 설정합니다.
-        tMapView.setCenterPoint(point.getLatitude(), point.getLongitude(), false); // 현재 위치로 이동
+        double temp1 = ((MainActivity)MainActivity.mContext).getCenterPointLat();
+        double temp2 = ((MainActivity)MainActivity.mContext).getCenterPointLon();
+        tMapView.setLocationPoint(temp1, temp2); // 현재위치로 표시될 좌표의 위도, 경도를 설정합니다.
+        tMapView.setCenterPoint(temp1, temp2, false); // 현재 위치로 이동
     }
 
 

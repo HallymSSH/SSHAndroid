@@ -33,6 +33,8 @@ import com.skt.Tmap.TMapView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    public static Context mContext;
+
     View view;
     TMapView tMapView = null;
     TMapGpsManager gps = null;
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mContext = this;
 
         // 권한부분
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -216,9 +220,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 지도 중심점 가져오기
-    public TMapPoint getCenterPoint() {
-        TMapPoint point = tMapView.getCenterPoint();
-        return point;
+    public double getCenterPointLat() {
+        return tMapView.getCenterPoint().getLatitude();
+    }
+
+    public double getCenterPointLon() {
+        return tMapView.getCenterPoint().getLongitude();
     }
 
 }
