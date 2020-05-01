@@ -3,7 +3,6 @@ package com.ssh.capstone.safetygohome;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,22 +16,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AlertDialogLayout;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 
@@ -66,7 +59,7 @@ public class profile extends AppCompatActivity {
         profile_view = (CircleImageView) findViewById((R.id.profile_image));
         textView_Date = (TextView)findViewById(R.id.birthday);
         textView_sex = (TextView) findViewById(R.id.textView_sex);
-        text_name = (TextView) findViewById(R.id.text_name);
+        text_name = (TextView) findViewById(R.id.textView);
         listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -198,6 +191,7 @@ public class profile extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 text_name.setText(editText.getText().toString());
+
             }
 
         });
