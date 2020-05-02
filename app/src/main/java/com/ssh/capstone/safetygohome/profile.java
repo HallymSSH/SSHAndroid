@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -127,7 +129,17 @@ public class profile extends AppCompatActivity {
         btn_sex.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(1);
+                final String [] items = {"남성","여성"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(profile.this);
+                builder.setTitle("성별을 선택하세요");
+                builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        textView_sex.setText(items[which]);
+                        dialog.dismiss(); // 누르면 바로 닫히는 형태
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -151,21 +163,6 @@ public class profile extends AppCompatActivity {
                 otheraddress();
             }
         });
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        final String [] items = {"남성","여성"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(profile.this);
-        builder.setTitle("성별을 선택하세요");
-        builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                textView_sex.setText(items[which]);
-                dialog.dismiss(); // 누르면 바로 닫히는 형태
-            }
-        });
-        return builder.create();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -196,7 +193,6 @@ public class profile extends AppCompatActivity {
     }
 
     public void inputname() {
-
         FrameLayout container = new FrameLayout(this);
         final EditText editText = new EditText(this);
         FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -204,10 +200,11 @@ public class profile extends AppCompatActivity {
         params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
         editText.setLayoutParams(params);
         container.addView(editText);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
         builder.setView(container);
-        builder.setTitle("이름 변경");
-        builder.setMessage("변경할 이름을 입력하세요");
+        builder.setTitle("이름 입력").setMessage("변경할 이름을 입력하세요");
+
+
 
         builder.setPositiveButton("입력", new DialogInterface.OnClickListener() {
             @Override
@@ -215,7 +212,6 @@ public class profile extends AppCompatActivity {
                 text_name.setText(editText.getText().toString());
 
             }
-
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
@@ -235,10 +231,10 @@ public class profile extends AppCompatActivity {
         params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
         editText.setLayoutParams(params);
         container.addView(editText);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
         builder.setView(container);
-        builder.setTitle("상세 주소 입력");
-        builder.setMessage("나머지 주소를 입력하세요");
+        builder.setTitle("상세 주소 입력").setMessage("나머지 주소를 입력하세요");
+
 
         builder.setPositiveButton("입력", new DialogInterface.OnClickListener() {
             @Override
@@ -246,7 +242,6 @@ public class profile extends AppCompatActivity {
                 daum_result2.setText(editText.getText().toString());
 
             }
-
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override

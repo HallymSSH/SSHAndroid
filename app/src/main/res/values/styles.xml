@@ -24,4 +24,10 @@
         <item name="android:background">#F3F3F3</item>
     </style>
 
+    <style name="MyAlertDialogStyle" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColorPrimary">#000000</item>
+
+
+    </style>
+
 </resources>
