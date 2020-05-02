@@ -36,9 +36,11 @@ public class profile extends AppCompatActivity {
 
     Button btn_profileback, btn_birthday, btn_sex;
     CircleImageView profile_view;
-    TextView textView_Date, textView_sex, text_name;
+    TextView textView_Date, textView_sex, text_name, daum_result, daum_result2;
+    Intent daum_view;
     private DatePickerDialog.OnDateSetListener listener;
-    private final int GET_GALLERY_IMAGE = 200;
+    private final int GET_GALLERY_IMAGE = 100;
+    private final int GET_ADDRESS = 200;
 
 
    @Override
@@ -60,6 +62,9 @@ public class profile extends AppCompatActivity {
         textView_Date = (TextView)findViewById(R.id.birthday);
         textView_sex = (TextView) findViewById(R.id.textView_sex);
         text_name = (TextView) findViewById(R.id.textView);
+        daum_result = (TextView) findViewById(R.id.daum_result);
+        daum_result2 = (TextView) findViewById(R.id.daum_result2);
+        daum_view = new Intent(getApplicationContext(),daumView.class);
         listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -132,6 +137,20 @@ public class profile extends AppCompatActivity {
                 inputname();
             }
         });
+
+        daum_result.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(daum_view,GET_ADDRESS);
+            }
+        });
+
+        daum_result2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                otheraddress();
+            }
+        });
     }
 
     @Override
@@ -153,22 +172,25 @@ public class profile extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-            if (requestCode == GET_GALLERY_IMAGE)
+            if (resultCode == RESULT_OK)
             {
-                if(resultCode == RESULT_OK)
+                switch(requestCode)
                 {
-                    try{
-                        InputStream in = getContentResolver().openInputStream(data.getData());
-                        Bitmap img = BitmapFactory.decodeStream(in);
-                        in.close();
-                        profile_view.setImageBitmap(img);
+                    case  GET_GALLERY_IMAGE:
+                        try{
+                            InputStream in = getContentResolver().openInputStream(data.getData());
+                            Bitmap img = BitmapFactory.decodeStream(in);
+                            in.close();
+                            profile_view.setImageBitmap(img);
 
+                        } catch (Exception e)
+                        {
+                        }
+                        break;
+                    case GET_ADDRESS:
+                        daum_result.setText(data.getStringExtra("result"));
+                        break;
 
-                    } catch (Exception e)
-                    {
-
-                    }
                 }
             }
     }
@@ -191,6 +213,37 @@ public class profile extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 text_name.setText(editText.getText().toString());
+
+            }
+
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    public void otheraddress() {
+
+        FrameLayout container = new FrameLayout(this);
+        final EditText editText = new EditText(this);
+        FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+        params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+        editText.setLayoutParams(params);
+        container.addView(editText);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(container);
+        builder.setTitle("상세 주소 입력");
+        builder.setMessage("나머지 주소를 입력하세요");
+
+        builder.setPositiveButton("입력", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                daum_result2.setText(editText.getText().toString());
 
             }
 

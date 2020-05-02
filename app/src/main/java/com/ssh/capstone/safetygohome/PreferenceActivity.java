@@ -16,7 +16,7 @@ public class PreferenceActivity extends AppCompatActivity {
 
     Intent To_address,To_info;
     Button btn_address, btn_info, btn_back, btn_volume;
-    TextView textView;
+
 
 
 
@@ -30,11 +30,10 @@ public class PreferenceActivity extends AppCompatActivity {
     }
     public void setting() {
         btn_back = (Button) findViewById(R.id.btn_back);
-        btn_address = (Button) findViewById(R.id.btn_address);
+        //btn_address = (Button) findViewById(R.id.btn_address);
         btn_info = (Button) findViewById(R.id.btn_info);
-        To_address = new Intent(getApplicationContext(),SearchAddress.class);
+        //To_address = new Intent(getApplicationContext(),SearchAddress.class);
         To_info = new Intent(getApplicationContext(),profile.class);
-        textView = (TextView) findViewById(R.id.textView5);
 
 
     }
@@ -46,13 +45,6 @@ public class PreferenceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-            }
-        });
-
-        btn_address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(To_address);
             }
         });
 

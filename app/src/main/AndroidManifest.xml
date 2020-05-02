@@ -55,8 +55,8 @@
         <!--찬우-->
         <!--시호-->
         <activity android:name=".PreferenceActivity"/>
-        <activity android:name=".SearchAddress" />
         <activity android:name=".profile" />
+        <activity android:name=".daumView"/>
         <!--시호-->
     </application>
 
