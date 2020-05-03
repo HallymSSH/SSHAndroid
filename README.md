@@ -9,7 +9,7 @@
 ## SSH 팀 구성
 - 지도교수 : 이원철
 - 팀장 : [황찬우](https://github.com/HChanWoo)
-- 팀원 : [심창현](https://github.com/changhyunsim)
+- 팀원 : [심창현](https://github.com/ChangHyun-S)
 - 팀원 : [송시호](https://github.com/tlgh0623)
 
 ## 개발환경
