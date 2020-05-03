@@ -22,7 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:ems="10"
         android:inputType="text"
-        android:text="목적지 입력부분"
+        android:text="을지로입구역"
         tools:ignore="MissingConstraints" />
 
     <Button

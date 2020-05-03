@@ -33,9 +33,11 @@ import com.skt.Tmap.TMapView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    public static Context mContext;
 
-    TMapView tMapView;
-    TMapGpsManager gps;
+    View view;
+    TMapView tMapView = null;
+    TMapGpsManager gps = null;
 
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mContext = this;
 
         // 권한부분
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -122,7 +126,9 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // gps로 하기
+        // lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener); // 휴대폰으로 옮길 때 활성화 하기
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener);
+
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -212,4 +218,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    // 지도 중심점 가져오기
+    public double getCenterPointLat() {
+        return tMapView.getCenterPoint().getLatitude();
+    }
+
+    public double getCenterPointLon() {
+        return tMapView.getCenterPoint().getLongitude();
+    }
+
 }

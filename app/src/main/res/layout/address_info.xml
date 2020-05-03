@@ -9,13 +9,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="35dp"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="35dp"
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
 
@@ -23,9 +23,9 @@
                 android:id="@+id/list_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Large Text"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_marginTop="5dp"
+                android:text="목적지 표시"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#111111" />
 
         </LinearLayout>

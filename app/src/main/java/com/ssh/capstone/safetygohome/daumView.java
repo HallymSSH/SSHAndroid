@@ -1,6 +1,8 @@
 package com.ssh.capstone.safetygohome;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.webkit.JavascriptInterface;
@@ -11,15 +13,17 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SearchAddress extends AppCompatActivity {
+public class daumView extends AppCompatActivity {
+
     private WebView daum_webView;
-    private TextView daum_result;
     private Handler handler;
+    private TextView daum_result;
+    String result;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.address_view);
+        setContentView(R.layout.daum_view);
         daum_result = (TextView) findViewById(R.id.daum_result);
 
         // WebView 초기화
@@ -48,6 +52,7 @@ public class SearchAddress extends AppCompatActivity {
 
         daum_webView.loadUrl("http://tlgh0623.ivyro.net/daum_address.php");
 
+
     }
 
     private class AndroidBridge {
@@ -56,10 +61,14 @@ public class SearchAddress extends AppCompatActivity {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    daum_result.setText(String.format("%s %s", arg1, arg2));
-
+                    result = String.format("%s %s", arg1, arg2);
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("result",result);
+                    //daum_result.setText(String.format("%s %s", arg1, arg2));
+                    setResult(RESULT_OK,resultIntent);
                     // WebView를 초기화 하지않으면 재사용할 수 없음
                     init_webView();
+                    finish();
                 }
             });
         }

@@ -27,29 +27,11 @@
         android:layout_marginLeft="12dp"
         android:layout_marginTop="88dp"
         android:text="내 정보"
-        android:textColor="#333000"
+        android:textColor="#000000"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view7"
-        style="@style/Divider"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="내집 정보"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home" />
 
     <Button
         android:id="@+id/button4"
@@ -94,11 +76,12 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="20dp"
         android:text="회원 정보"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view7" />
+        app:layout_constraintTop_toBottomOf="@+id/home" />
 
     <View
         android:id="@+id/view3"
@@ -185,7 +168,7 @@
         android:text="긴급상황"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:textColor="#333000"
+        android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
@@ -198,7 +181,7 @@
         android:text="사이렌"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:textColor="#333000"
+        android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view5" />
 
@@ -221,16 +204,10 @@
         android:text="소리변경"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view6" />
-
-    <Button
-        android:id="@+id/btn_address"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/nextbtn"
-        app:layout_constraintBottom_toTopOf="@+id/view7"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"/>
 
     <Button
         android:id="@+id/btn_back"
@@ -242,17 +219,6 @@
         android:background="@drawable/backbtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="5dp"
-        android:text="홍길동"
-        android:textColor="#0066FF"
-        app:layout_constraintEnd_toStartOf="@+id/btn_info"
-        app:layout_constraintTop_toBottomOf="@+id/view7" />
 
     <TextView
         android:id="@+id/textView_num"

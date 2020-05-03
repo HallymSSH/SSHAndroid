@@ -2,6 +2,7 @@ package com.ssh.capstone.safetygohome;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapPOIItem;
+import com.skt.Tmap.TMapPoint;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,7 +39,6 @@ public class DestinationList extends AppCompatActivity {
     private AddressListViewAdapter adapter;
     private String address;
     private Button search_button;
-    String[] temp = new String[100];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,6 @@ public class DestinationList extends AppCompatActivity {
 
         search_button = (Button) findViewById(R.id.search_button);
 
-
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +66,15 @@ public class DestinationList extends AppCompatActivity {
                 }
             }
         });
+
+        listView.setOnItemClickListener((new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
+                intent.putExtra("getLat", adapter.getItem(position).getPoint().getLatitude());
+                intent.putExtra("getLon", adapter.getItem(position).getPoint().getLongitude());
+                startActivity(intent);
+            }
+        }));
     }
 
     Handler myHandler = new Handler() {
@@ -86,11 +95,12 @@ public class DestinationList extends AppCompatActivity {
                 for (int i = 0; i < poiItem.size(); i++) {
                     TMapPOIItem item = poiItem.get(i);
                     // Log.d("ABABABAB", "" + item.name);
-                    adapter.addItem(item.name);
+                    adapter.addItem(item);
                     Message msg = myHandler.obtainMessage();
                     myHandler.sendMessage(msg);
                 }
             }
         });
     }
+
 }
