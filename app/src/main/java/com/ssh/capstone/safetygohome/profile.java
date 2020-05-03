@@ -162,8 +162,8 @@ public class profile extends AppCompatActivity {
                                 break;
                             case R.id.basic:
                                 profile_view.setImageResource(R.drawable.profile_icon);
-                                img = ((BitmapDrawable)temp2).getBitmap();
-                                //temp = profile_view.getDrawable();
+                                //img = ((BitmapDrawable)temp2).getBitmap();
+                                temp2 = profile_view.getDrawable();
                                 break;
                         }
                         return false;
@@ -242,7 +242,7 @@ public class profile extends AppCompatActivity {
                             InputStream in = getContentResolver().openInputStream(data.getData());
                             img = BitmapFactory.decodeStream(in);
                             in.close();
-                            profile_view.setImageBitmap(img);
+                             profile_view.setImageBitmap(img);
 
                         } catch (Exception e)
                         {
