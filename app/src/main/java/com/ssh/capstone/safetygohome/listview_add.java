@@ -74,7 +74,9 @@ public class listview_add extends Activity {
         btn_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ToBook.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(ToBook);
+                overridePendingTransition(0, 0);
             }
         });
     }

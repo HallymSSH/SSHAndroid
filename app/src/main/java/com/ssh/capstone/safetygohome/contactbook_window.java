@@ -1,6 +1,7 @@
 package com.ssh.capstone.safetygohome;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,14 +13,16 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import com.ssh.capstone.safetygohome.Database.DatabaseClass;
+import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
 
 public class contactbook_window extends AppCompatActivity {
 
-    ArrayList<String> items = new ArrayList<String>();
-    ArrayAdapter adapter;
+    ArrayList<ContactData> items = new ArrayList<>();
+    ContactAdapter adapter;
+    ArrayAdapter arrayAdapter;
     FrameLayout btn_add, btn_search, btn_delete;
     ListView contact_listView;
     String name = null, num = null;
@@ -27,11 +30,19 @@ public class contactbook_window extends AppCompatActivity {
     Intent FromAdd;
     Intent ToAdd;
 
+    private DatabaseClass db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);  //타이틀바 없애기
         setContentView(R.layout.layout_contactbook);
+
+        try {
+            initDB(getResources(), false); // db 준비
+        } catch (Exception e) {
+            Log.w("Get DB Exception", e.getMessage());
+        }
 
         setting();
         setlistener();
@@ -47,9 +58,12 @@ public class contactbook_window extends AppCompatActivity {
         ToAdd = new Intent(com.ssh.capstone.safetygohome.contactbook_window.this,
                 com.ssh.capstone.safetygohome.listview_add.class);
         FromAdd = getIntent();
-        adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_single_choice, items) ;
-        //contact_listView.setAdapter(adapter);
+        adapter = new ContactAdapter();
+        // ArrayAdapter 생성. 아이템 View를 선택(single choice)가능하도록 만듦.
+        arrayAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_single_choice, items);
+        contact_listView.setAdapter(adapter);
+        db = new DatabaseClass(this);
     }
 
     public void setlistener(){
@@ -79,7 +93,7 @@ public class contactbook_window extends AppCompatActivity {
             int count = adapter.getCount();
 
             // 아이템 추가.
-            items.add("LIST" + Integer.toString(count + 1));
+            items.add(new ContactData(name,num));
 
             // listview 갱신
             adapter.notifyDataSetChanged();
