@@ -5,13 +5,17 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Calendar;
 
@@ -36,6 +41,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class profile extends AppCompatActivity {
 
+    Bitmap img;
+    Bitmap tmpBitmap;
+    Bitmap tmpBitmap1;
+    private static final String FAIL_CODE = "no_image_found";
     Button btn_profileback, btn_birthday, btn_sex;
     CircleImageView profile_view;
     TextView textView_Date, textView_sex, text_name, daum_result, daum_result2;
@@ -43,17 +52,70 @@ public class profile extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener listener;
     private final int GET_GALLERY_IMAGE = 100;
     private final int GET_ADDRESS = 200;
+    String shared = "file";
+    Drawable temp,temp2;
 
 
    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_view);
-
         setting();
         setListener();
 
 
+       temp2 = getResources().getDrawable(R.drawable.profile_icon);
+       img = ((BitmapDrawable)temp2).getBitmap();
+       SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
+       String name = sharedPreferences.getString("name","");
+       String Birthday = sharedPreferences.getString("birthday","");
+       String sex = sharedPreferences.getString("sex","");
+       String Post1 = sharedPreferences.getString("post1","");
+       String Post2 = sharedPreferences.getString("post2","");
+       String profileimg = sharedPreferences.getString("profileimg","");
+
+
+
+       /*
+       tmpBitmap = ((BitmapDrawable)temp).getBitmap();
+       tmpBitmap1 = ((BitmapDrawable)temp2).getBitmap();
+       */
+       text_name.setText(name);
+       textView_Date.setText(Birthday);
+       textView_sex.setText(sex);
+       daum_result.setText(Post1);
+       daum_result2.setText(Post2);
+       profile_view.setImageBitmap(decodeBase64(profileimg));
+
+        /*
+       if (tmpBitmap.equals(tmpBitmap1)){
+           profile_view.setImageDrawable(getResources().getDrawable(R.drawable.profile_icon));
+       } else {
+
+       }
+
+         */
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String name = text_name.getText().toString();
+        String Birthday = textView_Date.getText().toString();
+        String sex = textView_sex.getText().toString();
+        String Post1 = daum_result.getText().toString();
+        String Post2 = daum_result2.getText().toString();
+        editor.putString("post2",Post2);
+        editor.putString("post1",Post1);
+        editor.putString("sex",sex);
+        editor.putString("birthday",Birthday);
+        editor.putString("name",name);
+        editor.putString("profileimg", encodeTobase64(img));
+        editor.commit();
     }
 
     public void setting() {
@@ -94,12 +156,14 @@ public class profile extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
                             case R.id.Album:
-                                Intent intent = new Intent(Intent.ACTION_PICK);
-                                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
-                                startActivityForResult(intent, GET_GALLERY_IMAGE);
+                                Intent albom = new Intent(Intent.ACTION_PICK);
+                                albom.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                                startActivityForResult(albom, GET_GALLERY_IMAGE);
                                 break;
                             case R.id.basic:
                                 profile_view.setImageResource(R.drawable.profile_icon);
+                                img = ((BitmapDrawable)temp2).getBitmap();
+                                //temp = profile_view.getDrawable();
                                 break;
                         }
                         return false;
@@ -176,7 +240,7 @@ public class profile extends AppCompatActivity {
                     case  GET_GALLERY_IMAGE:
                         try{
                             InputStream in = getContentResolver().openInputStream(data.getData());
-                            Bitmap img = BitmapFactory.decodeStream(in);
+                            img = BitmapFactory.decodeStream(in);
                             in.close();
                             profile_view.setImageBitmap(img);
 
@@ -252,4 +316,18 @@ public class profile extends AppCompatActivity {
         builder.show();
     }
 
+    public static String encodeTobase64(Bitmap image) {
+       Bitmap immage = image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immage.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+        return imageEncoded;
+    }
+
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory
+                .decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
 }
