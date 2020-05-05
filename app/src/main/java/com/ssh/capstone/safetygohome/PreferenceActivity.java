@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class PreferenceActivity extends AppCompatActivity {
 
-    Intent To_address,To_info;
-    Button btn_address, btn_info, btn_back, btn_volume;
+    Intent To_info;
+    Button btn_info, btn_back, btn_volume;
 
 
 
@@ -30,9 +30,7 @@ public class PreferenceActivity extends AppCompatActivity {
     }
     public void setting() {
         btn_back = (Button) findViewById(R.id.btn_back);
-        //btn_address = (Button) findViewById(R.id.btn_address);
         btn_info = (Button) findViewById(R.id.btn_info);
-        //To_address = new Intent(getApplicationContext(),SearchAddress.class);
         To_info = new Intent(getApplicationContext(),profile.class);
 
 

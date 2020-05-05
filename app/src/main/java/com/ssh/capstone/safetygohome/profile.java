@@ -155,12 +155,12 @@ public class profile extends AppCompatActivity {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
-                            case R.id.Album:
+                            case R.id.Album:    // 앨범에서 가져오기
                                 Intent albom = new Intent(Intent.ACTION_PICK);
                                 albom.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
                                 startActivityForResult(albom, GET_GALLERY_IMAGE);
                                 break;
-                            case R.id.basic:
+                            case R.id.basic:            // 기본이미지 설정
                                 profile_view.setImageResource(R.drawable.profile_icon);
                                 //img = ((BitmapDrawable)temp2).getBitmap();
                                 temp2 = profile_view.getDrawable();
@@ -240,7 +240,7 @@ public class profile extends AppCompatActivity {
                     case  GET_GALLERY_IMAGE:
                         try{
                             InputStream in = getContentResolver().openInputStream(data.getData());
-                            img = BitmapFactory.decodeStream(in);
+                            img = BitmapFactory.decodeStream(in);           // 비트맵으로 만들어서 저장
                             in.close();
                              profile_view.setImageBitmap(img);
 
