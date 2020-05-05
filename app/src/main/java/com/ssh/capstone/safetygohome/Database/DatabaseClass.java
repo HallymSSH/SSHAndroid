@@ -16,8 +16,39 @@ public class DatabaseClass {
         m_ctx = ctx;
     }
 
+
+    public int GetUserNum(){
+        int num=0;
+
+        try
+        {
+            tableData = new TableData(m_ctx);
+
+            SQLiteDatabase db = tableData.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery("SELECT user_name from user_info"  ,null);
+
+            if( cursor.getCount() > 0 ) {
+                cursor.moveToFirst();
+                num = cursor.getCount();
+            }
+            cursor.close();
+            db.close();
+        }
+        catch(StringIndexOutOfBoundsException e) {
+            Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
+            return -1;
+        }
+        finally {
+            tableData.close();
+        }
+
+        return num;
+    }
+
     //listview 로 불러올 데이테
     public boolean GetUser(ArrayList<String> username, ArrayList<String> usernum){
+
         try
         {
             tableData = new TableData(m_ctx);

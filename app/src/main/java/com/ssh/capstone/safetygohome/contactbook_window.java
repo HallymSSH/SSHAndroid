@@ -95,6 +95,7 @@ public class contactbook_window extends AppCompatActivity {
             // 아이템 추가.
             items.add(new ContactData(name,num));
 
+            Log.i(name,num);
             db.SaveUser(name, num);
 
             // listview 갱신
