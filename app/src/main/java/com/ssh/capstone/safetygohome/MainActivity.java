@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
-    Intent Intent_ToPopUp, Intent_DestList;
+    Intent Intent_ToPopUp, Intent_DestList, Intent_siren;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,18 +89,26 @@ public class MainActivity extends AppCompatActivity {
         ImageButton imageButton3 = (ImageButton) findViewById(R.id.imageButton3);
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton2);
 
+        // 황찬우
+        setting();
+        setlistener();
+        // 황찬우
+
         imageButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                show(v);
+                //show(v);
+                startActivity(Intent_siren);
             }
         });
+
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 show(v);
             }
         });
+
         imageButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,10 +124,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 황찬우
-        setting();
-        setlistener();
-        // 황찬우
+
     }
 
     public void setGps() {
@@ -189,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+
+
     // 황찬우
     //Button과 Intent 세팅
     public void setting() {
@@ -197,8 +205,11 @@ public class MainActivity extends AppCompatActivity {
         imageButton5 = (ImageButton) findViewById(R.id.imageButton5);
         Intent_ToPopUp = new Intent(MainActivity.this, com.ssh.capstone.safetygohome.popup_window.class);
 
+        Intent_siren = new Intent(MainActivity.this,Siren.class);
         // 목적지 목록 인텐트
         Intent_DestList = new Intent(MainActivity.this, com.ssh.capstone.safetygohome.DestinationList.class);
+
+
     }
 
     //button listener 세팅
@@ -217,6 +228,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(Intent_DestList);
             }
         });
+
+
     }
 
     // 지도 중심점 가져오기

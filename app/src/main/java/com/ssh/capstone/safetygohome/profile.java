@@ -80,6 +80,7 @@ public class profile extends AppCompatActivity {
        tmpBitmap = ((BitmapDrawable)temp).getBitmap();
        tmpBitmap1 = ((BitmapDrawable)temp2).getBitmap();
        */
+
        text_name.setText(name);
        textView_Date.setText(Birthday);
        textView_sex.setText(sex);
