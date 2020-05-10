@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = this;
 
-        // 권한부분
+        // 위치 권한부분
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -140,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show(v);
+
+                // 기능 확인시 주석풀고 ㄱㄱ
                 //sendSMS("821042008558","테스트입니다.");          // 문자보내기
             }
         });
@@ -148,8 +150,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show(v);
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01042008558"));
-                startActivity(intent);
+
+                // 기능확인시 주석 풀고 ㄱㄱ
+               // Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01042008558"));    // 전화걸기
+               // startActivity(intent);
 
             }
         });
