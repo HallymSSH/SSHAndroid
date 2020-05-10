@@ -65,7 +65,10 @@ public class Siren extends Activity {
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer.stop();
+                if(mediaPlayer != null) {
+                    mediaPlayer.stop();
+                    mediaPlayer = null;
+                }
             }
         });
     }
