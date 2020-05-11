@@ -4,17 +4,25 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
-    Intent Intent_ToPopUp, Intent_DestList;
+    Intent Intent_ToPopUp, Intent_DestList, Intent_siren;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = this;
 
-        // 권한부분
+        // 위치 권한부분
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -64,6 +72,33 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
         */
+
+        // sms 권한 확인
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.SEND_SMS)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.SEND_SMS},
+                        1);
+            }
+        }
+
+        // 전화 권한 확인
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CALL_PHONE},
+                    1);
+
+            // MY_PERMISSIONS_REQUEST_CALL_PHONE is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
+        }
 
         // tmap 그리기
         LinearLayout linearLayoutTmap = (LinearLayout) findViewById(R.id.linearLayoutTmap);
@@ -88,22 +123,38 @@ public class MainActivity extends AppCompatActivity {
         ImageButton imageButton3 = (ImageButton) findViewById(R.id.imageButton3);
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton2);
 
+        // 황찬우
+        setting();
+        setlistener();
+        // 황찬우
+
         imageButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                show(v);
+                //show(v);
+                startActivity(Intent_siren);
             }
         });
+
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                show(v);
+                //show(v);
+
+                // 기능 확인시 주석풀고 ㄱㄱ
+                //sendSMS("821042008558","테스트입니다.");          // 문자보내기
             }
         });
+
         imageButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                show(v);
+                //show(v);
+
+                // 기능확인시 주석 풀고 ㄱㄱ
+               // Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01042008558"));    // 전화걸기
+               // startActivity(intent);
+
             }
         });
 
@@ -115,10 +166,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 황찬우
-        setting();
-        setlistener();
-        // 황찬우
+
+    }
+    // 문자보내기
+    private void sendSMS(String phoneNumber, String message) {
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, null, null);
     }
 
     public void setGps() {
@@ -189,6 +242,8 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+
+
     // 황찬우
     //Button과 Intent 세팅
     public void setting() {
@@ -197,8 +252,11 @@ public class MainActivity extends AppCompatActivity {
         imageButton5 = (ImageButton) findViewById(R.id.imageButton5);
         Intent_ToPopUp = new Intent(MainActivity.this, com.ssh.capstone.safetygohome.popup_window.class);
 
+        Intent_siren = new Intent(MainActivity.this,Siren.class);
         // 목적지 목록 인텐트
         Intent_DestList = new Intent(MainActivity.this, com.ssh.capstone.safetygohome.DestinationList.class);
+
+
     }
 
     //button listener 세팅
@@ -217,6 +275,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(Intent_DestList);
             }
         });
+
+
     }
 
     // 지도 중심점 가져오기
