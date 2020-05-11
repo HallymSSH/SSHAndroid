@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 public class TableData extends SQLiteOpenHelper {
 
     public TableData(@Nullable Context context) {
-        super(context, "database/ssh.db", null, 1);
+        super(context, "ssh.db", null, 1);
     }
 
     public void onCreate(SQLiteDatabase db){

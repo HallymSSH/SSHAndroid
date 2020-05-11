@@ -93,7 +93,7 @@ public class DatabaseClass {
             tableData = new TableData(m_ctx);
             SQLiteDatabase db = tableData.getReadableDatabase();
 
-            db.execSQL("insert into user_info (user_name, user_num) values ("+name+", '"+num+"')");
+            db.execSQL("insert into user_info (user_name, user_num) values ('"+name+"', '"+num+"')");
             db.close();
         }
         catch(Exception e) {
