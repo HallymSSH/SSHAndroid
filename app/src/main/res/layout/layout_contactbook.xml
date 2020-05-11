@@ -18,11 +18,14 @@
             <EditText
                 android:id="@+id/edit_search"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:inputType="text"
+                android:hint="검색할 이름을 입력하세요:"
+                />
 
         </FrameLayout>
 
-        <FrameLayout
+        <Button
             android:id="@+id/btn_search"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -30,9 +33,9 @@
             android:background="@drawable/search"
             android:clickable="true">
 
-        </FrameLayout>
+        </Button>
 
-        <FrameLayout
+        <Button
             android:id="@+id/btn_add"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -40,9 +43,9 @@
             android:background="@drawable/add"
             android:clickable="true">
 
-        </FrameLayout>
+        </Button>
 
-        <FrameLayout
+        <Button
             android:id="@+id/btn_delete"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -50,7 +53,7 @@
             android:background="@drawable/delete"
             android:clickable="true">
 
-        </FrameLayout>
+        </Button>
     </LinearLayout>
 
     <FrameLayout

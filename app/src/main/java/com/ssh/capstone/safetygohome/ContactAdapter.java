@@ -15,6 +15,7 @@ public class ContactAdapter extends BaseAdapter {
 
     // ListViewAdapter의 생성자
     public ContactAdapter() {
+
     }
 
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
@@ -36,15 +37,15 @@ public class ContactAdapter extends BaseAdapter {
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
-        TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
+        TextView txt_name = (TextView) convertView.findViewById(R.id.txt_name) ;
+        TextView txt_num = (TextView) convertView.findViewById(R.id.txt_num) ;
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         ContactData listViewItem = listViewItemList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
-        titleTextView.setText(listViewItem.getName());
-        descTextView.setText(listViewItem.getNum());
+        txt_name.setText(listViewItem.getName());
+        txt_num.setText(listViewItem.getNum());
 
         return convertView;
     }
@@ -61,13 +62,13 @@ public class ContactAdapter extends BaseAdapter {
         return listViewItemList.get(position) ;
     }
 
-   /* // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String title, String desc) {
+    // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
+    public void addItem(String name, String num) {
         ContactData item = new ContactData();
 
-        item.setName(title);
-        item.setNum(desc);
+        item.setName(name);
+        item.setNum(num);
 
         listViewItemList.add(item);
-    }*/
+    }
 }

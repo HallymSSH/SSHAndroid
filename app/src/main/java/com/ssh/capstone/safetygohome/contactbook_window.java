@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 
 import com.ssh.capstone.safetygohome.Database.DatabaseClass;
@@ -21,11 +23,15 @@ import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
 public class contactbook_window extends AppCompatActivity {
 
     ArrayList<ContactData> items = new ArrayList<>();
-    ContactAdapter adapter;
-    ArrayAdapter arrayAdapter;
-    FrameLayout btn_add, btn_search, btn_delete;
-    ListView contact_listView;
+    ArrayList<String> username = new ArrayList<>();
+    ArrayList<String> usernum = new ArrayList<>();
     String name = null, num = null;
+
+    ListView contact_listView;
+    ContactAdapter adapter;
+
+    Button btn_add, btn_search, btn_delete;
+    CheckBox checkBox;
     EditText edit_search;
     Intent FromAdd;
     Intent ToAdd;
@@ -50,23 +56,28 @@ public class contactbook_window extends AppCompatActivity {
     }
 
     public void setting(){
-        btn_add = (FrameLayout) findViewById(R.id.btn_add);
-        btn_search = (FrameLayout)findViewById(R.id.btn_search);
-        btn_delete = (FrameLayout)findViewById(R.id.btn_delete);
+        btn_add = (Button) findViewById(R.id.btn_add);
+        btn_search = (Button) findViewById(R.id.btn_search);
+        btn_delete = (Button) findViewById(R.id.btn_delete);
         edit_search = (EditText)findViewById(R.id.edit_search);
         contact_listView = (ListView)findViewById(R.id.contact_listview);
         ToAdd = new Intent(com.ssh.capstone.safetygohome.contactbook_window.this,
                 com.ssh.capstone.safetygohome.listview_add.class);
         FromAdd = getIntent();
         adapter = new ContactAdapter();
-        // ArrayAdapter 생성. 아이템 View를 선택(single choice)가능하도록 만듦.
-        arrayAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_single_choice, items);
         contact_listView.setAdapter(adapter);
         db = new DatabaseClass(this);
     }
 
     public void setlistener(){
+
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchItem(edit_search.getText().toString());
+            }
+        });
+
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,24 +94,25 @@ public class contactbook_window extends AppCompatActivity {
         });
     }
 
+    public void setlistview(){
+        db.GetUser(username,usernum);
+
+        for(int i=0; i<username.size();i++) {
+            adapter.addItem(username.get(i), usernum.get(i));
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
     public void addItem(){
         name = FromAdd.getStringExtra("name");
         num = FromAdd.getStringExtra("num");
-        Log.i("name : "+name,"num : "+ num);
-        edit_search.setText("name : "+name+", num : "+num);
 
         if(name != null && num != null){
-            int count = adapter.getCount();
-
-            // 아이템 추가.
-            items.add(new ContactData(name,num));
-
             Log.i(name,num);
             db.SaveUser(name, num);
-
-            // listview 갱신
-            adapter.notifyDataSetChanged();
         }
+        setlistview();
     }
 
     public void deleteItem(){
@@ -114,13 +126,23 @@ public class contactbook_window extends AppCompatActivity {
             if (checked > -1 && checked < count) {
                 // 아이템 삭제
                 items.remove(checked) ;
-
                 // listview 선택 초기화.
                 contact_listView.clearChoices();
-
                 // listview 갱신.
                 adapter.notifyDataSetChanged();
             }
         }
+    }
+
+    public void searchItem(String name) {
+
+        db.SearchUser(username,usernum,name);
+
+        for(int i=0; i<username.size();i++) {
+            Log.i(username.get(i)+" : " + i, usernum.get(i)+" ");
+            adapter.addItem(username.get(i), usernum.get(i));
+        }
+
+        adapter.notifyDataSetChanged();
     }
 }
