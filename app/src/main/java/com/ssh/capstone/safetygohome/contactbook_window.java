@@ -31,7 +31,6 @@ public class contactbook_window extends AppCompatActivity {
     ContactAdapter adapter;
 
     Button btn_add, btn_search, btn_delete;
-    CheckBox checkBox;
     EditText edit_search;
     Intent FromAdd;
     Intent ToAdd;
@@ -122,6 +121,7 @@ public class contactbook_window extends AppCompatActivity {
         if (count > 0) {
             // 현재 선택된 아이템의 position 획득.
             checked = contact_listView.getCheckedItemPosition();
+            Log.i("들어오긴함 : ", checked+"");
 
             if (checked > -1 && checked < count) {
                 // 아이템 삭제
@@ -139,7 +139,6 @@ public class contactbook_window extends AppCompatActivity {
         db.SearchUser(username,usernum,name);
 
         for(int i=0; i<username.size();i++) {
-            Log.i(username.get(i)+" : " + i, usernum.get(i)+" ");
             adapter.addItem(username.get(i), usernum.get(i));
         }
 
