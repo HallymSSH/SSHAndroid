@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class ContactAdapter extends BaseAdapter {
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         TextView txt_name = (TextView) convertView.findViewById(R.id.txt_name) ;
         TextView txt_num = (TextView) convertView.findViewById(R.id.txt_num) ;
+        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.CheckBox);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         ContactData listViewItem = listViewItemList.get(position);
@@ -46,6 +48,7 @@ public class ContactAdapter extends BaseAdapter {
         // 아이템 내 각 위젯에 데이터 반영
         txt_name.setText(listViewItem.getName());
         txt_num.setText(listViewItem.getNum());
+        checkBox.setTag(listViewItem.getChecked());
 
         return convertView;
     }
@@ -70,5 +73,9 @@ public class ContactAdapter extends BaseAdapter {
         item.setNum(num);
 
         listViewItemList.add(item);
+    }
+
+    public void clear(){
+        listViewItemList.clear();
     }
 }

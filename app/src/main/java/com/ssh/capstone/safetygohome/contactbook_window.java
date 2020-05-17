@@ -3,6 +3,8 @@ package com.ssh.capstone.safetygohome;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -91,6 +93,20 @@ public class contactbook_window extends AppCompatActivity {
                 deleteItem();
             }
         });
+
+        //editText 실시간 확인
+        edit_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchItem(edit_search.getText().toString());
+            }
+        });
     }
 
     public void setlistview(){
@@ -99,7 +115,6 @@ public class contactbook_window extends AppCompatActivity {
         for(int i=0; i<username.size();i++) {
             adapter.addItem(username.get(i), usernum.get(i));
         }
-
         adapter.notifyDataSetChanged();
     }
 
@@ -120,6 +135,7 @@ public class contactbook_window extends AppCompatActivity {
 
         if (count > 0) {
             // 현재 선택된 아이템의 position 획득.
+            Log.i("checkitem : ",contact_listView.getCheckedItemCount()+"");
             checked = contact_listView.getCheckedItemPosition();
             Log.i("들어오긴함 : ", checked+"");
 
@@ -136,12 +152,21 @@ public class contactbook_window extends AppCompatActivity {
 
     public void searchItem(String name) {
 
-        db.SearchUser(username,usernum,name);
+        //검색을 위해 listview clear
+        adapter.clear();
 
-        for(int i=0; i<username.size();i++) {
-            adapter.addItem(username.get(i), usernum.get(i));
+        //검색창이 비었을 경우 보든 데이터를 가져온다
+        if(name.equals(""))
+            setlistview();
+
+        //검색창에 입력이 되면 해당 값을 검색함
+        else {
+            db.SearchUser(username, usernum, name);
+
+            for (int i = 0; i < username.size(); i++) {
+                adapter.addItem(username.get(i), usernum.get(i));
+            }
         }
-
         adapter.notifyDataSetChanged();
     }
 }

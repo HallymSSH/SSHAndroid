@@ -125,7 +125,8 @@ public class DatabaseClass {
 
             SQLiteDatabase db = tableData.getReadableDatabase();
 
-            Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info WHERE user_name = '"+ name +"'",null);
+            //Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info WHERE user_name = '"+ name +"'",null);
+            Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info WHERE user_name LIKE '%"+ name +"%'",null);
 
             if( cursor.getCount() > 0 ) {
                 cursor.moveToFirst();

@@ -2,7 +2,7 @@ package com.ssh.capstone.safetygohome;
 
 public class ContactData {
     private String num, name;
-
+    private boolean checked;
     /*public ContactData(String name, String num){
         this.name = name;
         this.num = num;
@@ -10,8 +10,9 @@ public class ContactData {
 
     public void setNum(String user_num) {num = user_num;}
     public void setName(String user_name) { name = user_name; }
+    public void setChecked(Boolean user_checked) { checked = user_checked; }
 
     public String getNum() { return this.num;}
     public String getName() { return this.name;}
-    
+    public Boolean getChecked() { return this.checked;}
 }
