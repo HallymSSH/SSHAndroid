@@ -15,6 +15,8 @@ public class TableData extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL("create table if not exists user_info(user_no INT PRIMARY KEY," +
                 "user_name CHAR(20), user_num CHAR(20));"); //황찬우 수정
+
+        db.execSQL("create table if not exists cctv(num INT PRIMARY KEY, address CHAR(100), latitude REAL, longitude REAL);");
     }
 
     @Override

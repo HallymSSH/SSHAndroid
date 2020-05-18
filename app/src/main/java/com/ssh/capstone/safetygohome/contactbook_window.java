@@ -159,7 +159,7 @@ public class contactbook_window extends AppCompatActivity {
         if(name.equals(""))
             setlistview();
 
-        //검색창에 입력이 되면 해당 값을 검색함
+            //검색창에 입력이 되면 해당 값을 검색함
         else {
             db.SearchUser(username, usernum, name);
 
