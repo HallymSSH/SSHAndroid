@@ -37,11 +37,11 @@ public class RouteActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_route);
 
-        LinearLayout routelayoutTmap = new LinearLayout(this);
+        LinearLayout routeLayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
         tMapView = new TMapView(this);
 
-        routelayoutTmap.addView(tMapView);
-        setContentView(routelayoutTmap);
+        routeLayoutTmap.addView(tMapView);
+
         tMapView.setIconVisibility(true);
 
         // setNowLocation(); // 현재위치로 중심점 옮김
@@ -58,6 +58,8 @@ public class RouteActivity extends Activity {
         Toast.makeText(getApplicationContext(), destLat + " / " + destLon, Toast.LENGTH_LONG).show();
 
         drawPedestrianPath();
+
+
 
 
     }
