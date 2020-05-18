@@ -3,9 +3,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <LinearLayout
@@ -30,36 +30,36 @@
         app:layout_constraintGuide_percent="0.92" />
 
     <ImageButton
-        android:id="@+id/imageButton1"
+        android:id="@+id/imageButton1r"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/imageButton2"
+        app:layout_constraintEnd_toStartOf="@id/imageButton2r"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guideline"
         app:srcCompat="@drawable/ic_notification_important_black_24dp" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/imageButton2r"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/imageButton3"
-        app:layout_constraintStart_toEndOf="@id/imageButton1"
+        app:layout_constraintEnd_toStartOf="@id/imageButton3r"
+        app:layout_constraintStart_toEndOf="@id/imageButton1r"
         app:layout_constraintTop_toTopOf="@id/guideline"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_notifications_active_24px" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/imageButton3r"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imageButton2"
+        app:layout_constraintStart_toEndOf="@id/imageButton2r"
         app:layout_constraintTop_toTopOf="@id/guideline"
         app:srcCompat="@drawable/ic_security_black_24dp" />
 
@@ -67,8 +67,8 @@
         android:id="@+id/floatingActionButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         android:clickable="true"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
