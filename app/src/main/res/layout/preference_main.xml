@@ -115,7 +115,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/btn_siren"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginRight="16dp"

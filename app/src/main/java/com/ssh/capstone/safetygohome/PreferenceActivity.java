@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class PreferenceActivity extends AppCompatActivity {
 
-    Intent To_info;
-    Button btn_info, btn_back, btn_volume;
+    Intent To_info, To_siren;
+    Button btn_info, btn_back, btn_siren;
 
 
 
@@ -31,8 +31,9 @@ public class PreferenceActivity extends AppCompatActivity {
     public void setting() {
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_info = (Button) findViewById(R.id.btn_info);
+        btn_siren = (Button) findViewById(R.id.btn_siren);
         To_info = new Intent(getApplicationContext(),profile.class);
-
+        To_siren = new Intent(getApplicationContext(),Siren_select.class);
 
     }
 
@@ -50,6 +51,13 @@ public class PreferenceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(To_info);
+            }
+        });
+
+        btn_siren.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(To_siren);
             }
         });
     }

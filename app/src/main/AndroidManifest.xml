@@ -61,14 +61,14 @@
         <!--시호-->
         <activity android:name=".PreferenceActivity"/>
         <activity android:name=".profile"/>
-        <activity android:name=".daumView"/>
+        <activity android:name=".daumView"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog.Alert"
+            tools:targetApi="lollipop_mr1" />
         <activity
             android:name=".Siren"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
-
-
-
         </activity>
+        <activity android:name=".Siren_select"/>
         <!--시호-->
     </application>
 

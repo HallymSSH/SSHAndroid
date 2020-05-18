@@ -3,15 +3,13 @@ package com.ssh.capstone.safetygohome;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.ssh.capstone.safetygohome.R;
 
@@ -19,6 +17,9 @@ public class Siren extends Activity {
 
     MediaPlayer mediaPlayer;
     Button btn_play, btn_stop;
+    String sound="";
+    Siren_select siren_select;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +31,8 @@ public class Siren extends Activity {
         getWindow().setAttributes(layoutParams);
         setContentView(R.layout.sirenpopup);
 
+
+        //sound = ((Siren_select)Siren_select.context).result;
         /*
         DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
 
@@ -44,7 +47,6 @@ public class Siren extends Activity {
 
         setting();
         setlistner();
-
     }
 
     public void setting() {
@@ -56,9 +58,30 @@ public class Siren extends Activity {
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
+                if (sound.equals("siren1")){
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren1);
+                    mediaPlayer.setLooping(true);
+                    mediaPlayer.start();
+                } else if(sound.equals("siren2")){
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren2);
+                    mediaPlayer.setLooping(true);
+                    mediaPlayer.start();
+                } else if(sound.equals("siren3")){
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren2);
+                    mediaPlayer.setLooping(true);
+                    mediaPlayer.start();
+                }
+                */
+
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren1);
                 mediaPlayer.setLooping(true);
                 mediaPlayer.start();
+
+                //((Siren_select)Siren_select.context).getresult();
+                //siren_select.getresult();
+
+                //Toast.makeText(getApplicationContext(), sound, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -81,5 +104,4 @@ public class Siren extends Activity {
             mediaPlayer = null;
         }
     }
-
 }

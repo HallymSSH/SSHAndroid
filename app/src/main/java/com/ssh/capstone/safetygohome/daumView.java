@@ -1,10 +1,13 @@
 package com.ssh.capstone.safetygohome;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -13,7 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class daumView extends AppCompatActivity {
+public class daumView extends Activity {
 
     private WebView daum_webView;
     private Handler handler;
@@ -23,6 +26,12 @@ public class daumView extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        WindowManager.LayoutParams layoutParams= new WindowManager.LayoutParams();
+
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        getWindow().setAttributes(layoutParams);
+
         setContentView(R.layout.daum_view);
         daum_result = (TextView) findViewById(R.id.daum_result);
 

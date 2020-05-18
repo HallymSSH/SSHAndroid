@@ -2,31 +2,23 @@ package com.ssh.capstone.safetygohome;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -38,7 +30,6 @@ import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static Context mContext;
@@ -141,8 +132,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //show(v);
 
+                CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
+                        sendSMS("821092086833","테스트입니다.");
+                    }
+                }.start();
+
                 // 기능 확인시 주석풀고 ㄱㄱ
-                //sendSMS("821042008558","테스트입니다.");          // 문자보내기
+                         // 문자보내기
             }
         });
 
@@ -150,10 +154,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show(v);
-
+                Toast.makeText(getApplicationContext(), "비상연락", Toast.LENGTH_LONG).show();
                 // 기능확인시 주석 풀고 ㄱㄱ
-               // Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01042008558"));    // 전화걸기
-               // startActivity(intent);
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01042008558"));    // 전화걸기
+               startActivity(intent);
 
             }
         });
@@ -252,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
         imageButton5 = (ImageButton) findViewById(R.id.imageButton5);
         Intent_ToPopUp = new Intent(MainActivity.this, com.ssh.capstone.safetygohome.popup_window.class);
 
-        Intent_siren = new Intent(MainActivity.this,Siren.class);
+        Intent_siren = new Intent(getApplicationContext(),Siren.class);
         // 목적지 목록 인텐트
         Intent_DestList = new Intent(MainActivity.this, com.ssh.capstone.safetygohome.DestinationList.class);
 
