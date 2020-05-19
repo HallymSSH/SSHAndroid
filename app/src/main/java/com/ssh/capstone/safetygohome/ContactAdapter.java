@@ -16,7 +16,6 @@ public class ContactAdapter extends BaseAdapter {
 
     // ListViewAdapter의 생성자
     public ContactAdapter() {
-
     }
 
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
@@ -27,7 +26,7 @@ public class ContactAdapter extends BaseAdapter {
 
     // position에 위치한 데이터를 화면에 출력하는데 사용될 View를 리턴. : 필수 구현
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final int pos = position;
         final Context context = parent.getContext();
 
@@ -40,7 +39,7 @@ public class ContactAdapter extends BaseAdapter {
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         TextView txt_name = (TextView) convertView.findViewById(R.id.txt_name) ;
         TextView txt_num = (TextView) convertView.findViewById(R.id.txt_num) ;
-        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.CheckBox);
+        CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.CheckBox);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         ContactData listViewItem = listViewItemList.get(position);
@@ -48,7 +47,16 @@ public class ContactAdapter extends BaseAdapter {
         // 아이템 내 각 위젯에 데이터 반영
         txt_name.setText(listViewItem.getName());
         txt_num.setText(listViewItem.getNum());
-        checkBox.setTag(listViewItem.getChecked());
+        checkBox.setChecked(listViewItemList.get(position).getChecked());
+
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean newState = !listViewItemList.get(position).getChecked();
+                listViewItemList.get(position).setChecked(newState);
+            }
+        });
+        checkBox.setChecked(isChecked(position));
 
         return convertView;
     }
@@ -63,6 +71,10 @@ public class ContactAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
         return listViewItemList.get(position) ;
+    }
+
+    public boolean isChecked(int position){
+        return listViewItemList.get(position).getChecked();
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.

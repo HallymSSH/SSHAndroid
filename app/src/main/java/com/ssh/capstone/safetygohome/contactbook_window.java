@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import com.ssh.capstone.safetygohome.Database.DatabaseClass;
 import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
 
-public class contactbook_window extends AppCompatActivity {
+public class contactbook_window extends AppCompatActivity implements View.OnClickListener{
 
     ArrayList<ContactData> items = new ArrayList<>();
     ArrayList<String> username = new ArrayList<>();
@@ -65,8 +66,10 @@ public class contactbook_window extends AppCompatActivity {
         ToAdd = new Intent(com.ssh.capstone.safetygohome.contactbook_window.this,
                 com.ssh.capstone.safetygohome.listview_add.class);
         FromAdd = getIntent();
+        //adapter = new ContactAdapter();
         adapter = new ContactAdapter();
         contact_listView.setAdapter(adapter);
+        contact_listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         db = new DatabaseClass(this);
     }
 
@@ -107,6 +110,8 @@ public class contactbook_window extends AppCompatActivity {
                 searchItem(edit_search.getText().toString());
             }
         });
+
+
     }
 
     public void setlistview(){
@@ -131,11 +136,22 @@ public class contactbook_window extends AppCompatActivity {
 
     public void deleteItem(){
         int count, checked ;
+        SparseBooleanArray checkedItems = contact_listView.getCheckedItemPositions();
         count = adapter.getCount() ;
+
+        if (checkedItems != null) {
+            for (int i=0; i<checkedItems.size(); i++) {
+                if (checkedItems.valueAt(i)) {
+                    String item = contact_listView.getAdapter().getItem(
+                            checkedItems.keyAt(i)).toString();
+                    Log.i("yes",item + " was selected");
+                }
+            }
+        }
 
         if (count > 0) {
             // 현재 선택된 아이템의 position 획득.
-            Log.i("checkitem : ",contact_listView.getCheckedItemCount()+"");
+            Log.i("checkitem : ",contact_listView.getCheckedItemPositions()+"");
             checked = contact_listView.getCheckedItemPosition();
             Log.i("들어오긴함 : ", checked+"");
 
@@ -168,5 +184,13 @@ public class contactbook_window extends AppCompatActivity {
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+        View ParentView = (View) v.getParent();
+        String temp = (String) ParentView.getTag();
+        int position = Integer.parseInt(temp);
+
     }
 }
