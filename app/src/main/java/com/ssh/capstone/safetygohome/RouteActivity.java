@@ -37,14 +37,16 @@ public class RouteActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_route);
 
-        LinearLayout routelayoutTmap = new LinearLayout(this);
+        LinearLayout routeLayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
         tMapView = new TMapView(this);
 
-        routelayoutTmap.addView(tMapView);
-        setContentView(routelayoutTmap);
+        routeLayoutTmap.addView(tMapView);
+
         tMapView.setIconVisibility(true);
 
         // setNowLocation(); // 현재위치로 중심점 옮김
+        // setTrackingMode(true) --> 트래킹모드 실행. gps 수신될때마다 변경
+        // 레이아웃에서 플로팅 버튼 누르면 on off 추가
 
         //LinearLayout routelayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
         //routelayoutTmap.addView(tMapView);
@@ -58,20 +60,21 @@ public class RouteActivity extends Activity {
         drawPedestrianPath();
 
 
+
+
     }
 
     public void setNowLocation() {
         double temp1 = ((MainActivity)MainActivity.mContext).getCenterPointLat();
         double temp2 = ((MainActivity)MainActivity.mContext).getCenterPointLon();
-        tMapView.setLocationPoint(temp1, temp2); // 현재위치로 표시될 좌표의 위도, 경도를 설정합니다.
-        tMapView.setCenterPoint(temp1, temp2, false); // 현재 위치로 이동
+        tMapView.setLocationPoint(temp1, temp2); // 현재위치로 표시될 좌표의 위도, 경도를 설정
+        tMapView.setCenterPoint(temp1, temp2, false); // 현재 위치로 센터포인트 지정
     }
 
 
     public void drawPedestrianPath() {
 
         TMapPoint point1 = tMapView.getLocationPoint(); // 출발점
-        // TMapPoint point1 = new TMapPoint(37.56420451, 126.98113196);
         TMapPoint point2 = new TMapPoint(destLat, destLon);
 
         TMapData tmapdata = new TMapData();
