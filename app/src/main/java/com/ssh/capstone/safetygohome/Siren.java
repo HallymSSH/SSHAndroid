@@ -1,6 +1,7 @@
 package com.ssh.capstone.safetygohome;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -17,8 +18,9 @@ public class Siren extends Activity {
 
     MediaPlayer mediaPlayer;
     Button btn_play, btn_stop;
-    String sound="";
-    Siren_select siren_select;
+    String shared="sirenfile";
+    String sound;
+    //Siren_select siren_select;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +33,9 @@ public class Siren extends Activity {
         getWindow().setAttributes(layoutParams);
         setContentView(R.layout.sirenpopup);
 
+        SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
+        sound = sharedPreferences.getString("sound", "");
+        Toast.makeText(getApplicationContext(), sound, Toast.LENGTH_SHORT).show();
 
         //sound = ((Siren_select)Siren_select.context).result;
         /*
@@ -44,7 +49,6 @@ public class Siren extends Activity {
 
         getWindow().getAttributes().height = height;
         */
-
         setting();
         setlistner();
     }
@@ -58,7 +62,7 @@ public class Siren extends Activity {
         btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
+
                 if (sound.equals("siren1")){
                     mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren1);
                     mediaPlayer.setLooping(true);
@@ -68,20 +72,14 @@ public class Siren extends Activity {
                     mediaPlayer.setLooping(true);
                     mediaPlayer.start();
                 } else if(sound.equals("siren3")){
-                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren2);
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren3);
+                    mediaPlayer.setLooping(true);
+                    mediaPlayer.start();
+                } else {
+                    mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren3);
                     mediaPlayer.setLooping(true);
                     mediaPlayer.start();
                 }
-                */
-
-                mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren1);
-                mediaPlayer.setLooping(true);
-                mediaPlayer.start();
-
-                //((Siren_select)Siren_select.context).getresult();
-                //siren_select.getresult();
-
-                //Toast.makeText(getApplicationContext(), sound, Toast.LENGTH_SHORT).show();
             }
         });
 

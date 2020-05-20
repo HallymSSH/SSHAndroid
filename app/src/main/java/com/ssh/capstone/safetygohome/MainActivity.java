@@ -135,13 +135,13 @@ public class MainActivity extends AppCompatActivity {
                 CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-
+                            // 간격마다 토스트 뿌려주기
                     }
 
                     @Override
                     public void onFinish() {
                         Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
-                        sendSMS("821092086833","테스트입니다.");
+                        sendSMS("821092086833","테스트입니다.");          // 문자보내기
                     }
                 }.start();
 
