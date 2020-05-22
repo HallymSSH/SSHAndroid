@@ -112,7 +112,7 @@ public class DatabaseClass {
 
 
     //검색때 사용하는 함수
-    public boolean SearchUser(ArrayList<String> username, ArrayList<String> usernum,String name){
+    public boolean SearchUser(ArrayList<String> username, ArrayList<String> usernum, String name){
         try
         {
             tableData = new TableData(m_ctx);
@@ -140,6 +140,35 @@ public class DatabaseClass {
                 } while (cursor.moveToNext());
             }
             cursor.close();
+            db.close();
+        }
+        catch(StringIndexOutOfBoundsException e) {
+            Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
+            return false;
+        }
+        finally {
+            tableData.close();
+        }
+
+        return true;
+    }
+
+    // CCTV
+    public boolean SearchCCTV(String latitude, String longitude){
+        try
+        {
+            tableData = new TableData(m_ctx);
+
+            String location1 = "";
+            String location2 = "";
+            String location3 = "";
+
+            SQLiteDatabase db = tableData.getReadableDatabase();
+
+            // 인덱스 테이블 만들어서 찾기
+            // Cursor cursor = db.rawQuery("SELECT from WHERE ,null);
+
+            // cursor.close();
             db.close();
         }
         catch(StringIndexOutOfBoundsException e) {

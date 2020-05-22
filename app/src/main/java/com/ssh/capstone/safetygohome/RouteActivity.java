@@ -11,6 +11,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,10 +20,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
+
+import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
 
 public class RouteActivity extends Activity {
     TMapView tMapView = null;
@@ -37,19 +42,19 @@ public class RouteActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_route);
 
+        try {
+            initDB(getResources(), false); // db 준비
+        } catch (Exception e) {
+            Log.w("Get DB Exception", e.getMessage());
+        }
+
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton2);
         LinearLayout routeLayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
         tMapView = new TMapView(this);
 
         routeLayoutTmap.addView(tMapView);
 
         tMapView.setIconVisibility(true);
-
-        // setNowLocation(); // 현재위치로 중심점 옮김
-        // setTrackingMode(true) --> 트래킹모드 실행. gps 수신될때마다 변경
-        // 레이아웃에서 플로팅 버튼 누르면 on off 추가
-
-        //LinearLayout routelayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
-        //routelayoutTmap.addView(tMapView);
 
         intent = getIntent();
         destLat = intent.getDoubleExtra("getLat", 0);
@@ -59,8 +64,12 @@ public class RouteActivity extends Activity {
 
         drawPedestrianPath();
 
-
-
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTracking();
+            }
+        });
 
     }
 
@@ -117,4 +126,10 @@ public class RouteActivity extends Activity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
+
+    public void setTracking() {
+        // setNowLocation(); // 현재위치로 중심점 옮김
+        // setTrackingMode(true) --> 트래킹모드 실행. gps 수신될때마다 변경
+        Toast.makeText(getApplicationContext(), "트래킹모드 on off", Toast.LENGTH_LONG).show();
+    }
 }
