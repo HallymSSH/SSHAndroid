@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         timeset = sharedPreferences.getInt("timenumber",0);
         //Toast.makeText(getApplicationContext(), String.valueOf(timeset), Toast.LENGTH_SHORT).show();
+
+        if (timeset== 0) {
+            timeset = 30;
+        }
         long millisInput = timeset*60000;
         setTime(millisInput);
 
@@ -368,6 +372,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
+        timeset = sharedPreferences.getInt("timenumber",0);
+        long millisInput = timeset*60000;
+        setTime(millisInput);
 
     }
 
