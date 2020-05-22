@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -48,7 +49,7 @@ public class RouteActivity extends Activity {
             Log.w("Get DB Exception", e.getMessage());
         }
 
-        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton2);
+        final ToggleButton tbTracking = (ToggleButton) this.findViewById(R.id.toggleButton);
         LinearLayout routeLayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
         tMapView = new TMapView(this);
 
@@ -64,10 +65,13 @@ public class RouteActivity extends Activity {
 
         drawPedestrianPath();
 
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        tbTracking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setTracking();
+                if(tbTracking.isChecked())
+                    setTracking(true);
+                else
+                    setTracking(false);
             }
         });
 
@@ -127,9 +131,9 @@ public class RouteActivity extends Activity {
         }
     };
 
-    public void setTracking() {
+    public void setTracking(boolean toggle) {
         // setNowLocation(); // 현재위치로 중심점 옮김
-        // setTrackingMode(true) --> 트래킹모드 실행. gps 수신될때마다 변경
+        // setTrackingMode(toggle) --> 트래킹모드 실행. gps 수신될때마다 변경, True일때 실행임
         Toast.makeText(getApplicationContext(), "트래킹모드 on off", Toast.LENGTH_LONG).show();
     }
 }
