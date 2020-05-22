@@ -105,7 +105,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/btn_emergency"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginRight="16dp"
@@ -230,6 +230,19 @@
         android:textColor="#0066FF"
         app:layout_constraintEnd_toStartOf="@+id/button4"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+    <TextView
+        android:id="@+id/emergency_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="63dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:hint="시간을 입력하세요"
+        android:textColor="#0066FF"
+        android:gravity="right"
+        app:layout_constraintEnd_toStartOf="@+id/btn_emergency"
+        app:layout_constraintTop_toBottomOf="@+id/view4" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -83,6 +84,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="@+id/linearLayoutTmap"
         app:srcCompat="@drawable/ic_add_black_24dp" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton2"

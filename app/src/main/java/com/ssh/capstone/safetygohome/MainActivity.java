@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     View view;
     TMapView tMapView = null;
     TMapGpsManager gps = null;
-
+    String emergency = "time";
+    int timeset;
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
     Intent Intent_ToPopUp, Intent_DestList, Intent_siren;
@@ -48,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mContext = this;
+        SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
+        timeset = sharedPreferences.getInt("timenumber",0);
+        Toast.makeText(getApplicationContext(), String.valueOf(timeset), Toast.LENGTH_SHORT).show();
 
         // 위치 권한부분
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -131,11 +136,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show(v);
-
-                CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
+                CountDownTimer countDownTimer = null;
+                if (countDownTimer != null) {
+                        countDownTimer.cancel();
+                }
+                //Toast.makeText(getApplicationContext(), "긴급상황이 설정되었습니다 한번더 누르면 취소됩니다.", Toast.LENGTH_LONG).show();
+                countDownTimer = new CountDownTimer(5000, 1000) {            // 5000 = 5초
                     @Override
                     public void onTick(long millisUntilFinished) {
                             // 간격마다 토스트 뿌려주기
+
                     }
 
                     @Override
@@ -147,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
 
                 // 기능 확인시 주석풀고 ㄱㄱ
                          // 문자보내기
+
+
+
             }
         });
 
