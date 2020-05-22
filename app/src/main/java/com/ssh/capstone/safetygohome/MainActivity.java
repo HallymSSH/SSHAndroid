@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +32,8 @@ import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
+
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
     Intent Intent_ToPopUp, Intent_DestList, Intent_siren;
+    TextView mTextViewCountDown;
+    CountDownTimer mCountDownTimer;
+    boolean mTimerRunning;
+
+    long mStartTimeInMillis;
+    long mTimeLeftInMillis;
+    long mEndTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +61,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mContext = this;
+        mTextViewCountDown = (TextView) findViewById(R.id.timer);
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         timeset = sharedPreferences.getInt("timenumber",0);
-        Toast.makeText(getApplicationContext(), String.valueOf(timeset), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), String.valueOf(timeset), Toast.LENGTH_SHORT).show();
+        long millisInput = timeset*60000;
+        setTime(millisInput);
 
         // 위치 권한부분
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -136,6 +150,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show(v);
+
+                if (mTimerRunning) {
+                    resetTimer();
+                    mCountDownTimer.cancel();
+                } else {
+                    startTimer();
+                }
+
+
+                /*
                 CountDownTimer countDownTimer = null;
                 if (countDownTimer != null) {
                         countDownTimer.cancel();
@@ -154,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                         sendSMS("821092086833","테스트입니다.");          // 문자보내기
                     }
                 }.start();
-
+                */
                 // 기능 확인시 주석풀고 ㄱㄱ
                          // 문자보내기
 
@@ -182,9 +206,60 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "현재위치", Toast.LENGTH_LONG).show();
             }
         });
+    }
 
+
+    public void setTime(long milliseconds) {
+        mStartTimeInMillis = milliseconds;
+        updateCountDownText();
+        resetTimer();
+    }
+
+    public void startTimer() {
+        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
+
+        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mTimeLeftInMillis = millisUntilFinished;
+                updateCountDownText();
+            }
+
+            @Override
+            public void onFinish() {
+                mTimerRunning = false;
+                Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
+                sendSMS("821092086833","테스트입니다.");          // 문자보내기
+                resetTimer();
+            }
+        }.start();
+        mTimerRunning = true;
+    }
+
+    public void resetTimer() {
+        mTimeLeftInMillis = mStartTimeInMillis;
+        updateCountDownText();
+        mTimerRunning = false;
+    }
+
+
+    @SuppressLint("DefaultLocale")
+    public void updateCountDownText() {
+        int hours = (int) (mTimeLeftInMillis / 1000) / 3600;
+        int minutes = (int) ((mTimeLeftInMillis / 1000) % 3600) / 60;
+        int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
+
+        String timeLeftFormatted;
+        if (hours > 0) {
+            timeLeftFormatted = String.format("%d:%02d:%02d", hours, minutes, seconds);
+        } else {
+            timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
+        }
+        mTextViewCountDown.setText(timeLeftFormatted);
 
     }
+
+
     // 문자보내기
     private void sendSMS(String phoneNumber, String message) {
         SmsManager sms = SmsManager.getDefault();

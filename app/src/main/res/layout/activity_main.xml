@@ -85,6 +85,17 @@
         app:layout_constraintEnd_toEndOf="@+id/linearLayoutTmap"
         app:srcCompat="@drawable/ic_add_black_24dp" />
 
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginBottom="32dp"
+        android:text="00:00"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toTopOf="@id/imageButton3"
+        app:layout_constraintEnd_toStartOf="@+id/floatingActionButton" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton2"
