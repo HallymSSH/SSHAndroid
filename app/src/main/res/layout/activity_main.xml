@@ -94,6 +94,7 @@
         android:layout_marginBottom="32dp"
         android:text="00:00"
         android:textSize="25dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/imageButton3"
         app:layout_constraintEnd_toStartOf="@+id/floatingActionButton" />
 

@@ -12,6 +12,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     Intent Intent_ToPopUp, Intent_DestList, Intent_siren;
     TextView mTextViewCountDown;
     CountDownTimer mCountDownTimer;
+    ColorStateList textColorDefault;
     boolean mTimerRunning;
 
     long mStartTimeInMillis;
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = this;
         mTextViewCountDown = (TextView) findViewById(R.id.timer);
+        textColorDefault = mTextViewCountDown.getTextColors();
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         timeset = sharedPreferences.getInt("timenumber",0);
         //Toast.makeText(getApplicationContext(), String.valueOf(timeset), Toast.LENGTH_SHORT).show();
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         long millisInput = timeset*60000;
         setTime(millisInput);
+
 
         // 위치 권한부분
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -256,7 +261,17 @@ public class MainActivity extends AppCompatActivity {
         } else {
             timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
         }
+
+
+        if(mTimeLeftInMillis < 60000) {
+            mTextViewCountDown.setTextColor(Color.parseColor("#FF0000"));
+        } else {
+            mTextViewCountDown.setTextColor(textColorDefault);
+        }
+        //Toast.makeText(this, String.valueOf(minutes), Toast.LENGTH_SHORT).show();
         mTextViewCountDown.setText(timeLeftFormatted);
+
+
 
     }
 
