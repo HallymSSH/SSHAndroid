@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     TMapView tMapView = null;
     TMapGpsManager gps = null;
     String emergency = "time";
-    int timeset;
+    int timeset,flag;
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
     Intent Intent_ToPopUp, Intent_DestList, Intent_siren;
@@ -65,10 +65,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         timeset = sharedPreferences.getInt("timenumber",0);
         //Toast.makeText(getApplicationContext(), String.valueOf(timeset), Toast.LENGTH_SHORT).show();
+        flag = timeset;
 
-        if (timeset== 0) {
-            timeset = 30;
-        }
         long millisInput = timeset*60000;
         setTime(millisInput);
 
@@ -161,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     startTimer();
                 }
-
 
                 /*
                 CountDownTimer countDownTimer = null;
@@ -338,8 +335,6 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
-
-
     // 황찬우
     //Button과 Intent 세팅
     public void setting() {
@@ -381,7 +376,12 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         timeset = sharedPreferences.getInt("timenumber",0);
         long millisInput = timeset*60000;
-        setTime(millisInput);
+        if (mTimerRunning==true && timeset!=flag ){
+            mCountDownTimer.cancel();
+            setTime(millisInput);
+        } else if (timeset!=flag) {
+            setTime(millisInput);
+        }
 
     }
 

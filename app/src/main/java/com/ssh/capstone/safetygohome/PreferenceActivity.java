@@ -41,7 +41,7 @@ public class PreferenceActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         String timeset = sharedPreferences.getString("timeset", "");
 
-        Toast.makeText(this, timeset, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, timeset, Toast.LENGTH_SHORT).show();
         timeview.setText(timeset);
     }
     public void setting() {
