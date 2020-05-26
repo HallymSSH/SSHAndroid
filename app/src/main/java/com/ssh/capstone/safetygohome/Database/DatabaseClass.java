@@ -154,7 +154,7 @@ public class DatabaseClass {
     }
 
     // CCTV
-    public boolean SearchCCTV(String latitude, String longitude){
+    public boolean SearchCCTV(String org_latitude, String org_longitude, String dst_latitude, String dst_longitude){
         try
         {
             tableData = new TableData(m_ctx);

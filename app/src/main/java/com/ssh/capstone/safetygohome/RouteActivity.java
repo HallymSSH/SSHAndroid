@@ -26,13 +26,14 @@ import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
-
+import com.ssh.capstone.safetygohome.Database.DatabaseClass;
 import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
 
 public class RouteActivity extends Activity {
     TMapView tMapView = null;
     Intent intent;
     MainActivity mainActivity;
+    private DatabaseClass db;
     private double destLat;
     private double destLon;
     private double nowLat;
@@ -57,6 +58,7 @@ public class RouteActivity extends Activity {
 
         tMapView.setIconVisibility(true);
 
+        // 목적지 위도 경도 가져오기
         intent = getIntent();
         destLat = intent.getDoubleExtra("getLat", 0);
         destLon = intent.getDoubleExtra("getLon", 0);
@@ -65,6 +67,7 @@ public class RouteActivity extends Activity {
 
         drawPedestrianPath();
 
+        // 트래킹모드 활성화 여부
         tbTracking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,10 +88,18 @@ public class RouteActivity extends Activity {
     }
 
 
+    // 보행자 경로 그리기
     public void drawPedestrianPath() {
 
-        TMapPoint point1 = tMapView.getLocationPoint(); // 출발점
+        TMapPoint point1 = tMapView.getLocationPoint(); // 현재위치 출발점
         TMapPoint point2 = new TMapPoint(destLat, destLon);
+
+        // 경유지 추가하기
+        /*
+        db.SearchCCTV(org위도, org경도, dst위도, dst경도);
+
+         */
+
 
         TMapData tmapdata = new TMapData();
 
@@ -132,8 +143,10 @@ public class RouteActivity extends Activity {
     };
 
     public void setTracking(boolean toggle) {
-        // setNowLocation(); // 현재위치로 중심점 옮김
-        // setTrackingMode(toggle) --> 트래킹모드 실행. gps 수신될때마다 변경, True일때 실행임
+        if (toggle == true) // 트래킹 모드 실행되면 현재위치로 중심점 옮김
+            setNowLocation();
+
+        tMapView.setTrackingMode(toggle); // --> 트래킹모드 실행. gps 수신될때마다 변경, True일때 실행임
         Toast.makeText(getApplicationContext(), "트래킹모드 on off", Toast.LENGTH_LONG).show();
     }
 }
