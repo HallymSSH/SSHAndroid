@@ -2,7 +2,6 @@ package com.ssh.capstone.safetygohome;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,8 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -42,8 +39,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class profile extends AppCompatActivity {
 
     Bitmap img;
-    Bitmap tmpBitmap;
-    Bitmap tmpBitmap1;
     private static final String FAIL_CODE = "no_image_found";
     Button btn_profileback, btn_birthday, btn_sex;
     CircleImageView profile_view;
@@ -53,7 +48,7 @@ public class profile extends AppCompatActivity {
     private final int GET_GALLERY_IMAGE = 100;
     private final int GET_ADDRESS = 200;
     String shared = "file";
-    Drawable temp,temp2;
+    Drawable temp2;
 
 
    @Override
@@ -133,7 +128,7 @@ public class profile extends AppCompatActivity {
         listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                textView_Date.setText(year+"년 "+month+"월 "+dayOfMonth+"일 ");
+                textView_Date.setText(year+"년 "+(month+1)+"월 "+dayOfMonth+"일 ");
 
             }
         };
@@ -260,7 +255,7 @@ public class profile extends AppCompatActivity {
     public void inputname() {
         FrameLayout container = new FrameLayout(this);
         final EditText editText = new EditText(this);
-        FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
         params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
         editText.setLayoutParams(params);
@@ -268,8 +263,6 @@ public class profile extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
         builder.setView(container);
         builder.setTitle("이름 입력").setMessage("변경할 이름을 입력하세요");
-
-
 
         builder.setPositiveButton("입력", new DialogInterface.OnClickListener() {
             @Override

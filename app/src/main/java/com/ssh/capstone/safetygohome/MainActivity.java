@@ -6,10 +6,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,6 +25,7 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +35,8 @@ import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
+import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
     public static Context mContext;
@@ -37,10 +44,19 @@ public class MainActivity extends AppCompatActivity {
     View view;
     TMapView tMapView = null;
     TMapGpsManager gps = null;
-
+    String emergency = "time";
+    int timeset,flag;
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
     Intent Intent_ToPopUp, Intent_DestList, Intent_siren;
+    TextView mTextViewCountDown;
+    CountDownTimer mCountDownTimer;
+    ColorStateList textColorDefault;
+    boolean mTimerRunning;
+
+    long mStartTimeInMillis;
+    long mTimeLeftInMillis;
+    long mEndTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mContext = this;
+        mTextViewCountDown = (TextView) findViewById(R.id.timer);
+        textColorDefault = mTextViewCountDown.getTextColors();
+        SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
+        timeset = sharedPreferences.getInt("timenumber",0);
+        //Toast.makeText(getApplicationContext(), String.valueOf(timeset), Toast.LENGTH_SHORT).show();
+        flag = timeset;
+
+        long millisInput = timeset*60000;
+        setTime(millisInput);
+
 
         // 위치 권한부분
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -132,21 +158,38 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //show(v);
 
-                CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
+                if (mTimerRunning) {
+                    resetTimer();
+                    mCountDownTimer.cancel();
+                } else {
+                    startTimer();
+                }
+
+                /*
+                CountDownTimer countDownTimer = null;
+                if (countDownTimer != null) {
+                        countDownTimer.cancel();
+                }
+                //Toast.makeText(getApplicationContext(), "긴급상황이 설정되었습니다 한번더 누르면 취소됩니다.", Toast.LENGTH_LONG).show();
+                countDownTimer = new CountDownTimer(5000, 1000) {            // 5000 = 5초
                     @Override
                     public void onTick(long millisUntilFinished) {
+                            // 간격마다 토스트 뿌려주기
 
                     }
 
                     @Override
                     public void onFinish() {
                         Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
-                        sendSMS("821092086833","테스트입니다.");
+                        sendSMS("821092086833","테스트입니다.");          // 문자보내기
                     }
                 }.start();
-
+                */
                 // 기능 확인시 주석풀고 ㄱㄱ
                          // 문자보내기
+
+
+
             }
         });
 
@@ -169,9 +212,68 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "현재위치", Toast.LENGTH_LONG).show();
             }
         });
+    }
 
+
+    public void setTime(long milliseconds) {
+        mStartTimeInMillis = milliseconds;
+        updateCountDownText();
+        resetTimer();
+    }
+
+    public void startTimer() {
+        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
+
+        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mTimeLeftInMillis = millisUntilFinished;
+                updateCountDownText();
+            }
+
+            @Override
+            public void onFinish() {
+                mTimerRunning = false;
+                Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
+                sendSMS("821092086833","테스트입니다.");          // 문자보내기
+                resetTimer();
+            }
+        }.start();
+        mTimerRunning = true;
+    }
+
+    public void resetTimer() {
+        mTimeLeftInMillis = mStartTimeInMillis;
+        updateCountDownText();
+        mTimerRunning = false;
+    }
+
+
+    @SuppressLint("DefaultLocale")
+    public void updateCountDownText() {
+        int hours = (int) (mTimeLeftInMillis / 1000) / 3600;
+        int minutes = (int) ((mTimeLeftInMillis / 1000) % 3600) / 60;
+        int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
+
+        String timeLeftFormatted;
+        if (hours > 0) {
+            timeLeftFormatted = String.format("%d:%02d:%02d", hours, minutes, seconds);
+        } else {
+            timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
+        }
+
+
+        if(mTimeLeftInMillis < 60000) {
+            mTextViewCountDown.setTextColor(Color.parseColor("#FF0000"));
+        } else {
+            mTextViewCountDown.setTextColor(textColorDefault);
+        }
+        //Toast.makeText(this, String.valueOf(minutes), Toast.LENGTH_SHORT).show();
+        mTextViewCountDown.setText(timeLeftFormatted);
 
     }
+
+
     // 문자보내기
     private void sendSMS(String phoneNumber, String message) {
         SmsManager sms = SmsManager.getDefault();
@@ -185,7 +287,6 @@ public class MainActivity extends AppCompatActivity {
         }
         // lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener); // 휴대폰으로 옮길 때 활성화 하기
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener);
-
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -246,8 +347,6 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
-
-
     // 황찬우
     //Button과 Intent 세팅
     public void setting() {
@@ -259,7 +358,6 @@ public class MainActivity extends AppCompatActivity {
         Intent_siren = new Intent(getApplicationContext(),Siren.class);
         // 목적지 목록 인텐트
         Intent_DestList = new Intent(MainActivity.this, com.ssh.capstone.safetygohome.DestinationList.class);
-
 
     }
 
@@ -280,6 +378,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
+        timeset = sharedPreferences.getInt("timenumber",0);
+        long millisInput = timeset*60000;
+        if (mTimerRunning==true && timeset!=flag ){
+            mCountDownTimer.cancel();
+            setTime(millisInput);
+        } else if (timeset!=flag) {
+            setTime(millisInput);
+        }
 
     }
 

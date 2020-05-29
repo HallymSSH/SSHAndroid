@@ -2,10 +2,12 @@ package com.ssh.capstone.safetygohome;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -14,20 +16,22 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Siren_select extends AppCompatActivity {
     Button btn_back,btn_siren1,btn_siren2,btn_siren3,btn_select1,btn_select2,btn_select3;
     MediaPlayer mediaPlayer;
-    public static Context context;
     String shared = "sirenfile";
-    public String result = "siren3";
+    String result;
+    Boolean state1,state2,state3;
+    SeekBar seekBar;
+    AudioManager audioManager;
+    int nMax;
+    int nCurrentVolumn;
 
-    Boolean state1 = false;
-    Boolean state2 = false;
-    Boolean state3 = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.siren_select);
         setting();
         setlistner();
-        context = this;
+        setSeekBar();
         SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
         Boolean select1 = sharedPreferences.getBoolean("select1", false);
         Boolean select2 = sharedPreferences.getBoolean("select2", false);
@@ -36,17 +40,10 @@ public class Siren_select extends AppCompatActivity {
         btn_select1.setSelected(select1);
         btn_select2.setSelected(select2);
         btn_select3.setSelected(select3);
+        state1 = select1;
+        state2 = select2;
+        state3 = select3;
 
-        if (state1.equals(true)){
-            result="siren1";
-        } else if(state2.equals(true)) {
-            result="siren2";
-        } else if(state3.equals(true)){
-            result="siren3";
-        } else {
-            result="siren3";
-        }
-        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
     }
 
     public void setting() {
@@ -57,7 +54,6 @@ public class Siren_select extends AppCompatActivity {
         btn_select1 = (Button) findViewById(R.id.btn_select1);
         btn_select2 = (Button) findViewById(R.id.btn_select2);
         btn_select3 = (Button) findViewById(R.id.btn_select3);
-
     }
 
     public void setlistner() {
@@ -156,8 +152,35 @@ public class Siren_select extends AppCompatActivity {
                 btn_select3.setSelected(true);
             }
         });
-
     }
+
+    public void setSeekBar() {
+        seekBar = (SeekBar) findViewById(R.id.seekBar);
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        nMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        nCurrentVolumn = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+        seekBar.setMax(nMax);
+        seekBar.setProgress(nCurrentVolumn);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress,0);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -167,39 +190,29 @@ public class Siren_select extends AppCompatActivity {
             mediaPlayer = null;
         }
 
+        if (state1.equals(true)){
+            result="siren1";
+        } else if(state2.equals(true)) {
+            result="siren2";
+        } else if(state3.equals(true)){
+            result="siren3";
+        } else {
+            result="siren3";
+        }
+
+
         SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Boolean select1 = state1;
         Boolean select2 = state2;
         Boolean select3 = state3;
+        String sound = result;
 
+        editor.putString("sound",sound);
         editor.putBoolean("select1", select1);
         editor.putBoolean("select2", select2);
         editor.putBoolean("select3", select3);
-        //Toast.makeText(getApplicationContext(), select1.toString(), Toast.LENGTH_LONG).show();
         editor.commit();
 
-
-    }
-
-    public void getresult() {
-        MediaPlayer mediaPlayer;
-        if (result.equals("siren1")){
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren1);
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-        } else if(result.equals("siren2")){
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren2);
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-        } else if(result.equals("siren3")){
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren3);
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-        } else {
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren1);
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-        }
     }
 }

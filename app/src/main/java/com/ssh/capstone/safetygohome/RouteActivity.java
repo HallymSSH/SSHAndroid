@@ -11,22 +11,29 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
+import com.ssh.capstone.safetygohome.Database.DatabaseClass;
+import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
 
 public class RouteActivity extends Activity {
     TMapView tMapView = null;
     Intent intent;
     MainActivity mainActivity;
+    private DatabaseClass db;
     private double destLat;
     private double destLon;
     private double nowLat;
@@ -37,6 +44,13 @@ public class RouteActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_route);
 
+        try {
+            initDB(getResources(), false); // db 준비
+        } catch (Exception e) {
+            Log.w("Get DB Exception", e.getMessage());
+        }
+
+        final ToggleButton tbTracking = (ToggleButton) this.findViewById(R.id.toggleButton);
         LinearLayout routeLayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
         tMapView = new TMapView(this);
 
@@ -44,13 +58,7 @@ public class RouteActivity extends Activity {
 
         tMapView.setIconVisibility(true);
 
-        // setNowLocation(); // 현재위치로 중심점 옮김
-        // setTrackingMode(true) --> 트래킹모드 실행. gps 수신될때마다 변경
-        // 레이아웃에서 플로팅 버튼 누르면 on off 추가
-
-        //LinearLayout routelayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
-        //routelayoutTmap.addView(tMapView);
-
+        // 목적지 위도 경도 가져오기
         intent = getIntent();
         destLat = intent.getDoubleExtra("getLat", 0);
         destLon = intent.getDoubleExtra("getLon", 0);
@@ -59,8 +67,16 @@ public class RouteActivity extends Activity {
 
         drawPedestrianPath();
 
-
-
+        // 트래킹모드 활성화 여부
+        tbTracking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(tbTracking.isChecked())
+                    setTracking(true);
+                else
+                    setTracking(false);
+            }
+        });
 
     }
 
@@ -72,10 +88,18 @@ public class RouteActivity extends Activity {
     }
 
 
+    // 보행자 경로 그리기
     public void drawPedestrianPath() {
 
-        TMapPoint point1 = tMapView.getLocationPoint(); // 출발점
+        TMapPoint point1 = tMapView.getLocationPoint(); // 현재위치 출발점
         TMapPoint point2 = new TMapPoint(destLat, destLon);
+
+        // 경유지 추가하기
+        /*
+        db.SearchCCTV(org위도, org경도, dst위도, dst경도);
+
+         */
+
 
         TMapData tmapdata = new TMapData();
 
@@ -117,4 +141,12 @@ public class RouteActivity extends Activity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
+
+    public void setTracking(boolean toggle) {
+        if (toggle == true) // 트래킹 모드 실행되면 현재위치로 중심점 옮김
+            setNowLocation();
+
+        tMapView.setTrackingMode(toggle); // --> 트래킹모드 실행. gps 수신될때마다 변경, True일때 실행임
+        Toast.makeText(getApplicationContext(), "트래킹모드 on off", Toast.LENGTH_LONG).show();
+    }
 }
