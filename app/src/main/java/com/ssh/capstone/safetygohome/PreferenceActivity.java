@@ -8,8 +8,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.widget.Toast;
@@ -21,14 +23,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class PreferenceActivity extends AppCompatActivity {
 
-    Intent To_info, To_siren;
+    Intent To_info, To_siren, To_emergency;
     Button btn_info, btn_back, btn_siren, btn_emergency;
     TextView timeview;
     String emergency = "time";
     LinearLayout emergencycall;
-
-
-
+    Switch aSwitch;
+    Boolean switch_state = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {      // 버튼 클릭 이벤트
@@ -40,7 +41,8 @@ public class PreferenceActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         String timeset = sharedPreferences.getString("timeset", "");
-
+        Boolean Switch = sharedPreferences.getBoolean("switch",true);
+        aSwitch.setChecked(Switch);
         //Toast.makeText(this, timeset, Toast.LENGTH_SHORT).show();
         timeview.setText(timeset);
     }
@@ -51,8 +53,10 @@ public class PreferenceActivity extends AppCompatActivity {
         btn_emergency = (Button) findViewById(R.id.btn_emergency);
         To_info = new Intent(getApplicationContext(),profile.class);
         To_siren = new Intent(getApplicationContext(),Siren_select.class);
+        To_emergency = new Intent(getApplicationContext(), Emergencycall.class);
         timeview = (TextView) findViewById(R.id.emergency_time);
         emergencycall = (LinearLayout) findViewById(R.id.emergencycall);
+        aSwitch = (Switch) findViewById(R.id.switch_call);
     }
 
     public void setListener() {
@@ -88,7 +92,21 @@ public class PreferenceActivity extends AppCompatActivity {
         emergencycall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PreferenceActivity.this, "클릭되었습니다.", Toast.LENGTH_SHORT).show();
+                startActivity(To_emergency);
+
+
+            }
+        });
+
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked == true) {
+                    switch_state = true;
+
+                } else {
+                    switch_state = false;
+                }
             }
         });
     }
@@ -126,10 +144,11 @@ public class PreferenceActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         int timeset = Integer.parseInt(timeview.getText().toString());
         String timesetting = timeview.getText().toString();
+        Boolean Switch = switch_state;
         //Toast.makeText(this, timesetting, Toast.LENGTH_SHORT).show();
+        editor.putBoolean("switch",Switch);
         editor.putInt("timenumber", timeset);
         editor.putString("timeset",timesetting);
         editor.commit();
-
     }
 }

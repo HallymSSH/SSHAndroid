@@ -25,6 +25,7 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
     TMapView tMapView = null;
     TMapGpsManager gps = null;
     String emergency = "time";
+    String shared = "emergency";
     int timeset,flag;
+    Boolean state,switch_state;
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
     Intent Intent_ToPopUp, Intent_DestList, Intent_siren;
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         textColorDefault = mTextViewCountDown.getTextColors();
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         timeset = sharedPreferences.getInt("timenumber",0);
+        switch_state = sharedPreferences.getBoolean("switch", true);
         //Toast.makeText(getApplicationContext(), String.valueOf(timeset), Toast.LENGTH_SHORT).show();
         flag = timeset;
 
@@ -117,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
             // result of the request.
         }
 
+        // 연락처 권한 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},1);
+
+        }
+
         // tmap 그리기
         LinearLayout linearLayoutTmap = (LinearLayout) findViewById(R.id.linearLayoutTmap);
 
@@ -157,39 +167,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show(v);
-
-                if (mTimerRunning) {
-                    resetTimer();
-                    mCountDownTimer.cancel();
+                if (switch_state == true){
+                    if (mTimerRunning) {
+                        resetTimer();
+                        mCountDownTimer.cancel();
+                    } else {
+                        startTimer();
+                    }
                 } else {
-                    startTimer();
+                    Toast.makeText(MainActivity.this, "설정에서 스위치를 켜세요", Toast.LENGTH_SHORT).show();
                 }
 
-                /*
-                CountDownTimer countDownTimer = null;
-                if (countDownTimer != null) {
-                        countDownTimer.cancel();
-                }
-                //Toast.makeText(getApplicationContext(), "긴급상황이 설정되었습니다 한번더 누르면 취소됩니다.", Toast.LENGTH_LONG).show();
-                countDownTimer = new CountDownTimer(5000, 1000) {            // 5000 = 5초
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                            // 간격마다 토스트 뿌려주기
-
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
-                        sendSMS("821092086833","테스트입니다.");          // 문자보내기
-                    }
-                }.start();
-                */
                 // 기능 확인시 주석풀고 ㄱㄱ
                          // 문자보내기
-
-
-
             }
         });
 
@@ -197,11 +187,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show(v);
-                Toast.makeText(getApplicationContext(), "비상연락", Toast.LENGTH_LONG).show();
-                // 기능확인시 주석 풀고 ㄱㄱ
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01042008558"));    // 전화걸기
-               startActivity(intent);
 
+                // 기능확인시 주석 풀고 ㄱㄱ
+
+                if (switch_state == true) {
+                    SharedPreferences emergency = getSharedPreferences(shared,0);
+                    state = emergency.getBoolean("check",true);
+                    String number = emergency.getString("number", "");
+                    if (state == true) {
+                        Toast.makeText(getApplicationContext(), "비상연락", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01092086833"));    // 전화걸기
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));    // 전화걸기
+                        startActivity(intent);
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "설정에서 스위치를 켜세요", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -235,7 +238,14 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 mTimerRunning = false;
                 Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
-                sendSMS("821092086833","테스트입니다.");          // 문자보내기
+                SharedPreferences emergency = getSharedPreferences(shared,0);
+                state = emergency.getBoolean("check",true);
+                String number = emergency.getString("number", "");
+                if (state == true) {
+                    sendSMS("821092086833","테스트입니다.");      // 문자보내기
+                } else {
+                    sendSMS(number,"테스트입니다.");
+                }
                 resetTimer();
             }
         }.start();
@@ -384,7 +394,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
+        switch_state = sharedPreferences.getBoolean("switch", true);
         timeset = sharedPreferences.getInt("timenumber",0);
         long millisInput = timeset*60000;
         if (mTimerRunning==true && timeset!=flag ){
