@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.ssh.capstone.safetygohome.ContactData;
+
 import java.util.ArrayList;
 
 public class DatabaseClass {
@@ -140,6 +142,55 @@ public class DatabaseClass {
                 } while (cursor.moveToNext());
             }
             cursor.close();
+            db.close();
+        }
+        catch(StringIndexOutOfBoundsException e) {
+            Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
+            return false;
+        }
+        finally {
+            tableData.close();
+        }
+
+        return true;
+    }
+
+    public boolean DeleteUser(ArrayList<ContactData> items, ArrayList<Boolean> item_tag){
+        try
+        {
+            tableData = new TableData(m_ctx);
+
+            SQLiteDatabase db = tableData.getReadableDatabase();
+
+            for(int i=0;i<items.size();i++){
+                if(item_tag.get(i) == true) {
+                    db.execSQL("DELETE FROM user_info WHERE user_name = '" + items.get(i).getName() + "'" +
+                            " AND user_num = '" + items.get(i).getNum() + "'");
+                }
+            }
+            db.close();
+        }
+        catch(StringIndexOutOfBoundsException e) {
+            Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
+            return false;
+        }
+        finally {
+            tableData.close();
+        }
+
+        return true;
+    }
+
+    public boolean ModifyUser(ArrayList<String> user_send){
+        try
+        {
+            ArrayList<String> push = user_send;
+            tableData = new TableData(m_ctx);
+
+            SQLiteDatabase db = tableData.getReadableDatabase();
+
+            db.execSQL("UPDATE user_info SET user_name = '"+ push.get(0) +"' , user_num = '"+push.get(1)+"' " +
+                    "WHERE user_name = '"+ push.get(2) + "' AND user_num = '" + push.get(3)+"'");
             db.close();
         }
         catch(StringIndexOutOfBoundsException e) {
