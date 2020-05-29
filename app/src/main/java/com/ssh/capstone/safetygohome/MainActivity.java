@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         textColorDefault = mTextViewCountDown.getTextColors();
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         timeset = sharedPreferences.getInt("timenumber",0);
-        switch_state = sharedPreferences.getBoolean("switch", true);
+        switch_state = sharedPreferences.getBoolean("switch", false);
         //Toast.makeText(getApplicationContext(), String.valueOf(timeset), Toast.LENGTH_SHORT).show();
         flag = timeset;
 
@@ -95,9 +95,7 @@ public class MainActivity extends AppCompatActivity {
         */
 
         // sms 권한 확인
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.SEND_SMS)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.SEND_SMS)) {
             } else {
@@ -108,13 +106,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // 전화 권한 확인
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CALL_PHONE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CALL_PHONE},
-                    1);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
 
             // MY_PERMISSIONS_REQUEST_CALL_PHONE is an
             // app-defined int constant. The callback method gets the
@@ -124,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
         // 연락처 권한 확인
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},1);
-
         }
 
         // tmap 그리기
@@ -192,15 +184,20 @@ public class MainActivity extends AppCompatActivity {
 
                 if (switch_state == true) {
                     SharedPreferences emergency = getSharedPreferences(shared,0);
-                    state = emergency.getBoolean("check",true);
+                    state = emergency.getBoolean("check",false);
                     String number = emergency.getString("number", "");
                     if (state == true) {
                         Toast.makeText(getApplicationContext(), "비상연락", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01092086833"));    // 전화걸기
                         startActivity(intent);
                     } else {
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));    // 전화걸기
-                        startActivity(intent);
+                        if (number == "") {
+                            Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));    // 전화걸기
+                            startActivity(intent);
+                        }
+
                     }
                 } else {
                     Toast.makeText(MainActivity.this, "설정에서 스위치를 켜세요", Toast.LENGTH_SHORT).show();
@@ -239,12 +236,19 @@ public class MainActivity extends AppCompatActivity {
                 mTimerRunning = false;
                 Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
                 SharedPreferences emergency = getSharedPreferences(shared,0);
-                state = emergency.getBoolean("check",true);
+                state = emergency.getBoolean("check",false);
                 String number = emergency.getString("number", "");
                 if (state == true) {
+                    if (number =="") {
+                        Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
+                    }
                     sendSMS("821092086833","테스트입니다.");      // 문자보내기
                 } else {
-                    sendSMS(number,"테스트입니다.");
+                    if (number =="") {
+                        Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
+                    } else {
+                        sendSMS(number,"테스트입니다.");
+                    }
                 }
                 resetTimer();
             }

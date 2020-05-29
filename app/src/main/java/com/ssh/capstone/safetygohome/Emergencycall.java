@@ -45,7 +45,7 @@ public class Emergencycall extends Activity {
         SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
         String Name = sharedPreferences.getString("name","");
         String number = sharedPreferences.getString("number","");
-        Boolean State = sharedPreferences.getBoolean("check",true);
+        Boolean State = sharedPreferences.getBoolean("check",false);
         //Toast.makeText(this, Name, Toast.LENGTH_SHORT).show();
 
         if (State == true) {

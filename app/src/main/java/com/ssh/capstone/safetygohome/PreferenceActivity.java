@@ -40,8 +40,8 @@ public class PreferenceActivity extends AppCompatActivity {
         setListener();
 
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
-        String timeset = sharedPreferences.getString("timeset", "");
-        Boolean Switch = sharedPreferences.getBoolean("switch",true);
+        String timeset = sharedPreferences.getString("timeset", "30");
+        Boolean Switch = sharedPreferences.getBoolean("switch",false);
         aSwitch.setChecked(Switch);
         //Toast.makeText(this, timeset, Toast.LENGTH_SHORT).show();
         timeview.setText(timeset);
