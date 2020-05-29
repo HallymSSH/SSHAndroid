@@ -48,7 +48,6 @@ public class DatabaseClass {
 
     //listview 로 불러올 데이테
     public boolean GetUser(ArrayList<String> username, ArrayList<String> usernum){
-
         try
         {
             tableData = new TableData(m_ctx);

@@ -271,8 +271,6 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(this, String.valueOf(minutes), Toast.LENGTH_SHORT).show();
         mTextViewCountDown.setText(timeLeftFormatted);
 
-
-
     }
 
 
@@ -289,7 +287,6 @@ public class MainActivity extends AppCompatActivity {
         }
         // lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener); // 휴대폰으로 옮길 때 활성화 하기
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener);
-
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -361,7 +358,6 @@ public class MainActivity extends AppCompatActivity {
         Intent_siren = new Intent(getApplicationContext(),Siren.class);
         // 목적지 목록 인텐트
         Intent_DestList = new Intent(MainActivity.this, com.ssh.capstone.safetygohome.DestinationList.class);
-
 
     }
 

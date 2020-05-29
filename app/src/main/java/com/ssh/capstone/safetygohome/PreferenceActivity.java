@@ -7,10 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.widget.Toast;
@@ -26,6 +25,7 @@ public class PreferenceActivity extends AppCompatActivity {
     Button btn_info, btn_back, btn_siren, btn_emergency;
     TextView timeview;
     String emergency = "time";
+    LinearLayout emergencycall;
 
 
 
@@ -52,9 +52,8 @@ public class PreferenceActivity extends AppCompatActivity {
         To_info = new Intent(getApplicationContext(),profile.class);
         To_siren = new Intent(getApplicationContext(),Siren_select.class);
         timeview = (TextView) findViewById(R.id.emergency_time);
-
+        emergencycall = (LinearLayout) findViewById(R.id.emergencycall);
     }
-
 
     public void setListener() {
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -85,17 +84,13 @@ public class PreferenceActivity extends AppCompatActivity {
                 inputtime();
             }
         });
-    }
 
-    public void OnClickHandler(View view)               // 버전 버튼 클릭시 다이얼로그
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("버전").setMessage("0.0.1");
-
-        AlertDialog alertDialog = builder.create();
-
-        alertDialog.show();
+        emergencycall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PreferenceActivity.this, "클릭되었습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
