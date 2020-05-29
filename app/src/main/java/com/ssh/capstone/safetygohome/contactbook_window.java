@@ -1,26 +1,21 @@
 package com.ssh.capstone.safetygohome;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ssh.capstone.safetygohome.Database.DatabaseClass;
 import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
 
@@ -35,7 +30,8 @@ public class contactbook_window extends AppCompatActivity {
     ListView contact_listView;
     ContactAdapter adapter;
 
-    Button btn_add, btn_search, btn_delete;
+    Button btn_delete;
+    FloatingActionButton btn_add2;
     EditText edit_search;
     Intent FromAdd;
     Intent ToAdd;
@@ -60,8 +56,7 @@ public class contactbook_window extends AppCompatActivity {
     }
 
     public void setting(){
-        btn_add = (Button) findViewById(R.id.btn_add);
-        btn_search = (Button) findViewById(R.id.btn_search);
+        btn_add2 = (FloatingActionButton)findViewById(R.id.floatingActionButton2);
         btn_delete = (Button) findViewById(R.id.btn_delete);
         edit_search = (EditText)findViewById(R.id.edit_search);
         contact_listView = (ListView)findViewById(R.id.contact_listview);
@@ -77,14 +72,7 @@ public class contactbook_window extends AppCompatActivity {
 
     public void setlistener(){
 
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchItem(edit_search.getText().toString());
-            }
-        });
-
-        btn_add.setOnClickListener(new View.OnClickListener() {
+        btn_add2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ToAdd.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
