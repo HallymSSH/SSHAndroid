@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.ssh.capstone.safetygohome.ContactData;
+
 import java.util.ArrayList;
 
 public class DatabaseClass {
@@ -48,6 +50,7 @@ public class DatabaseClass {
 
     //listview 로 불러올 데이테
     public boolean GetUser(ArrayList<String> username, ArrayList<String> usernum){
+
         try
         {
             tableData = new TableData(m_ctx);
@@ -111,7 +114,7 @@ public class DatabaseClass {
 
 
     //검색때 사용하는 함수
-    public boolean SearchUser(ArrayList<String> username, ArrayList<String> usernum, String name){
+    public boolean SearchUser(ArrayList<String> username, ArrayList<String> usernum,String name){
         try
         {
             tableData = new TableData(m_ctx);
@@ -152,22 +155,42 @@ public class DatabaseClass {
         return true;
     }
 
-    // CCTV
-    public boolean SearchCCTV(String org_latitude, String org_longitude, String dst_latitude, String dst_longitude){
+    public boolean DeleteUser(ArrayList<ContactData> items, ArrayList<Boolean> item_tag){
         try
         {
             tableData = new TableData(m_ctx);
 
-            String location1 = "";
-            String location2 = "";
-            String location3 = "";
+            SQLiteDatabase db = tableData.getReadableDatabase();
+
+            for(int i=0;i<items.size();i++){
+                if(item_tag.get(i) == true) {
+                    db.execSQL("DELETE FROM user_info WHERE user_name = '" + items.get(i).getName() + "'" +
+                            " AND user_num = '" + items.get(i).getNum() + "'");
+                }
+            }
+            db.close();
+        }
+        catch(StringIndexOutOfBoundsException e) {
+            Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
+            return false;
+        }
+        finally {
+            tableData.close();
+        }
+
+        return true;
+    }
+
+    public boolean ModifyUser(ArrayList<String> user_send){
+        try
+        {
+            ArrayList<String> push = user_send;
+            tableData = new TableData(m_ctx);
 
             SQLiteDatabase db = tableData.getReadableDatabase();
 
-            // 인덱스 테이블 만들어서 찾기
-            // Cursor cursor = db.rawQuery("SELECT from WHERE ,null);
-
-            // cursor.close();
+            db.execSQL("UPDATE user_info SET user_name = '"+ push.get(0) +"' , user_num = '"+push.get(1)+"' " +
+                    "WHERE user_name = '"+ push.get(2) + "' AND user_num = '" + push.get(3)+"'");
             db.close();
         }
         catch(StringIndexOutOfBoundsException e) {

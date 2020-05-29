@@ -1,39 +1,37 @@
 package com.ssh.capstone.safetygohome;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ssh.capstone.safetygohome.Database.DatabaseClass;
 import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
 
-public class contactbook_window extends AppCompatActivity implements View.OnClickListener{
+public class contactbook_window extends AppCompatActivity {
 
     ArrayList<ContactData> items = new ArrayList<>();
     ArrayList<String> username = new ArrayList<>();
     ArrayList<String> usernum = new ArrayList<>();
+    ArrayList<Boolean> item_position = null;
     String name = null, num = null;
 
     ListView contact_listView;
     ContactAdapter adapter;
 
-    Button btn_add, btn_search, btn_delete;
+    Button btn_delete;
+    FloatingActionButton btn_add2;
     EditText edit_search;
     Intent FromAdd;
     Intent ToAdd;
@@ -58,8 +56,7 @@ public class contactbook_window extends AppCompatActivity implements View.OnClic
     }
 
     public void setting(){
-        btn_add = (Button) findViewById(R.id.btn_add);
-        btn_search = (Button) findViewById(R.id.btn_search);
+        btn_add2 = (FloatingActionButton)findViewById(R.id.floatingActionButton2);
         btn_delete = (Button) findViewById(R.id.btn_delete);
         edit_search = (EditText)findViewById(R.id.edit_search);
         contact_listView = (ListView)findViewById(R.id.contact_listview);
@@ -75,14 +72,7 @@ public class contactbook_window extends AppCompatActivity implements View.OnClic
 
     public void setlistener(){
 
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchItem(edit_search.getText().toString());
-            }
-        });
-
-        btn_add.setOnClickListener(new View.OnClickListener() {
+        btn_add2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ToAdd.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -111,7 +101,6 @@ public class contactbook_window extends AppCompatActivity implements View.OnClic
             }
         });
 
-
     }
 
     public void setlistview(){
@@ -119,6 +108,7 @@ public class contactbook_window extends AppCompatActivity implements View.OnClic
 
         for(int i=0; i<username.size();i++) {
             adapter.addItem(username.get(i), usernum.get(i));
+            items.add(new ContactData(username.get(i), usernum.get(i)));
         }
         adapter.notifyDataSetChanged();
     }
@@ -135,35 +125,21 @@ public class contactbook_window extends AppCompatActivity implements View.OnClic
     }
 
     public void deleteItem(){
-        int count, checked ;
-        SparseBooleanArray checkedItems = contact_listView.getCheckedItemPositions();
-        count = adapter.getCount() ;
+        int count = adapter.getCount() ;
 
-        if (checkedItems != null) {
-            for (int i=0; i<checkedItems.size(); i++) {
-                if (checkedItems.valueAt(i)) {
-                    String item = contact_listView.getAdapter().getItem(
-                            checkedItems.keyAt(i)).toString();
-                    Log.i("yes",item + " was selected");
-                }
-            }
+        item_position = adapter.getItems();
+
+        for(int i=0; i<items.size();i++){
+            Log.i(i+"번째 : ", items.get(i).getName()+"");
+            Log.i(i+"번째 : ", item_position.get(i)+"");
         }
 
-        if (count > 0) {
-            // 현재 선택된 아이템의 position 획득.
-            Log.i("checkitem : ",contact_listView.getCheckedItemPositions()+"");
-            checked = contact_listView.getCheckedItemPosition();
-            Log.i("들어오긴함 : ", checked+"");
-
-            if (checked > -1 && checked < count) {
-                // 아이템 삭제
-                items.remove(checked) ;
-                // listview 선택 초기화.
-                contact_listView.clearChoices();
-                // listview 갱신.
-                adapter.notifyDataSetChanged();
-            }
+        if(count > 0){
+            adapter.clear();
+            db.DeleteUser(items, item_position);
+            setlistview();
         }
+
     }
 
     public void searchItem(String name) {
@@ -186,11 +162,4 @@ public class contactbook_window extends AppCompatActivity implements View.OnClic
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onClick(View v) {
-        View ParentView = (View) v.getParent();
-        String temp = (String) ParentView.getTag();
-        int position = Integer.parseInt(temp);
-
-    }
 }
