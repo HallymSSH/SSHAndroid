@@ -55,6 +55,7 @@ public class ContactAdapter extends BaseAdapter {
         checkBox.setTag(position);
         tag_position.add(false);
 
+
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

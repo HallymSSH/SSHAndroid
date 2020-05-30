@@ -63,13 +63,13 @@ public class contactbook_window extends AppCompatActivity {
         ToAdd = new Intent(com.ssh.capstone.safetygohome.contactbook_window.this,
                 com.ssh.capstone.safetygohome.listview_add.class);
         FromAdd = getIntent();
-        //adapter = new ContactAdapter();
         adapter = new ContactAdapter();
         contact_listView.setAdapter(adapter);
         contact_listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         db = new DatabaseClass(this);
     }
 
+    //listener 설정
     public void setlistener(){
 
         btn_add2.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +103,7 @@ public class contactbook_window extends AppCompatActivity {
 
     }
 
+    //db 파일에서 가져온 정보를 listview 로
     public void setlistview(){
         db.GetUser(username,usernum);
 
@@ -113,6 +114,7 @@ public class contactbook_window extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    //새 정보 추가하기
     public void addItem(){
         name = FromAdd.getStringExtra("name");
         num = FromAdd.getStringExtra("num");
@@ -124,6 +126,7 @@ public class contactbook_window extends AppCompatActivity {
         setlistview();
     }
 
+    //정보 삭제하기
     public void deleteItem(){
         int count = adapter.getCount() ;
 
@@ -142,6 +145,7 @@ public class contactbook_window extends AppCompatActivity {
 
     }
 
+    //이름으로 검색하기
     public void searchItem(String name) {
 
         //검색을 위해 listview clear
