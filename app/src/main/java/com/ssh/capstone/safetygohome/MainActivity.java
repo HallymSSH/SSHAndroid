@@ -30,12 +30,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -79,15 +83,41 @@ public class MainActivity extends AppCompatActivity {
         setTime(millisInput);
 
 
-        // 위치 권한부분
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        // 권한 받아오기 TedPermission 라이브러리 사용
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                //Toast.makeText(MainActivity.this, "권한 허용", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+                Toast.makeText(MainActivity.this, "권한 거부", Toast.LENGTH_SHORT).show();
+            }
+        };
+        TedPermission.with(this)
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage("가족이나 지인에게 연락을 하기 위해 접근권한이 필요합니다.")
+                .setDeniedMessage("설정 메뉴에서 언제든지 권한을 변경할 수 있습니다.")
+                .setPermissions(Manifest.permission.READ_CONTACTS, Manifest.permission.SEND_SMS, Manifest.permission.CALL_PHONE)
+                .check();
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage("사용자의 위치를 가져오기 위해 접근권한이 필요합니다.")
+                .setDeniedMessage("설정 메뉴에서 언제든지 권한을 변경할 수 있습니다.")
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                .check();
+
+
+        // 위치 권한부분
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1); //위치권한 탐색 허용 관련 내용
             }
             return;
         }
+
         /*
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
@@ -96,8 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
         // sms 권한 확인
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.SEND_SMS)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.SEND_SMS},
@@ -164,7 +193,14 @@ public class MainActivity extends AppCompatActivity {
                         resetTimer();
                         mCountDownTimer.cancel();
                     } else {
-                        startTimer();
+                        SharedPreferences emergency = getSharedPreferences(shared,0);
+                        String number = emergency.getString("number", "");
+                        if (number == "") {
+                            Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
+                        } else {
+                            startTimer();
+                        }
+
                     }
                 } else {
                     Toast.makeText(MainActivity.this, "설정에서 스위치를 켜세요", Toast.LENGTH_SHORT).show();
@@ -234,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 mTimerRunning = false;
-                Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
+
                 SharedPreferences emergency = getSharedPreferences(shared,0);
                 state = emergency.getBoolean("check",false);
                 String number = emergency.getString("number", "");
@@ -242,11 +278,13 @@ public class MainActivity extends AppCompatActivity {
                     if (number =="") {
                         Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                     }
+                    Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
                     sendSMS("821092086833","테스트입니다.");      // 문자보내기
                 } else {
                     if (number =="") {
                         Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                     } else {
+                        Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
                         sendSMS(number,"테스트입니다.");
                     }
                 }
