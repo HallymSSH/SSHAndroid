@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     long mStartTimeInMillis;
     long mTimeLeftInMillis;
     long mEndTime;
+    Geocoder g;
     List<Address> addresslocation=null;
 
     @Override
@@ -170,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         longitude = location.getLongitude();
         latitude = location.getLatitude();
-        Geocoder g = new Geocoder(this);
+        g = new Geocoder(this);
 
         try {
             addresslocation = g.getFromLocation(latitude
@@ -391,6 +392,20 @@ public class MainActivity extends AppCompatActivity {
                 //tMapView.setIconVisibility(true);
                 //tMapView.setCenterPoint(longitude, latitude,true); // 현재 위치로 이동
                 tMapView.setCenterPoint(longitude, latitude, true); // 현재 위치로 이동
+            }
+
+            try {
+                addresslocation = g.getFromLocation(latitude
+                        ,longitude,10);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(addresslocation!=null) {
+                if(addresslocation.size() == 0) {
+                    address = "주소찾기 오류";
+                }else {
+                    address = addresslocation.get(0).getAddressLine(0);
+                }
             }
 
         }
