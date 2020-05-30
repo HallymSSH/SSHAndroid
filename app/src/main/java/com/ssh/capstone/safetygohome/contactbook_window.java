@@ -1,5 +1,6 @@
 package com.ssh.capstone.safetygohome;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,7 +30,6 @@ public class contactbook_window extends AppCompatActivity {
 
     ListView contact_listView;
     ContactAdapter adapter;
-
     Button btn_delete;
     FloatingActionButton btn_add2;
     EditText edit_search;

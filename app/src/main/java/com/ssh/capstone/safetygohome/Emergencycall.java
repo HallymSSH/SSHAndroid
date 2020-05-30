@@ -16,6 +16,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.ssh.capstone.safetygohome.Database.DatabaseClass;
+import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
+
 
 import androidx.annotation.Nullable;
 
@@ -27,12 +30,16 @@ public class Emergencycall extends Activity {
     Intent intent;
     String shared = "emergency";
     boolean state = true;
+    private DatabaseClass db;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.layout_emergency);
         setFinishOnTouchOutside(false);
+        //initDB(getResources(), false);
+
         DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
 
         int width = (int) (dm.widthPixels * 0.8); // Display 사이즈의 90%(가로)
@@ -69,6 +76,7 @@ public class Emergencycall extends Activity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         police = (RadioButton) findViewById(R.id.radioButton);
         rd_contact = (RadioButton) findViewById(R.id.radioButton2);
+        db = new DatabaseClass(this);
      }
 
      public void setlistner() {
@@ -103,9 +111,11 @@ public class Emergencycall extends Activity {
                 }
 
                 editor.commit();
+                DbAdd();
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
+
             }
         });
 
@@ -115,6 +125,7 @@ public class Emergencycall extends Activity {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
                 startActivityForResult(intent,0);
+
             }
         });
 
@@ -144,6 +155,11 @@ public class Emergencycall extends Activity {
             String sNumber = cursor.getString(1);
             name.setText(sName);
             num.setText(sNumber);
+
         }
+    }
+
+    public void DbAdd() {
+        db.SaveUser(name.getText().toString(),num.getText().toString());
     }
 }
