@@ -66,7 +66,7 @@ public class ContactAdapter extends BaseAdapter {
             }
         });
         checkBox.setChecked(isChecked(position));
-        /*
+
         txt_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +88,7 @@ public class ContactAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
-        */
+
         return convertView;
     }
 
