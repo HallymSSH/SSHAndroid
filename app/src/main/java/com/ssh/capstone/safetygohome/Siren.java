@@ -37,7 +37,7 @@ public class Siren extends Activity {
         sound = sharedPreferences.getString("sound", "");
         Toast.makeText(getApplicationContext(), sound, Toast.LENGTH_SHORT).show();
 
-        //sound = ((Siren_select)Siren_select.context).result;
+
         /*
         DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
 

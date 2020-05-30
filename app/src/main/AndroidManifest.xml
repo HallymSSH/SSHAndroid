@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.SEND_SMS"></uses-permission>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
     <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
-    
+    <uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
     
     <application
         android:allowBackup="true"
@@ -70,6 +70,9 @@
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
         </activity>
         <activity android:name=".Siren_select"/>
+        <activity android:name=".Emergencycall"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
+        </activity>
         <!--시호-->
     </application>
 
