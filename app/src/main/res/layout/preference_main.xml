@@ -119,7 +119,7 @@
         android:id="@+id/view5"
         style="@style/Divider2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emergencycall" />
+        app:layout_constraintTop_toBottomOf="@+id/emegencysms" />
 
     <TextView
         android:id="@+id/Emergency"
@@ -212,6 +212,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="3dp"
         android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3">
 
@@ -231,6 +232,45 @@
             android:layout_marginRight="16dp"
             android:layout_weight="0.5" />
 
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view11"
+        style="@style/Divider"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emergencycall" />
+
+    <LinearLayout
+        android:id="@+id/emegencysms"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="3dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view11">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="9"
+            android:text="긴급 문자" />
+
+        <Switch
+            android:id="@+id/switch_sms"
+            android:layout_width="29dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="16dp"
+            android:layout_weight="0.5" />
     </LinearLayout>
 
 
