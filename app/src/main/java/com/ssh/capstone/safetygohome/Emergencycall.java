@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -24,7 +25,7 @@ public class Emergencycall extends Activity {
     Button close,save,btn_contect;
     RadioGroup radioGroup;
     RadioButton police, rd_contact;
-    TextView name, num;
+    EditText name, num;
     Intent intent;
     String shared = "emergency";
     boolean state = true;
@@ -69,8 +70,8 @@ public class Emergencycall extends Activity {
         save = (Button) findViewById(R.id.btn_save);
         btn_contect = (Button) findViewById(R.id.btn_contect);
         intent = new Intent(getApplicationContext(),PreferenceActivity.class);
-        name = (TextView) findViewById(R.id.text_name);
-        num = (TextView) findViewById(R.id.text_num);
+        name = (EditText) findViewById(R.id.text_name);
+        num = (EditText) findViewById(R.id.text_num);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupcall);
         police = (RadioButton) findViewById(R.id.radiobutton);
         rd_contact = (RadioButton) findViewById(R.id.radiobutton2);

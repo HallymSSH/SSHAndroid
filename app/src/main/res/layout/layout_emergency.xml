@@ -70,7 +70,7 @@
         app:layout_constraintTop_toBottomOf="@+id/radioGroupcall"
         tools:layout_editor_absoluteX="0dp">
 
-        <TextView
+        <EditText
             android:id="@+id/text_name"
             android:layout_width="25dp"
             android:layout_height="25dp"
@@ -79,17 +79,20 @@
             android:background="@drawable/border"
             android:gravity="center_vertical"
             android:hint="이름"
+            android:textSize="13dp"
             android:padding="5dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/text_num"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="16dp"
             android:layout_weight="7"
+            android:textSize="13dp"
             android:background="@drawable/border"
             android:gravity="center_vertical"
+            android:inputType="number"
             android:hint="전화번호"
             android:padding="5dp" />
 

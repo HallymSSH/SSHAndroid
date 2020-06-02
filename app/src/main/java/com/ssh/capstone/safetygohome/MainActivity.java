@@ -227,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show(v);
-
                 Toast.makeText(MainActivity.this, address, Toast.LENGTH_SHORT).show();
                 if (bswitch_state == true){
                     if (mTimerRunning) {
@@ -263,11 +262,11 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences emergency = getSharedPreferences(shared,0);
                     state = emergency.getBoolean("callcheck",false);
                     String number = emergency.getString("number", "");
-                    if (state == true) {
+                    if (state == true) {            // 경찰
                         Toast.makeText(getApplicationContext(), "비상연락", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01092086833"));    // 전화걸기
                         startActivity(intent);
-                    } else {
+                    } else {                        // 사용자 지정 연락
                         if (number == "") {
                             Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                         } else {
@@ -315,18 +314,18 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences emergency = getSharedPreferences(shared,0);
                 state = emergency.getBoolean("smscheck",false);
                 String number = emergency.getString("number", "");
-                if (state == true) {
+                if (state == true) {                // 경찰
                     if (number =="") {
                         Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                     }
                     Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
-                    sendSMS("821092086833","테스트입니다.");      // 문자보내기
-                } else {
+                    sendSMS("821092086833",address);      // 문자보내기
+                } else {                            // 사용자 지정 연락처
                     if (number =="") {
                         Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
-                        sendSMS(number,"테스트입니다.");
+                        sendSMS(number,address+ " 주소 테스트 입니다.");
                     }
                 }
                 resetTimer();
@@ -395,8 +394,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             try {
-                addresslocation = g.getFromLocation(latitude
-                        ,longitude,10);
+                addresslocation = g.getFromLocation(latitude,longitude,10);
             } catch (IOException e) {
                 e.printStackTrace();
             }
