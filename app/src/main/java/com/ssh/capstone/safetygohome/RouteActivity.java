@@ -103,6 +103,18 @@ public class RouteActivity extends Activity {
 
         TMapData tmapdata = new TMapData();
 
+        /*
+        경유지 -> <ArrayList> passlist / 변수 0 -> 최적경로
+        tmapdata.findPathDataWithType(TMapPathType.CAR_PATH, point1, point2, passList, 0
+	new FindPathDataListenerCallback() {
+		@Override
+		public void onFindPathData(TMapPolyLine polyLine) {
+			mMapView.addTMapPath(polyLine);
+		}
+	});
+
+         */
+
         tmapdata.findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH, point1, point2, new TMapData.FindPathDataListenerCallback() {
             @Override
             public void onFindPathData(TMapPolyLine polyLine) {
