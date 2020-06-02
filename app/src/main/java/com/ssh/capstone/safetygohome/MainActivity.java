@@ -56,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
     String shared = "emergency";
     String address;
     int timeset, flag;
-    double latitude = 1.0;
-    double longitude = 1.0;
+    double latitude, longitude;
     Boolean state, aswitch_state, bswitch_state;
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
@@ -273,10 +272,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                         } else {
                             Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));    // 전화걸기
-                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-
-                                return;
-                            }
                             startActivity(intent);
                         }
 
