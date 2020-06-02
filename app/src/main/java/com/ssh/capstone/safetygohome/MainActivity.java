@@ -56,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
     String shared = "emergency";
     String address;
     int timeset, flag;
-    double latitude, longitude;
+    double latitude = 1.0;
+    double longitude = 1.0;
     Boolean state, aswitch_state, bswitch_state;
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     long mTimeLeftInMillis;
     long mEndTime;
     Geocoder g;
-    List<Address> addresslocation=null;
+    List<Address> addresslocation = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,14 +176,14 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             addresslocation = g.getFromLocation(latitude
-                    ,longitude,10);
+                    , longitude, 10);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(addresslocation!=null) {
-            if(addresslocation.size() == 0) {
+        if (addresslocation != null) {
+            if (addresslocation.size() == 0) {
                 address = "주소찾기 오류";
-            }else {
+            } else {
                 address = addresslocation.get(0).getAddressLine(0);
             }
         }
@@ -228,12 +229,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //show(v);
                 Toast.makeText(MainActivity.this, address, Toast.LENGTH_SHORT).show();
-                if (bswitch_state == true){
+                if (bswitch_state == true) {
                     if (mTimerRunning) {
                         resetTimer();
                         mCountDownTimer.cancel();
                     } else {
-                        SharedPreferences emergency = getSharedPreferences(shared,0);
+                        SharedPreferences emergency = getSharedPreferences(shared, 0);
                         String number = emergency.getString("number", "");
                         if (number == "") {
                             Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
@@ -247,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // 기능 확인시 주석풀고 ㄱㄱ
-                         // 문자보내기
+                // 문자보내기
             }
         });
 
@@ -259,8 +260,8 @@ public class MainActivity extends AppCompatActivity {
                 // 기능확인시 주석 풀고 ㄱㄱ
 
                 if (aswitch_state == true) {
-                    SharedPreferences emergency = getSharedPreferences(shared,0);
-                    state = emergency.getBoolean("callcheck",false);
+                    SharedPreferences emergency = getSharedPreferences(shared, 0);
+                    state = emergency.getBoolean("callcheck", false);
                     String number = emergency.getString("number", "");
                     if (state == true) {            // 경찰
                         Toast.makeText(getApplicationContext(), "비상연락", Toast.LENGTH_LONG).show();
@@ -271,6 +272,10 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                         } else {
                             Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));    // 전화걸기
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                                return;
+                            }
                             startActivity(intent);
                         }
 
