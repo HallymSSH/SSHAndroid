@@ -154,6 +154,23 @@ public class RouteActivity extends Activity {
         }
     };
 
+
+    // A, B 위, 경도 위치 반환
+    // distanceTo(현재 위,경도 / 도착 위,경도);
+    public double distanceTo(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
+        Location startPos = new Location("Point A");
+        Location endPos = new Location("Point B");
+
+        startPos.setLatitude(startLatitude);
+        startPos.setLongitude(startLongitude);
+        endPos.setLatitude(endLatitude);
+        endPos.setLongitude(endLongitude);
+
+        double distance = startPos.distanceTo(endPos);
+
+        return distance;
+    }
+
     public void setTracking(boolean toggle) {
         if (toggle == true) // 트래킹 모드 실행되면 현재위치로 중심점 옮김
             setNowLocation();
