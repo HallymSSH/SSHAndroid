@@ -23,13 +23,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class PreferenceActivity extends AppCompatActivity {
 
-    Intent To_info, To_siren, To_emergency;
+    Intent To_info, To_siren, To_emergency, To_emergencysms;
     Button btn_info, btn_back, btn_siren, btn_emergency;
     TextView timeview;
     String emergency = "time";
-    LinearLayout emergencycall;
-    Switch aSwitch;
-    Boolean switch_state = false;
+    LinearLayout emergencycall, emergencysms;
+    Switch aSwitch, bSwitch;
+    Boolean aswitch_state = false;
+    Boolean bswitch_state = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {      // 버튼 클릭 이벤트
@@ -41,8 +42,10 @@ public class PreferenceActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         String timeset = sharedPreferences.getString("timeset", "30");
-        Boolean Switch = sharedPreferences.getBoolean("switch",false);
-        aSwitch.setChecked(Switch);
+        Boolean aswitch = sharedPreferences.getBoolean("aswitch",false);
+        Boolean bswitch = sharedPreferences.getBoolean("bswitch",false);
+        aSwitch.setChecked(aswitch);
+        bSwitch.setChecked(bswitch);
         //Toast.makeText(this, timeset, Toast.LENGTH_SHORT).show();
         timeview.setText(timeset);
     }
@@ -54,9 +57,12 @@ public class PreferenceActivity extends AppCompatActivity {
         To_info = new Intent(getApplicationContext(),profile.class);
         To_siren = new Intent(getApplicationContext(),Siren_select.class);
         To_emergency = new Intent(getApplicationContext(), Emergencycall.class);
+        To_emergencysms = new Intent(getApplicationContext(), Emergencysms.class);
         timeview = (TextView) findViewById(R.id.emergency_time);
         emergencycall = (LinearLayout) findViewById(R.id.emergencycall);
+        emergencysms = (LinearLayout) findViewById(R.id.emegencysms);
         aSwitch = (Switch) findViewById(R.id.switch_call);
+        bSwitch = (Switch) findViewById(R.id.switch_sms);
     }
 
     public void setListener() {
@@ -94,7 +100,13 @@ public class PreferenceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(To_emergency);
 
+            }
+        });
 
+        emergencysms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(To_emergencysms);
             }
         });
 
@@ -102,10 +114,22 @@ public class PreferenceActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked == true) {
-                    switch_state = true;
+                    aswitch_state = true;
 
                 } else {
-                    switch_state = false;
+                    aswitch_state = false;
+                }
+            }
+        });
+
+        bSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked == true) {
+                    bswitch_state = true;
+
+                } else {
+                    bswitch_state = false;
                 }
             }
         });
@@ -144,9 +168,11 @@ public class PreferenceActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         int timeset = Integer.parseInt(timeview.getText().toString());
         String timesetting = timeview.getText().toString();
-        Boolean Switch = switch_state;
+        Boolean aSwitch = aswitch_state;
+        Boolean bSwitch = bswitch_state;
         //Toast.makeText(this, timesetting, Toast.LENGTH_SHORT).show();
-        editor.putBoolean("switch",Switch);
+        editor.putBoolean("aswitch",aSwitch);
+        editor.putBoolean("bswitch",bSwitch);
         editor.putInt("timenumber", timeset);
         editor.putString("timeset",timesetting);
         editor.commit();

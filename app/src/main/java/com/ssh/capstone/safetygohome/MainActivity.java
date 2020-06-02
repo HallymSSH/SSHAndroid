@@ -14,6 +14,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -38,6 +40,7 @@ import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -51,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
     TMapGpsManager gps = null;
     String emergency = "time";
     String shared = "emergency";
-    int timeset,flag;
-    Boolean state,switch_state;
+    String address;
+    int timeset, flag;
+    double latitude, longitude;
+    Boolean state, aswitch_state, bswitch_state;
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
     Intent Intent_ToPopUp, Intent_DestList, Intent_siren;
@@ -60,10 +65,11 @@ public class MainActivity extends AppCompatActivity {
     CountDownTimer mCountDownTimer;
     ColorStateList textColorDefault;
     boolean mTimerRunning;
-
     long mStartTimeInMillis;
     long mTimeLeftInMillis;
     long mEndTime;
+    Geocoder g;
+    List<Address> addresslocation=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +80,12 @@ public class MainActivity extends AppCompatActivity {
         mTextViewCountDown = (TextView) findViewById(R.id.timer);
         textColorDefault = mTextViewCountDown.getTextColors();
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
-        timeset = sharedPreferences.getInt("timenumber",0);
-        switch_state = sharedPreferences.getBoolean("switch", false);
+        timeset = sharedPreferences.getInt("timenumber", 0);
+        aswitch_state = sharedPreferences.getBoolean("aswitch", false);
+        bswitch_state = sharedPreferences.getBoolean("bswitch", false);
         //Toast.makeText(getApplicationContext(), String.valueOf(timeset), Toast.LENGTH_SHORT).show();
         flag = timeset;
-
-        long millisInput = timeset*60000;
+        long millisInput = timeset * 60000;
         setTime(millisInput);
 
 
@@ -106,10 +112,10 @@ public class MainActivity extends AppCompatActivity {
                 .setPermissionListener(permissionListener)
                 .setRationaleMessage("사용자의 위치를 가져오기 위해 접근권한이 필요합니다.")
                 .setDeniedMessage("설정 메뉴에서 언제든지 권한을 변경할 수 있습니다.")
-                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
                 .check();
 
-
+        /*
         // 위치 권한부분
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -122,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
-        */
+
 
         // sms 권한 확인
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
@@ -146,6 +152,39 @@ public class MainActivity extends AppCompatActivity {
         // 연락처 권한 확인
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},1);
+        }
+        */
+
+        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        longitude = location.getLongitude();
+        latitude = location.getLatitude();
+        g = new Geocoder(this);
+
+        try {
+            addresslocation = g.getFromLocation(latitude
+                    ,longitude,10);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(addresslocation!=null) {
+            if(addresslocation.size() == 0) {
+                address = "주소찾기 오류";
+            }else {
+                address = addresslocation.get(0).getAddressLine(0);
+            }
         }
 
         // tmap 그리기
@@ -188,7 +227,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show(v);
-                if (switch_state == true){
+                Toast.makeText(MainActivity.this, address, Toast.LENGTH_SHORT).show();
+                if (bswitch_state == true){
                     if (mTimerRunning) {
                         resetTimer();
                         mCountDownTimer.cancel();
@@ -218,15 +258,15 @@ public class MainActivity extends AppCompatActivity {
 
                 // 기능확인시 주석 풀고 ㄱㄱ
 
-                if (switch_state == true) {
+                if (aswitch_state == true) {
                     SharedPreferences emergency = getSharedPreferences(shared,0);
-                    state = emergency.getBoolean("check",false);
+                    state = emergency.getBoolean("callcheck",false);
                     String number = emergency.getString("number", "");
-                    if (state == true) {
+                    if (state == true) {            // 경찰
                         Toast.makeText(getApplicationContext(), "비상연락", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01092086833"));    // 전화걸기
                         startActivity(intent);
-                    } else {
+                    } else {                        // 사용자 지정 연락
                         if (number == "") {
                             Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                         } else {
@@ -272,20 +312,20 @@ public class MainActivity extends AppCompatActivity {
                 mTimerRunning = false;
 
                 SharedPreferences emergency = getSharedPreferences(shared,0);
-                state = emergency.getBoolean("check",false);
+                state = emergency.getBoolean("smscheck",false);
                 String number = emergency.getString("number", "");
-                if (state == true) {
+                if (state == true) {                // 경찰
                     if (number =="") {
                         Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                     }
                     Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
-                    sendSMS("821092086833","테스트입니다.");      // 문자보내기
-                } else {
+                    sendSMS("821092086833",address);      // 문자보내기
+                } else {                            // 사용자 지정 연락처
                     if (number =="") {
                         Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
-                        sendSMS(number,"테스트입니다.");
+                        sendSMS(number,address+ " 주소 테스트 입니다.");
                     }
                 }
                 resetTimer();
@@ -325,7 +365,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     // 문자보내기
     private void sendSMS(String phoneNumber, String message) {
         SmsManager sms = SmsManager.getDefault();
@@ -345,13 +384,26 @@ public class MainActivity extends AppCompatActivity {
         public void onLocationChanged(Location location) {
             //현재위치의 좌표를 알수있는 부분
             if (location != null) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
+                latitude = location.getLatitude();           // 위도
+                longitude = location.getLongitude();         // 경도
                 // Log.d("TmapTest",""+longitude+","+latitude);
                 tMapView.setLocationPoint(longitude, latitude); // 현재위치로 표시될 좌표의 위도, 경도를 설정합니다.
                 //tMapView.setIconVisibility(true);
                 //tMapView.setCenterPoint(longitude, latitude,true); // 현재 위치로 이동
                 tMapView.setCenterPoint(longitude, latitude, true); // 현재 위치로 이동
+            }
+
+            try {
+                addresslocation = g.getFromLocation(latitude,longitude,10);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(addresslocation!=null) {
+                if(addresslocation.size() == 0) {
+                    address = "주소찾기 오류";
+                }else {
+                    address = addresslocation.get(0).getAddressLine(0);
+                }
             }
 
         }
@@ -438,7 +490,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
-        switch_state = sharedPreferences.getBoolean("switch", true);
+        aswitch_state = sharedPreferences.getBoolean("aswitch", false);
+        bswitch_state = sharedPreferences.getBoolean("bswitch", false);
         timeset = sharedPreferences.getInt("timenumber",0);
         long millisInput = timeset*60000;
         if (mTimerRunning==true && timeset!=flag ){
@@ -447,7 +500,6 @@ public class MainActivity extends AppCompatActivity {
         } else if (timeset!=flag) {
             setTime(millisInput);
         }
-
     }
 
     // 지도 중심점 가져오기

@@ -14,28 +14,24 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.ssh.capstone.safetygohome.Database.DatabaseClass;
-
 
 import androidx.annotation.Nullable;
 
-public class Emergencycall extends Activity {
+public class Emergencysms extends Activity {
+
     Button close,save,btn_contect;
     RadioGroup radioGroup;
     RadioButton police, rd_contact;
-    EditText name, num;
+    EditText smsname, smsnum;
     Intent intent;
-    String shared = "emergency";
     boolean state = true;
-    private DatabaseClass db;
+    String shared = "emergency";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.layout_emergency);
+        setContentView(R.layout.layout_emersms);
         setFinishOnTouchOutside(false);
         //initDB(getResources(), false);
 
@@ -47,38 +43,37 @@ public class Emergencycall extends Activity {
         //getWindow().getAttributes().height = height;
         setting();
         setlistner();
-
         SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
         String Name = sharedPreferences.getString("name","");
         String number = sharedPreferences.getString("number","");
-        Boolean State = sharedPreferences.getBoolean("callcheck",false);
-        //Toast.makeText(this, Name, Toast.LENGTH_SHORT).show();
+        Boolean State = sharedPreferences.getBoolean("smscheck",false);
 
         if (State == true) {
             police.setChecked(true);
-            name.setText(Name);
-            num.setText(number);
+            smsname.setText(Name);
+            smsnum.setText(number);
         } else {
             rd_contact.setChecked(true);
-            name.setText(Name);
-            num.setText(number);
+            smsname.setText(Name);
+            smsnum.setText(number);
         }
+
+
     }
 
-     public void setting() {
-        close = (Button) findViewById(R.id.btn_close);
-        save = (Button) findViewById(R.id.btn_save);
-        btn_contect = (Button) findViewById(R.id.btn_contect);
+    public void setting() {
+        close = (Button) findViewById(R.id.btn_smsclose);
+        save = (Button) findViewById(R.id.btn_smssave);
+        btn_contect = (Button) findViewById(R.id.btn_smscontact);
         intent = new Intent(getApplicationContext(),PreferenceActivity.class);
-        name = (EditText) findViewById(R.id.text_name);
-        num = (EditText) findViewById(R.id.text_num);
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroupcall);
-        police = (RadioButton) findViewById(R.id.radiobutton);
-        rd_contact = (RadioButton) findViewById(R.id.radiobutton2);
-        db = new DatabaseClass(this);
-     }
+        smsname = (EditText) findViewById(R.id.text_smsname);
+        smsnum = (EditText) findViewById(R.id.text_smsnum);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroupsms);
+        police = (RadioButton) findViewById(R.id.radiosms);
+        rd_contact = (RadioButton) findViewById(R.id.radiosms2);
+    }
 
-     public void setlistner() {
+    public void setlistner() {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,26 +89,25 @@ public class Emergencycall extends Activity {
                 SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (state == true) {
-                    String Name = name.getText().toString();
-                    String Number = num.getText().toString();
+                    String Name = smsname.getText().toString();
+                    String Number = smsnum.getText().toString();
                     Boolean State = state;
-                    editor.putString("name",Name);
-                    editor.putString("number",Number);
-                    editor.putBoolean("callcheck",State);
+                    editor.putString("smsname",Name);
+                    editor.putString("smsnumber",Number);
+                    editor.putBoolean("smscheck",State);
                 } else {
-                    String Name = name.getText().toString();
-                    String Number = num.getText().toString();
+                    String Name = smsname.getText().toString();
+                    String Number = smsnum.getText().toString();
                     Boolean State = state;
-                    editor.putString("name",Name);
-                    editor.putString("number",Number);
-                    editor.putBoolean("callcheck",State);
+                    editor.putString("smsname",Name);
+                    editor.putString("smsnumber",Number);
+                    editor.putBoolean("smscheck",State);
                 }
+
                 editor.commit();
-                DbAdd();
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
-
             }
         });
 
@@ -130,17 +124,17 @@ public class Emergencycall extends Activity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == R.id.radiobutton){
+                if(checkedId == R.id.radiosms){
                     state = true;
                     //Toast.makeText(Emergencycall.this, "112입니다.", Toast.LENGTH_SHORT).show();
                 }
-                else if(checkedId == R.id.radiobutton2) {
+                else if(checkedId == R.id.radiosms2) {
                     state = false;
                     //Toast.makeText(Emergencycall.this, "사용자 연락처입니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-     }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -151,14 +145,8 @@ public class Emergencycall extends Activity {
             cursor.moveToFirst();
             String sName = cursor.getString(0);
             String sNumber = cursor.getString(1);
-            name.setText(sName);
-            num.setText(sNumber);
-
+            smsname.setText(sName);
+            smsnum.setText(sNumber);
         }
-    }
-
-    public void DbAdd() {
-        //Toast.makeText(this, num.getText().toString(), Toast.LENGTH_SHORT).show();
-        db.SaveUser(name.getText().toString(),num.getText().toString());
     }
 }

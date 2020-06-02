@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
     <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
     <uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     
     <application
         android:allowBackup="true"
@@ -71,6 +72,9 @@
         </activity>
         <activity android:name=".Siren_select"/>
         <activity android:name=".Emergencycall"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
+        </activity>
+        <activity android:name=".Emergencysms"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
         </activity>
         <!--시호-->
