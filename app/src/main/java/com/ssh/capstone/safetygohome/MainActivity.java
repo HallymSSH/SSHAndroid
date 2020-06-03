@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     String shared = "emergency";
     String address;
     int timeset, flag;
-    double latitude, longitude;
+    double latitude,longitude;
     Boolean state, aswitch_state, bswitch_state;
     FloatingActionButton btn_ToPopUp;
     ImageButton imageButton5;
@@ -92,10 +92,12 @@ public class MainActivity extends AppCompatActivity {
 
         // 권한 받아오기 TedPermission 라이브러리 사용
         PermissionListener permissionListener = new PermissionListener() {
+            @Override
             public void onPermissionGranted() {
                 //Toast.makeText(MainActivity.this, "권한 허용", Toast.LENGTH_SHORT).show();
             }
 
+            @Override
             public void onPermissionDenied(List<String> deniedPermissions) {
                 Toast.makeText(MainActivity.this, "권한 거부", Toast.LENGTH_SHORT).show();
             }
@@ -154,38 +156,18 @@ public class MainActivity extends AppCompatActivity {
         }
         */
 
+
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
-        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        longitude = location.getLongitude();
-        latitude = location.getLatitude();
-        g = new Geocoder(this);
+        //longitude = location.getLongitude();
+        //latitude = location.getLatitude();
 
-        try {
-            addresslocation = g.getFromLocation(latitude
-                    , longitude, 10);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (addresslocation != null) {
-            if (addresslocation.size() == 0) {
-                address = "주소찾기 오류";
-            } else {
-                address = addresslocation.get(0).getAddressLine(0);
-            }
-        }
-*/
+
         // tmap 그리기
         LinearLayout linearLayoutTmap = (LinearLayout) findViewById(R.id.linearLayoutTmap);
 
@@ -201,7 +183,24 @@ public class MainActivity extends AppCompatActivity {
         //현재위치 표시될 아이콘
         tMapView.setIconVisibility(true);
 
-        // setGps(); 현재위치 바로 받아올때 이거 쓰기
+        setGps(); // 현재위치 바로 받아올때 이거 쓰기
+
+        g = new Geocoder(this);
+
+        try {
+            addresslocation = g.getFromLocation(latitude
+                    , longitude, 10);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresslocation != null) {
+            if (addresslocation.size() == 0) {
+                address = "주소찾기 오류";
+            } else {
+                address = addresslocation.get(0).getAddressLine(0);
+            }
+        }
+
 
         // 사이렌, 긴급상황, 경찰서, 메뉴버튼
         ImageButton imageButton1 = (ImageButton) findViewById(R.id.imageButton1);
@@ -264,15 +263,16 @@ public class MainActivity extends AppCompatActivity {
                     if (state == true) {            // 경찰
                         Toast.makeText(getApplicationContext(), "비상연락", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01092086833"));    // 전화걸기
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
                         startActivity(intent);
                     } else {                        // 사용자 지정 연락
                         if (number == "") {
                             Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                         } else {
                             Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));    // 전화걸기
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                                return;
+                            }
                             startActivity(intent);
                         }
 
@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        // lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener); // 휴대폰으로 옮길 때 활성화 하기
+        //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener); // 휴대폰으로 옮길 때 활성화 하기
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener);
     }
 
