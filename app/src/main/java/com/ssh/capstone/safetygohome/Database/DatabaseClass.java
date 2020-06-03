@@ -195,9 +195,21 @@ public class DatabaseClass {
 
             SQLiteDatabase db = tableData.getReadableDatabase();
 
+            // between 순서 위해 값 크면 순서 바꿔주기
+            if (startLatitude < endLatitude) {
+                double temp = startLatitude;
+                startLatitude = endLatitude;
+                endLatitude = temp;
+            }
+
+            if (startLongitude < endLongitude) {
+                double temp = startLongitude;
+                startLongitude = endLongitude;
+                endLongitude = temp;
+            }
+
             // 위도 먼저 필터링하고 경도 찾기
-            //Cursor cursor = db.rawQuery("SELECT longitude FROM cctv WHERE latitude BETWEEN startLatitude AND endLatitude", null);
-            Cursor cursor = db.rawQuery("SELECT * FROM (SELECT * FROM cctv WHERE latitude BETWEEN " + startLatitude + " AND " + endLatitude + " ) as A WHERE A.longitude BETWEEN " + startLongitude + " AND " + endLongitude +"", null);
+            Cursor cursor = db.rawQuery("SELECT max(roadAddress) as roadAddress, max(branchAddress) as branchAddress, latitude, longitude, count(latitude) as cnt FROM cctv WHERE latitude BETWEEN " + startLatitude + " AND " + endLatitude + " and longitude BETWEEN " + startLongitude + " AND " + endLongitude + " group by latitude, longitude order by count(latitude) DESC", null);
 
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
