@@ -196,8 +196,8 @@ public class DatabaseClass {
             SQLiteDatabase db = tableData.getReadableDatabase();
 
             // 위도 먼저 필터링하고 경도 찾기
-            Cursor cursor = db.rawQuery("SELECT longitude FROM cctv WHERE latitude BETWEEN startLatitude AND endLatitude", null);
-            //Cursor cursor = db.rawQuery("SELECT * FROM (SELECT longitude FROM cctv WHERE latitude BETWEEN startLatitude AND endLatitude) as A WHERE A.longitude BETWEEN startLongitude AND endLongitude", null);
+            //Cursor cursor = db.rawQuery("SELECT longitude FROM cctv WHERE latitude BETWEEN startLatitude AND endLatitude", null);
+            Cursor cursor = db.rawQuery("SELECT * FROM (SELECT longitude FROM cctv WHERE latitude BETWEEN startLatitude AND endLatitude) as A WHERE A.longitude BETWEEN startLongitude AND endLongitude", null);
 
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
