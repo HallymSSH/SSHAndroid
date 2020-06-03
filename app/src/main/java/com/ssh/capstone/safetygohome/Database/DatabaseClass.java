@@ -19,29 +19,26 @@ public class DatabaseClass {
     }
 
 
-    public int GetUserNum(){
-        int num=0;
+    public int GetUserNum() {
+        int num = 0;
 
-        try
-        {
+        try {
             tableData = new TableData(m_ctx);
 
             SQLiteDatabase db = tableData.getReadableDatabase();
 
-            Cursor cursor = db.rawQuery("SELECT user_name from user_info"  ,null);
+            Cursor cursor = db.rawQuery("SELECT user_name from user_info", null);
 
-            if( cursor.getCount() > 0 ) {
+            if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 num = cursor.getCount();
             }
             cursor.close();
             db.close();
-        }
-        catch(StringIndexOutOfBoundsException e) {
+        } catch (StringIndexOutOfBoundsException e) {
             Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
             return -1;
-        }
-        finally {
+        } finally {
             tableData.close();
         }
 
@@ -49,10 +46,9 @@ public class DatabaseClass {
     }
 
     //listview 로 불러올 데이테
-    public boolean GetUser(ArrayList<String> username, ArrayList<String> usernum){
+    public boolean GetUser(ArrayList<String> username, ArrayList<String> usernum) {
 
-        try
-        {
+        try {
             tableData = new TableData(m_ctx);
 
             username.clear();
@@ -63,9 +59,9 @@ public class DatabaseClass {
 
             SQLiteDatabase db = tableData.getReadableDatabase();
 
-            Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info"  ,null);
+            Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info", null);
 
-            if( cursor.getCount() > 0 ) {
+            if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
 
                 do {
@@ -78,12 +74,10 @@ public class DatabaseClass {
             }
             cursor.close();
             db.close();
-        }
-        catch(StringIndexOutOfBoundsException e) {
+        } catch (StringIndexOutOfBoundsException e) {
             Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
             return false;
-        }
-        finally {
+        } finally {
             tableData.close();
         }
 
@@ -91,21 +85,19 @@ public class DatabaseClass {
     }
 
     //데이터를 새로 추가할때 사용하는 함수
-    public boolean SaveUser(String name, String num){
+    public boolean SaveUser(String name, String num) {
         String query = null;
 
         try {
             tableData = new TableData(m_ctx);
             SQLiteDatabase db = tableData.getReadableDatabase();
 
-            db.execSQL("insert into user_info (user_name, user_num) values ('"+name+"', '"+num+"')");
+            db.execSQL("insert into user_info (user_name, user_num) values ('" + name + "', '" + num + "')");
             db.close();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             Log.w("Except", e.getMessage());
             return false;
-        }
-        finally {
+        } finally {
             tableData.close();
         }
 
@@ -114,9 +106,8 @@ public class DatabaseClass {
 
 
     //검색때 사용하는 함수
-    public boolean SearchUser(ArrayList<String> username, ArrayList<String> usernum,String name){
-        try
-        {
+    public boolean SearchUser(ArrayList<String> username, ArrayList<String> usernum, String name) {
+        try {
             tableData = new TableData(m_ctx);
 
             username.clear();
@@ -128,9 +119,9 @@ public class DatabaseClass {
             SQLiteDatabase db = tableData.getReadableDatabase();
 
             //Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info WHERE user_name = '"+ name +"'",null);
-            Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info WHERE user_name LIKE '%"+ name +"%'",null);
+            Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info WHERE user_name LIKE '%" + name + "%'", null);
 
-            if( cursor.getCount() > 0 ) {
+            if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
 
                 do {
@@ -143,82 +134,75 @@ public class DatabaseClass {
             }
             cursor.close();
             db.close();
-        }
-        catch(StringIndexOutOfBoundsException e) {
+        } catch (StringIndexOutOfBoundsException e) {
             Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
             return false;
-        }
-        finally {
+        } finally {
             tableData.close();
         }
 
         return true;
     }
 
-    public boolean DeleteUser(ArrayList<ContactData> items, ArrayList<Boolean> item_tag){
-        try
-        {
+    public boolean DeleteUser(ArrayList<ContactData> items, ArrayList<Boolean> item_tag) {
+        try {
             tableData = new TableData(m_ctx);
 
             SQLiteDatabase db = tableData.getReadableDatabase();
 
-            for(int i=0;i<items.size();i++){
-                if(item_tag.get(i) == true) {
+            for (int i = 0; i < items.size(); i++) {
+                if (item_tag.get(i) == true) {
                     db.execSQL("DELETE FROM user_info WHERE user_name = '" + items.get(i).getName() + "'" +
                             " AND user_num = '" + items.get(i).getNum() + "'");
                 }
             }
             db.close();
-        }
-        catch(StringIndexOutOfBoundsException e) {
+        } catch (StringIndexOutOfBoundsException e) {
             Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
             return false;
-        }
-        finally {
+        } finally {
             tableData.close();
         }
 
         return true;
     }
 
-    public boolean ModifyUser(ArrayList<String> user_send){
-        try
-        {
+    public boolean ModifyUser(ArrayList<String> user_send) {
+        try {
             ArrayList<String> push = user_send;
             tableData = new TableData(m_ctx);
 
             SQLiteDatabase db = tableData.getReadableDatabase();
 
-            db.execSQL("UPDATE user_info SET user_name = '"+ push.get(0) +"' , user_num = '"+push.get(1)+"' " +
-                    "WHERE user_name = '"+ push.get(2) + "' AND user_num = '" + push.get(3)+"'");
+            db.execSQL("UPDATE user_info SET user_name = '" + push.get(0) + "' , user_num = '" + push.get(1) + "' " +
+                    "WHERE user_name = '" + push.get(2) + "' AND user_num = '" + push.get(3) + "'");
             db.close();
-        }
-        catch(StringIndexOutOfBoundsException e) {
+        } catch (StringIndexOutOfBoundsException e) {
             Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
             return false;
-        }
-        finally {
+        } finally {
             tableData.close();
         }
 
         return true;
     }
 
-    public boolean searchCCTV(ArrayList<Double[]> positionList, double startLatitude, double startLongitude, double endLatitude, double endLongitude){
-        try
-        {
+    public boolean searchCCTV(ArrayList<Double[]> positionList, double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
+        try {
             tableData = new TableData(m_ctx);
 
             positionList.clear();
 
             SQLiteDatabase db = tableData.getReadableDatabase();
 
-            //Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info WHERE user_name = '"+ name +"'",null);
-            Cursor cursor = db.rawQuery("SELECT * FROM (SELECT longitude FROM cctv WHERE latitude BETWEEN startLatitude AND endLatitude) as A WHERE A.longitude BETWEEN startLongitude AND endLongitude",null);
+            // 위도 먼저 필터링하고 경도 찾기
+            Cursor cursor = db.rawQuery("SELECT longitude FROM cctv WHERE latitude BETWEEN startLatitude AND endLatitude", null);
+            //Cursor cursor = db.rawQuery("SELECT * FROM (SELECT longitude FROM cctv WHERE latitude BETWEEN startLatitude AND endLatitude) as A WHERE A.longitude BETWEEN startLongitude AND endLongitude", null);
 
-            if( cursor.getCount() > 0 ) {
+            if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
 
+                // PositionList ArrayList에 2차원배열로 위도, 경도 add
                 do {
                     positionList.add(new Double[]{cursor.getDouble(0), cursor.getDouble(1)});
 
@@ -226,12 +210,10 @@ public class DatabaseClass {
             }
             cursor.close();
             db.close();
-        }
-        catch(StringIndexOutOfBoundsException e) {
+        } catch (StringIndexOutOfBoundsException e) {
             Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
             return false;
-        }
-        finally {
+        } finally {
             tableData.close();
         }
 
