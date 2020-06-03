@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -45,7 +47,9 @@ public class RouteActivity extends Activity {
     private double nowLon;
 
     // CCTV arraylist
-    ArrayList<Double[]> cctvList = new ArrayList<Double[]>();
+    ArrayList<TMapPoint> cctvList = new ArrayList<>();
+    ArrayList<Double> tmp1 = new ArrayList<Double>();
+    ArrayList<Double> tmp2 = new ArrayList<Double>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +80,13 @@ public class RouteActivity extends Activity {
         destLat = intent.getDoubleExtra("getLat", 0);
         destLon = intent.getDoubleExtra("getLon", 0);
 
+        // 출발지 목적지 경유지 같은아이콘으로 임시설정
+        TMapData tmapdata = new TMapData();
+        Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.poi_star);
+        Bitmap end = BitmapFactory.decodeResource(getResources(), R.drawable.poi_star);
+        Bitmap pass = BitmapFactory.decodeResource(getResources(), R.drawable.poi_star);
+        tMapView.setTMapPathIcon(start, end, pass);
+
         // 테스트용
         Toast.makeText(getApplicationContext(), destLat + " / " + destLon, Toast.LENGTH_LONG).show();
 
@@ -95,7 +106,7 @@ public class RouteActivity extends Activity {
 
     }
 
-    // 현재 위치 메인에서 가져온 후 지도 중심점으로 설정
+    // 현재 위치 메인에서 가져온 후 지도 중심점으로 설정. 이거 필요없을듯
     public void setNowLocation() {
         double temp1 = ((MainActivity) MainActivity.mContext).getCenterPointLat();
         double temp2 = ((MainActivity) MainActivity.mContext).getCenterPointLon();
@@ -108,35 +119,39 @@ public class RouteActivity extends Activity {
     public void drawPedestrianPath() {
         TMapPoint point1 = tMapView.getLocationPoint(); // 현재위치 출발점
         TMapPoint point2 = new TMapPoint(destLat, destLon); // 목적지 좌표
+        TMapPoint wayPoint;
 
         // CCTV 위치 찾기. ArrayList, 출발 위경도, 도착 위경도
         db.searchCCTV(cctvList, point1.getLatitude(), point1.getLongitude(), point2.getLatitude(), point2.getLongitude());
-        System.out.println(cctvList); // 출력용
+
+        for (int i = 0; i < cctvList.size(); i++) {
+            Log.i(cctvList.get(i) + " / ", "경로경로경로경로");
+        }
 
         TMapData tmapdata = new TMapData();
 
-        /*
-        경유지 -> < ArrayList > passlist / 변수 0 ->최적경로. 아래 함수대신 사용하기
-        tmapdata.findPathDataWithType(TMapPathType.CAR_PATH, point1, point2, passList, 0
-        new FindPathDataListenerCallback() {
-            @Override
-            public void onFindPathData(TMapPolyLine polyLine) {
-                mMapView.addTMapPath(polyLine);
-            }
-        });
+        // 경유지 5개까지라해서 일단 조건문 설정해둠. 5개 초과하면 그냥 일반라인 그려주는걸로. db에서는 3개만 받도록 해둠
+        if (cctvList.size() > 0 && cctvList.size() < 5) {
+            tmapdata.findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH, point1, point2, cctvList, 10, new TMapData.FindPathDataListenerCallback() {
+                @Override
+                public void onFindPathData(TMapPolyLine polyLine) {
+                    polyLine.setLineColor(Color.RED);
+                    tMapView.addTMapPath(polyLine);
+                }
+            });
+        } else {
+            tmapdata.findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH, point1, point2, new TMapData.FindPathDataListenerCallback() {
+                @Override
+                public void onFindPathData(TMapPolyLine polyLine) {
+                    polyLine.setLineColor(Color.BLUE);
+                    tMapView.addTMapPath(polyLine);
+                }
+            });
+        }
 
-         */
 
-        // 보행자 옵션으로 경로 그린 후 BLUE로 폴리라인 그리기
-        tmapdata.findPathDataWithType(TMapData.TMapPathType.PEDESTRIAN_PATH, point1, point2, new TMapData.FindPathDataListenerCallback() {
-            @Override
-            public void onFindPathData(TMapPolyLine polyLine) {
-                polyLine.setLineColor(Color.BLUE);
-                tMapView.addTMapPath(polyLine);
-            }
-        });
     }
-
+    /*
     // 현재 위치찾기
     public void setGps() {
         final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -171,7 +186,7 @@ public class RouteActivity extends Activity {
 
     // A, B 위, 경도 위치 반환
     // distanceTo(현재 위,경도 / 도착 위,경도);
-    /*
+
     public double distanceTo(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
         Location startPos = new Location("Point A");
         Location endPos = new Location("Point B");
