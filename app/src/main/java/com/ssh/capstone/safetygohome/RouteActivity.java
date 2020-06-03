@@ -27,6 +27,9 @@ import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
 import com.ssh.capstone.safetygohome.Database.DatabaseClass;
+
+import java.util.ArrayList;
+
 import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
 
 public class RouteActivity extends Activity {
@@ -38,6 +41,7 @@ public class RouteActivity extends Activity {
     private double destLon;
     private double nowLat;
     private double nowLon;
+    ArrayList<Double[]> cctvList = new ArrayList<Double[]>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,12 +98,9 @@ public class RouteActivity extends Activity {
         TMapPoint point1 = tMapView.getLocationPoint(); // 현재위치 출발점
         TMapPoint point2 = new TMapPoint(destLat, destLon);
 
-        // 경유지 추가하기
-        /*
-        db.SearchCCTV(org위도, org경도, dst위도, dst경도);
-
-         */
-
+        // CCTV 위치 찾기
+        db.searchCCTV(cctvList, point1.getLatitude(), point1.getLongitude(), point2.getLatitude(), point2.getLongitude());
+        System.out.println(cctvList);
 
         TMapData tmapdata = new TMapData();
 
@@ -157,6 +158,7 @@ public class RouteActivity extends Activity {
 
     // A, B 위, 경도 위치 반환
     // distanceTo(현재 위,경도 / 도착 위,경도);
+    /*
     public double distanceTo(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
         Location startPos = new Location("Point A");
         Location endPos = new Location("Point B");
@@ -171,6 +173,8 @@ public class RouteActivity extends Activity {
         return distance;
     }
 
+     */
+
     public void setTracking(boolean toggle) {
         if (toggle == true) // 트래킹 모드 실행되면 현재위치로 중심점 옮김
             setNowLocation();
@@ -178,4 +182,5 @@ public class RouteActivity extends Activity {
         tMapView.setTrackingMode(toggle); // --> 트래킹모드 실행. gps 수신될때마다 변경, True일때 실행임
         Toast.makeText(getApplicationContext(), "트래킹모드 on off", Toast.LENGTH_LONG).show();
     }
+
 }

@@ -203,4 +203,38 @@ public class DatabaseClass {
 
         return true;
     }
+
+    public boolean searchCCTV(ArrayList<Double[]> positionList, double startLatitude, double startLongitude, double endLatitude, double endLongitude){
+        try
+        {
+            tableData = new TableData(m_ctx);
+
+            positionList.clear();
+
+            SQLiteDatabase db = tableData.getReadableDatabase();
+
+            //Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info WHERE user_name = '"+ name +"'",null);
+            Cursor cursor = db.rawQuery("SELECT * FROM (SELECT longitude FROM cctv WHERE latitude BETWEEN startLatitude AND endLatitude) as A WHERE A.longitude BETWEEN startLongitude AND endLongitude",null);
+
+            if( cursor.getCount() > 0 ) {
+                cursor.moveToFirst();
+
+                do {
+                    positionList.add(new Double[]{cursor.getDouble(0), cursor.getDouble(1)});
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+        }
+        catch(StringIndexOutOfBoundsException e) {
+            Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
+            return false;
+        }
+        finally {
+            tableData.close();
+        }
+
+        return true;
+    }
 }

@@ -49,6 +49,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     public static Context mContext;
 
+    Location location;
     View view;
     TMapView tMapView = null;
     TMapGpsManager gps = null;
@@ -483,7 +484,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     @Override
@@ -503,13 +503,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // 지도 중심점 가져오기
+    // 현재 위치 가져오기
+    // 함수 이름 바꿔야함
     public double getCenterPointLat() {
-        return tMapView.getCenterPoint().getLatitude();
+        return location.getLatitude();
     }
 
     public double getCenterPointLon() {
-        return tMapView.getCenterPoint().getLongitude();
+        return location.getLongitude();
     }
 
 }
