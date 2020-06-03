@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.skt.Tmap.TMapPoint;
 import com.ssh.capstone.safetygohome.ContactData;
 
 import java.util.ArrayList;
@@ -187,7 +188,7 @@ public class DatabaseClass {
         return true;
     }
 
-    public boolean searchCCTV(ArrayList<Double[]> positionList, double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
+    public boolean searchCCTV(ArrayList<TMapPoint> positionList, double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
         try {
             tableData = new TableData(m_ctx);
 
@@ -196,27 +197,31 @@ public class DatabaseClass {
             SQLiteDatabase db = tableData.getReadableDatabase();
 
             // between 순서 위해 값 크면 순서 바꿔주기
-            if (startLatitude < endLatitude) {
+            if (startLatitude > endLatitude) {
                 double temp = startLatitude;
                 startLatitude = endLatitude;
                 endLatitude = temp;
             }
 
-            if (startLongitude < endLongitude) {
+            if (startLongitude > endLongitude) {
                 double temp = startLongitude;
                 startLongitude = endLongitude;
                 endLongitude = temp;
             }
 
             // 위도 먼저 필터링하고 경도 찾기
-            Cursor cursor = db.rawQuery("SELECT max(roadAddress) as roadAddress, max(branchAddress) as branchAddress, latitude, longitude, count(latitude) as cnt FROM cctv WHERE latitude BETWEEN " + startLatitude + " AND " + endLatitude + " and longitude BETWEEN " + startLongitude + " AND " + endLongitude + " group by latitude, longitude order by count(latitude) DESC", null);
-
+            //Cursor cursor = db.rawQuery("SELECT * from cctv where lattitude between " + startLatitude + " and " + endLatitude, null);
+            Cursor cursor = db.rawQuery("SELECT max(roadAddress) as roadAddress, max(branchAddress) as branchAddress, latitude, longitude, count(latitude) as cnt " +
+                    "FROM cctv WHERE latitude BETWEEN " + startLatitude + " AND " + endLatitude + " and longitude BETWEEN " + startLongitude + " AND " + endLongitude + " " +
+                    "group by latitude, longitude " +
+                    "order by count(latitude) DESC LIMIT 3", null);
+            Log.i("커서사이즈", cursor.getCount() + "");
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
 
                 // PositionList ArrayList에 2차원배열로 위도, 경도 add
                 do {
-                    positionList.add(new Double[]{cursor.getDouble(0), cursor.getDouble(1)});
+                    positionList.add(new TMapPoint(cursor.getDouble(2), cursor.getDouble(3)));
 
                 } while (cursor.moveToNext());
             }
