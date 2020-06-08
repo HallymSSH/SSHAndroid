@@ -233,7 +233,10 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         SharedPreferences emergency = getSharedPreferences(shared, 0);
                         String number = emergency.getString("number", "");
-                        if (number == "") {
+                        state = emergency.getBoolean("smscheck",false);
+                        if (state == true) {                // 경찰
+                            startTimer();
+                        } else if (state == false && number == "") {
                             Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
                         } else {
                             startTimer();
