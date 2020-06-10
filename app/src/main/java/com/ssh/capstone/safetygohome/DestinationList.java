@@ -90,10 +90,17 @@ public class DestinationList extends AppCompatActivity {
                             .setMessage("직선 거리가 30km 이내인 경우에만 도보 길찾기를 제공합니다.")
                             .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which){
-                                    Toast.makeText(getApplicationContext(), "확인", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "확인버튼눌렀을때!@!@!@!@!@", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .show();
+                    /*
+                    Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
+                    intent.putExtra("getLat", adapter.getItem(position).getPoint().getLatitude());
+                    intent.putExtra("getLon", adapter.getItem(position).getPoint().getLongitude());
+                    startActivity(intent);
+
+                     */
                 }
                 else {
                     Intent intent = new Intent(getApplicationContext(), RouteActivity.class);

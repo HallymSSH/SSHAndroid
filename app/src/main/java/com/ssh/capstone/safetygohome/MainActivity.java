@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -112,57 +113,6 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1); //위치권한 탐색 허용 관련 내용
         }
-        // 위치 권한부분
-        /*
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        }
-
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1); //위치권한 탐색 허용 관련 내용
-            }
-            return;
-        }
-
-        // sms 권한 확인
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.SEND_SMS},
-                        1);
-            }
-        }
-
-        // 전화 권한 확인
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
-
-            // MY_PERMISSIONS_REQUEST_CALL_PHONE is an
-            // app-defined int constant. The callback method gets the
-            // result of the request.
-        }
-
-        // 연락처 권한 확인
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},1);
-        }
-        */
-
-
-        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        //longitude = location.getLongitude();
-        //latitude = location.getLatitude();
-
 
         // tmap 그리기
         LinearLayout linearLayoutTmap = (LinearLayout) findViewById(R.id.linearLayoutTmap);
@@ -286,9 +236,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setGps();
+                tMapView.setLocationPoint(longitude, latitude); // 현재위치로 표시될 좌표의 위도, 경도를 설정
+                tMapView.setCenterPoint(longitude, latitude, false); // 현재 위치로 이동
                 Toast.makeText(getApplicationContext(), "현재위치", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                tMapView.setCenterPoint(longitude, latitude);
+            }
+        }, 3000);  // 2000은 2초를 의미합니다.
+
     }
 
 
@@ -372,14 +332,17 @@ public class MainActivity extends AppCompatActivity {
         sms.sendTextMessage(phoneNumber, null, message, null, null);
     }
 
+    LocationManager lm = null;
+
     public void setGps() {
-        final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener); // 휴대폰으로 옮길 때 활성화 하기
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener); // 휴대폰으로 옮길 때 활성화 하기
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // 이거 네트워크 위치 잡는거
     }
+
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             //현재위치의 좌표를 알수있는 부분
@@ -388,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
                 longitude = location.getLongitude();         // 경도
                 Log.d("여긴가여긴가", latitude + " / " + longitude + "");
                 tMapView.setLocationPoint(longitude, latitude); // 현재위치로 표시될 좌표의 위도, 경도를 설정
-                tMapView.setCenterPoint(longitude, latitude, true); // 현재 위치로 이동
             }
 
             try {
@@ -415,6 +377,12 @@ public class MainActivity extends AppCompatActivity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
+
+    // 리스너 중단. 아직 사용은안함
+    public void stopLocation(){
+        lm.removeUpdates(mLocationListener);
+    }
+
 
     protected void show(View view) {
         String dialogTitle;

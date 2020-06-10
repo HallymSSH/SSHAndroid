@@ -16,14 +16,12 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapPolyLine;
@@ -42,11 +40,9 @@ public class RouteActivity extends Activity {
     // 목적지 위경도
     private double destLat;
     private double destLon;
-    // 현재 위경도
-    private double nowLat;
-    private double nowLon;
-
-    Location location;
+    double latitude, longitude;
+    LocationManager lm = null;
+    boolean temp = false;
 
     // CCTV arraylist
     ArrayList<TMapPoint> cctvList = new ArrayList<>();
@@ -77,9 +73,6 @@ public class RouteActivity extends Activity {
         // 현재 위치 원형아이콘으로 표시
         tMapView.setIconVisibility(true);
 
-        // 현재 위치로 표시
-        setNowLocation();
-
         // DestinationList 클래스에서 선택한 목적지 위도 경도 가져오기
         intent = getIntent();
         destLat = intent.getDoubleExtra("getLat", 0);
@@ -96,7 +89,10 @@ public class RouteActivity extends Activity {
         Toast.makeText(getApplicationContext(), destLat + " / " + destLon, Toast.LENGTH_SHORT).show();
 
         // 목적지까지 라인 그리기
-        drawPedestrianPath();
+        // drawPedestrianPath(); 여기 주석처리여기 주석처리여기 주석처리
+
+        // 현재 위치로 표시
+        setGps();
 
         // 트래킹모드 활성화 여부. 버튼으로 동작
         tbTracking.setOnClickListener(new View.OnClickListener() {
@@ -109,22 +105,20 @@ public class RouteActivity extends Activity {
             }
         });
 
-    }
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                tMapView.setCenterPoint(longitude, latitude);
+                drawPedestrianPath();
+            }
+        }, 3000);  // 2000은 2초를 의미합니다.
 
-    // 현재 위치 메인에서 가져온 후 지도 중심점으로 설정.
-    public void setNowLocation() {
-        double nowPointLat = location.getLatitude();
-        double nowPointLon = location.getLongitude();
-        tMapView.setLocationPoint(nowPointLat, nowPointLon); // 현재위치로 표시될 좌표의 위도, 경도를 설정
-        tMapView.setCenterPoint(nowPointLat, nowPointLon, true); // 현재 위치로 센터포인트 지정
     }
-
 
     // 보행자 경로 그리기
     public void drawPedestrianPath() {
-        TMapPoint point1 = tMapView.getLocationPoint(); // 현재위치 출발점
+        TMapPoint point1 = tMapView.getCenterPoint(); // 현재위치 출발점
         TMapPoint point2 = new TMapPoint(destLat, destLon); // 목적지 좌표
-        TMapPoint wayPoint;
 
         // CCTV 위치 찾기. ArrayList, 출발 위경도, 도착 위경도
         db.searchCCTV(cctvList, point1.getLatitude(), point1.getLongitude(), point2.getLatitude(), point2.getLongitude());
@@ -157,28 +151,32 @@ public class RouteActivity extends Activity {
 
     }
 
-    // 현재 위치찾기
+    // 현재 위치 지도 중심점으로 설정.
+    public void setNowLocation(double nowPointLat, double nowPointLon) {
+        tMapView.setLocationPoint(nowPointLon, nowPointLat); // 현재위치로 표시될 좌표의 위도, 경도를 설정
+        tMapView.setCenterPoint(nowPointLon, nowPointLat, false); // 현재 위치로 센터포인트 지정
+    }
+
     public void setGps() {
-        final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // gps로 하기
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener); // 휴대폰으로 옮길 때 활성화 하기
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // 이거 네트워크 위치 잡는거
+
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
-            /*
             //현재위치의 좌표를 알수있는 부분
             if (location != null) {
-                nowLat = location.getLatitude();
-                nowLon = location.getLongitude();
-                tMapView.setLocationPoint(nowLat, nowLon); // 현재위치로 표시될 좌표의 위도, 경도를 설정합니다.
-                tMapView.setCenterPoint(nowLat, nowLon, true); // 현재 위치로 이동
+                latitude = location.getLatitude();           // 위도
+                longitude = location.getLongitude();         // 경도
+                Log.d("여긴가여긴가", latitude + " / " + longitude + "");
+                tMapView.setLocationPoint(longitude, latitude);
             }
 
-             */
 
         }
 
@@ -190,19 +188,24 @@ public class RouteActivity extends Activity {
 
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
-    }; // 현재 위치찾기 끝
+    };
+
+    public void stopLocation(){
+        lm.removeUpdates(mLocationListener);
+    }
 
 
     // 토글버튼 클릭 시 트래킹모드 설정여부
     public void setTracking(boolean toggle) {
         if (toggle == true) { // 트래킹 모드 실행되면 현재위치로 중심점 옮김
-            setNowLocation();
+            setGps();
+            tMapView.setCenterPoint(longitude, latitude);
             Toast.makeText(getApplicationContext(), "트래킹모드 true", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), "트래킹모드 false", Toast.LENGTH_SHORT).show();
         }
 
+        tMapView.setCompassMode(toggle);
         tMapView.setSightVisible(toggle); // 시야 표출 여부
         tMapView.setTrackingMode(toggle); // --> 트래킹모드 실행. gps 수신될때마다 변경, True일때 실행임
 
