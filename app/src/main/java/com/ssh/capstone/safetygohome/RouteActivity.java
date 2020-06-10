@@ -46,6 +46,8 @@ public class RouteActivity extends Activity {
     private double nowLat;
     private double nowLon;
 
+    Location location;
+
     // CCTV arraylist
     ArrayList<TMapPoint> cctvList = new ArrayList<>();
     ArrayList<Double> tmp1 = new ArrayList<Double>();
@@ -75,6 +77,9 @@ public class RouteActivity extends Activity {
         // 현재 위치 원형아이콘으로 표시
         tMapView.setIconVisibility(true);
 
+        // 현재 위치로 표시
+        setNowLocation();
+
         // DestinationList 클래스에서 선택한 목적지 위도 경도 가져오기
         intent = getIntent();
         destLat = intent.getDoubleExtra("getLat", 0);
@@ -87,8 +92,8 @@ public class RouteActivity extends Activity {
         Bitmap pass = BitmapFactory.decodeResource(getResources(), R.drawable.poi_star);
         tMapView.setTMapPathIcon(start, end, pass);
 
-        // 테스트용
-        Toast.makeText(getApplicationContext(), destLat + " / " + destLon, Toast.LENGTH_LONG).show();
+        // 목적지 위도 경도 팝업 테스트용
+        Toast.makeText(getApplicationContext(), destLat + " / " + destLon, Toast.LENGTH_SHORT).show();
 
         // 목적지까지 라인 그리기
         drawPedestrianPath();
@@ -106,12 +111,12 @@ public class RouteActivity extends Activity {
 
     }
 
-    // 현재 위치 메인에서 가져온 후 지도 중심점으로 설정. 이거 필요없을듯
+    // 현재 위치 메인에서 가져온 후 지도 중심점으로 설정.
     public void setNowLocation() {
-        double temp1 = ((MainActivity) MainActivity.mContext).getCenterPointLat();
-        double temp2 = ((MainActivity) MainActivity.mContext).getCenterPointLon();
-        tMapView.setLocationPoint(temp1, temp2); // 현재위치로 표시될 좌표의 위도, 경도를 설정
-        tMapView.setCenterPoint(temp1, temp2, false); // 현재 위치로 센터포인트 지정
+        double nowPointLat = location.getLatitude();
+        double nowPointLon = location.getLongitude();
+        tMapView.setLocationPoint(nowPointLat, nowPointLon); // 현재위치로 표시될 좌표의 위도, 경도를 설정
+        tMapView.setCenterPoint(nowPointLat, nowPointLon, true); // 현재 위치로 센터포인트 지정
     }
 
 
@@ -182,34 +187,21 @@ public class RouteActivity extends Activity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     }; // 현재 위치찾기 끝
-
-
-    // A, B 위, 경도 위치 반환
-    // distanceTo(현재 위,경도 / 도착 위,경도);
-
-    public double distanceTo(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
-        Location startPos = new Location("Point A");
-        Location endPos = new Location("Point B");
-
-        startPos.setLatitude(startLatitude);
-        startPos.setLongitude(startLongitude);
-        endPos.setLatitude(endLatitude);
-        endPos.setLongitude(endLongitude);
-
-        double distance = startPos.distanceTo(endPos);
-
-        return distance;
-    }
-
      */
 
     // 토글버튼 클릭 시 트래킹모드 설정여부
     public void setTracking(boolean toggle) {
-        if (toggle == true) // 트래킹 모드 실행되면 현재위치로 중심점 옮김
+        if (toggle == true) { // 트래킹 모드 실행되면 현재위치로 중심점 옮김
             setNowLocation();
+            Toast.makeText(getApplicationContext(), "트래킹모드 true", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "트래킹모드 false", Toast.LENGTH_SHORT).show();
+        }
 
+        tMapView.setSightVisible(toggle); // 시야 표출 여부
         tMapView.setTrackingMode(toggle); // --> 트래킹모드 실행. gps 수신될때마다 변경, True일때 실행임
-        Toast.makeText(getApplicationContext(), "트래킹모드 on off", Toast.LENGTH_LONG).show();
+
     }
 
 }

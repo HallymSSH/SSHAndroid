@@ -3,6 +3,7 @@ package com.ssh.capstone.safetygohome;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +40,7 @@ public class DestinationList extends AppCompatActivity {
     private AddressListViewAdapter adapter;
     private String address;
     private Button search_button;
+    Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +69,45 @@ public class DestinationList extends AppCompatActivity {
             }
         });
 
+        // 리스트뷰 아이템 선택했을 떄 30km 이상이면 길찾기 미제공
         listView.setOnItemClickListener((new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
-                intent.putExtra("getLat", adapter.getItem(position).getPoint().getLatitude());
-                intent.putExtra("getLon", adapter.getItem(position).getPoint().getLongitude());
-                startActivity(intent);
+
+                double nowlat = location.getLatitude();;
+                double nowlon = location.getLongitude();
+
+                if (distanceTo(nowlat, nowlon, adapter.getItem(position).getPoint().getLatitude(), adapter.getItem(position).getPoint().getLongitude()) > 30000) {
+                    new AlertDialog.Builder(DestinationList.this)
+                            .setMessage("직선 거리가 30km 이내인 경우에만 도보 길찾기를 제공합니다.")
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which){
+                                    Toast.makeText(getApplicationContext(), "확인", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .show();
+                }
+                else {
+                    Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
+                    intent.putExtra("getLat", adapter.getItem(position).getPoint().getLatitude());
+                    intent.putExtra("getLon", adapter.getItem(position).getPoint().getLongitude());
+                    startActivity(intent);
+                }
             }
         }));
+    }
+
+    public double distanceTo(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
+        Location startPos = new Location("Point A");
+        Location endPos = new Location("Point B");
+
+        startPos.setLatitude(startLatitude);
+        startPos.setLongitude(startLongitude);
+        endPos.setLatitude(endLatitude);
+        endPos.setLongitude(endLongitude);
+
+        double distance = startPos.distanceTo(endPos);
+
+        return distance;
     }
 
     Handler myHandler = new Handler() {
