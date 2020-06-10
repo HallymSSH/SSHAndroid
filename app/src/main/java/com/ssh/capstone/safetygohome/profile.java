@@ -5,12 +5,16 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,7 +34,12 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -58,7 +67,7 @@ public class profile extends AppCompatActivity {
         setting();
         setListener();
 
-
+       profile_view.setImageResource(R.drawable.profile_icon);
        temp2 = getResources().getDrawable(R.drawable.profile_icon);
        img = ((BitmapDrawable)temp2).getBitmap();
        SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
@@ -69,29 +78,12 @@ public class profile extends AppCompatActivity {
        String Post2 = sharedPreferences.getString("post2","");
        String profileimg = sharedPreferences.getString("profileimg","");
 
-
-
-       /*
-       tmpBitmap = ((BitmapDrawable)temp).getBitmap();
-       tmpBitmap1 = ((BitmapDrawable)temp2).getBitmap();
-       */
-
        text_name.setText(name);
        textView_Date.setText(Birthday);
        textView_sex.setText(sex);
        daum_result.setText(Post1);
        daum_result2.setText(Post2);
        profile_view.setImageBitmap(decodeBase64(profileimg));
-
-        /*
-       if (tmpBitmap.equals(tmpBitmap1)){
-           profile_view.setImageDrawable(getResources().getDrawable(R.drawable.profile_icon));
-       } else {
-
-       }
-
-         */
-
     }
 
     @Override
@@ -132,7 +124,6 @@ public class profile extends AppCompatActivity {
 
             }
         };
-
     }
 
     public void setListener() {
@@ -153,7 +144,8 @@ public class profile extends AppCompatActivity {
                         switch (item.getItemId()){
                             case R.id.Album:    // 앨범에서 가져오기
                                 Intent albom = new Intent(Intent.ACTION_PICK);
-                                albom.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                                albom.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                albom.setType("image/*");
                                 startActivityForResult(albom, GET_GALLERY_IMAGE);
                                 break;
                             case R.id.basic:            // 기본이미지 설정
@@ -179,9 +171,9 @@ public class profile extends AppCompatActivity {
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         profile.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,listener,
+                        android.R.style.Theme_DeviceDefault_Light_Dialog,listener,
                         year,month,day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
@@ -238,11 +230,12 @@ public class profile extends AppCompatActivity {
                             InputStream in = getContentResolver().openInputStream(data.getData());
                             img = BitmapFactory.decodeStream(in);           // 비트맵으로 만들어서 저장
                             in.close();
-                             profile_view.setImageBitmap(img);
+                            profile_view.setImageBitmap(img);
 
                         } catch (Exception e)
                         {
                         }
+
                         break;
                     case GET_ADDRESS:
                         daum_result.setText(data.getStringExtra("result"));
@@ -251,6 +244,8 @@ public class profile extends AppCompatActivity {
                 }
             }
     }
+
+
 
     public void inputname() {
         FrameLayout container = new FrameLayout(this);

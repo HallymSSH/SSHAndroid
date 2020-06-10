@@ -1,9 +1,11 @@
 package com.ssh.capstone.safetygohome;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -20,9 +22,11 @@ import com.ssh.capstone.safetygohome.R;
 public class Siren extends Activity {
 
     static MediaPlayer mediaPlayer;
+    AudioManager audioManager;
     Button btn_play;
     String shared="sirenfile";
     String sound;
+    int defaltVol;
     boolean isPlaying = false;
     //Siren_select siren_select;
 
@@ -53,6 +57,7 @@ public class Siren extends Activity {
 
     public void setting() {
         btn_play = (Button) findViewById(R.id.btn_play);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     }
 
     public void setlistner() {
@@ -61,24 +66,35 @@ public class Siren extends Activity {
             public void onClick(View v) {
                 if (mediaPlayer == null){
                     if (sound.equals("siren1")){
+                        defaltVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_PLAY_SOUND);
                         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren1);
                         mediaPlayer.setLooping(true);
                         mediaPlayer.start();
 
                     } else if(sound.equals("siren2")){
+                        defaltVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_PLAY_SOUND);
                         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren2);
                         mediaPlayer.setLooping(true);
                         mediaPlayer.start();
 
+
                     } else if(sound.equals("siren3")){
+                        defaltVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_PLAY_SOUND);
                         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren3);
                         mediaPlayer.setLooping(true);
                         mediaPlayer.start();
 
+
                     } else {
+                        defaltVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_PLAY_SOUND);
                         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.siren3);
                         mediaPlayer.setLooping(true);
                         mediaPlayer.start();
+                        mediaPlayer.setVolume(1.0f,1.0f);
                     }
                     btn_play.setText("중지");
 
@@ -87,6 +103,7 @@ public class Siren extends Activity {
                         mediaPlayer.stop();
                         mediaPlayer = null;
                         btn_play.setText("시작");
+                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,defaltVol, AudioManager.FLAG_PLAY_SOUND);
                     }
                 }
 

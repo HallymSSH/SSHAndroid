@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show(v);
-                Toast.makeText(MainActivity.this, address, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, address, Toast.LENGTH_SHORT).show();
                 if (bswitch_state == true) {
                     if (mTimerRunning) {
                         resetTimer();

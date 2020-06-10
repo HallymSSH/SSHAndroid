@@ -36,7 +36,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:text="내 정보"
             android:textColor="#000000"
@@ -50,7 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="20dp"
                 android:layout_weight="9.5"
@@ -71,7 +71,6 @@
             android:id="@+id/view6"
             style="@style/Divider"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"/>
 
@@ -82,8 +81,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="9"
                 android:text="버전" />
@@ -126,7 +125,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:text="긴급상황"
             android:textColor="#000000"
@@ -140,7 +139,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="20dp"
                 android:layout_weight="6"
@@ -187,7 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="20dp"
                 android:layout_weight="9"
                 android:text="비상 연락" />
 
@@ -222,7 +221,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="20dp"
+
                 android:layout_weight="9"
 
                 android:text="긴급 문자" />
@@ -251,7 +251,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:text="사이렌"
             android:textColor="#000000"
@@ -265,7 +265,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="20dp"
                 android:layout_weight="9.5"
