@@ -3,7 +3,6 @@ package com.ssh.capstone.safetygohome;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -24,32 +23,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapGpsManager;
-import com.skt.Tmap.TMapPOIItem;
-import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
     public static Context mContext;
 
-    Location location;
     View view;
     TMapView tMapView = null;
     TMapGpsManager gps = null;
@@ -117,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 .check();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1); //위치권한 탐색 허용 관련 내용
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1); //위치권한 탐색 허용 관련 내용
         }
         // 위치 권한부분
         /*
@@ -387,14 +380,13 @@ public class MainActivity extends AppCompatActivity {
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener); // 휴대폰으로 옮길 때 활성화 하기
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // 이거 네트워크 위치 잡는거
     }
-
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             //현재위치의 좌표를 알수있는 부분
             if (location != null) {
                 latitude = location.getLatitude();           // 위도
                 longitude = location.getLongitude();         // 경도
-
+                Log.d("여긴가여긴가", latitude + " / " + longitude + "");
                 tMapView.setLocationPoint(longitude, latitude); // 현재위치로 표시될 좌표의 위도, 경도를 설정
                 tMapView.setCenterPoint(longitude, latitude, true); // 현재 위치로 이동
             }
@@ -509,11 +501,14 @@ public class MainActivity extends AppCompatActivity {
 
     // 현재 위치 가져오기
     public double getNowPointLat() {
-        return location.getLatitude();
+        setGps();
+        return latitude;
     }
 
     public double getNowPointLon() {
-        return location.getLongitude();
+        Log.i("여기다여기다", longitude + "");
+        return longitude;
     }
+
 
 }

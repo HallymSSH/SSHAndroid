@@ -156,7 +156,7 @@ public class RouteActivity extends Activity {
 
 
     }
-    /*
+
     // 현재 위치찾기
     public void setGps() {
         final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -164,10 +164,12 @@ public class RouteActivity extends Activity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // gps로 하기
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener);
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
+            /*
             //현재위치의 좌표를 알수있는 부분
             if (location != null) {
                 nowLat = location.getLatitude();
@@ -175,6 +177,8 @@ public class RouteActivity extends Activity {
                 tMapView.setLocationPoint(nowLat, nowLon); // 현재위치로 표시될 좌표의 위도, 경도를 설정합니다.
                 tMapView.setCenterPoint(nowLat, nowLon, true); // 현재 위치로 이동
             }
+
+             */
 
         }
 
@@ -187,7 +191,7 @@ public class RouteActivity extends Activity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     }; // 현재 위치찾기 끝
-     */
+
 
     // 토글버튼 클릭 시 트래킹모드 설정여부
     public void setTracking(boolean toggle) {

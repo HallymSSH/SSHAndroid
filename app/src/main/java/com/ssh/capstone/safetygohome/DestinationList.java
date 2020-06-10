@@ -1,9 +1,14 @@
 package com.ssh.capstone.safetygohome;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.skt.Tmap.TMapData;
 import com.skt.Tmap.TMapPOIItem;
@@ -41,6 +47,7 @@ public class DestinationList extends AppCompatActivity {
     private String address;
     private Button search_button;
     Location location;
+    MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +80,12 @@ public class DestinationList extends AppCompatActivity {
         listView.setOnItemClickListener((new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                double nowlat = location.getLatitude();;
-                double nowlon = location.getLongitude();
+                double nowlat = ((MainActivity) MainActivity.mContext).getNowPointLat();
+                double nowlon = ((MainActivity) MainActivity.mContext).getNowPointLon();
 
                 if (distanceTo(nowlat, nowlon, adapter.getItem(position).getPoint().getLatitude(), adapter.getItem(position).getPoint().getLongitude()) > 30000) {
+                    Log.i("여기여기여기 " + nowlat + " / " + nowlon + " / " + " / " + adapter.getItem(position).getPoint().getLatitude() + " / " + adapter.getItem(position).getPoint().getLongitude() + " / " + distanceTo(nowlat, nowlon, adapter.getItem(position).getPoint().getLatitude(), adapter.getItem(position).getPoint().getLongitude()), "Here");
+                    // Toast.makeText(getApplicationContext(), " / " + nowlat + " / " + nowlon + " / " + distanceTo(nowlat, nowlon, adapter.getItem(position).getPoint().getLatitude(), adapter.getItem(position).getPoint().getLongitude()), Toast.LENGTH_SHORT).show();
                     new AlertDialog.Builder(DestinationList.this)
                             .setMessage("직선 거리가 30km 이내인 경우에만 도보 길찾기를 제공합니다.")
                             .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -94,7 +103,31 @@ public class DestinationList extends AppCompatActivity {
                 }
             }
         }));
+
     }
+
+    public void setGps() {
+        final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // gps로 하기
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener);
+    }
+
+    private final LocationListener mLocationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+    };
 
     public double distanceTo(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
         Location startPos = new Location("Point A");
