@@ -209,12 +209,12 @@ public class DatabaseClass {
                 endLongitude = temp;
             }
 
-            // 위도 먼저 필터링하고 경도 찾기
+            // 위도 먼저 필터링하고 경도 찾기 2개로함
             //Cursor cursor = db.rawQuery("SELECT * from cctv where lattitude between " + startLatitude + " and " + endLatitude, null);
             Cursor cursor = db.rawQuery("SELECT max(roadAddress) as roadAddress, max(branchAddress) as branchAddress, latitude, longitude, count(latitude) as cnt " +
                     "FROM cctv WHERE latitude BETWEEN " + startLatitude + " AND " + endLatitude + " and longitude BETWEEN " + startLongitude + " AND " + endLongitude + " " +
                     "group by latitude, longitude " +
-                    "order by count(latitude) DESC LIMIT 3", null);
+                    "order by count(latitude) DESC LIMIT 2", null);
             Log.i("커서사이즈", cursor.getCount() + "");
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
@@ -225,6 +225,7 @@ public class DatabaseClass {
 
                 } while (cursor.moveToNext());
             }
+
             cursor.close();
             db.close();
         } catch (StringIndexOutOfBoundsException e) {

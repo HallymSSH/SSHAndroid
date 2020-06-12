@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,10 +12,13 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -62,6 +66,13 @@ public class RouteActivity extends Activity {
         }
 
         // 버튼, 레이아웃
+        ImageButton imageButton1 = (ImageButton) findViewById(R.id.imageButton1r);
+        imageButton1.setImageResource(R.drawable.ic_notification_important_black_24dp);
+        ImageButton imageButton2 = (ImageButton) findViewById(R.id.imageButton2r);
+        imageButton2.setImageResource(R.drawable.ic_notifications_active_24px);
+        ImageButton imageButton3 = (ImageButton) findViewById(R.id.imageButton3r);
+        imageButton3.setImageResource(R.drawable.ic_security_black_24dp);
+
         final ToggleButton tbTracking = (ToggleButton) this.findViewById(R.id.toggleButton);
         LinearLayout routeLayoutTmap = (LinearLayout) findViewById(R.id.routeLayoutTmap);
         tMapView = new TMapView(this);
@@ -72,6 +83,27 @@ public class RouteActivity extends Activity {
 
         // 현재 위치 원형아이콘으로 표시
         tMapView.setIconVisibility(true);
+
+        imageButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) MainActivity.mContext).imagebutton1_click();
+            }
+        });
+
+        imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) MainActivity.mContext).imagebutton2_click();
+            }
+        });
+
+        imageButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) MainActivity.mContext).imagebutton3_click();
+            }
+        });
 
         // DestinationList 클래스에서 선택한 목적지 위도 경도 가져오기
         intent = getIntent();
@@ -111,7 +143,7 @@ public class RouteActivity extends Activity {
                 tMapView.setCenterPoint(longitude, latitude);
                 drawPedestrianPath();
             }
-        }, 3000);  // 2000은 2초를 의미합니다.
+        }, 3000);
 
     }
 
@@ -125,6 +157,25 @@ public class RouteActivity extends Activity {
 
         for (int i = 0; i < cctvList.size(); i++) {
             Log.i(cctvList.get(i) + " / ", "경로경로경로경로");
+        }
+
+        if (cctvList.size() == 2) {
+
+            double distance1 = distanceTo(point1.getLatitude(), point1.getLongitude(), cctvList.get(0).getLatitude(), cctvList.get(0).getLongitude());
+            double distance2 = distanceTo(point1.getLatitude(), point1.getLongitude(), cctvList.get(1).getLatitude(), cctvList.get(1).getLongitude());
+
+            Log.i(distance1 + "distance1", "distance1");
+            Log.i(distance2 + "distance2", "distance2");
+            if (distance1 > distance2) {
+                TMapPoint temp1 = cctvList.get(0);
+                TMapPoint temp2 = cctvList.get(1);
+
+                cctvList.clear();
+                cctvList.add(temp2);
+                cctvList.add(temp1);
+                Log.i(cctvList.get(0) + "0번째임", "0번째임");
+                Log.i(cctvList.get(1) + "1번째임", "1번째임");
+            }
         }
 
         TMapData tmapdata = new TMapData();
@@ -149,12 +200,6 @@ public class RouteActivity extends Activity {
         }
 
 
-    }
-
-    // 현재 위치 지도 중심점으로 설정.
-    public void setNowLocation(double nowPointLat, double nowPointLon) {
-        tMapView.setLocationPoint(nowPointLon, nowPointLat); // 현재위치로 표시될 좌표의 위도, 경도를 설정
-        tMapView.setCenterPoint(nowPointLon, nowPointLat, false); // 현재 위치로 센터포인트 지정
     }
 
     public void setGps() {
@@ -190,11 +235,6 @@ public class RouteActivity extends Activity {
         }
     };
 
-    public void stopLocation(){
-        lm.removeUpdates(mLocationListener);
-    }
-
-
     // 토글버튼 클릭 시 트래킹모드 설정여부
     public void setTracking(boolean toggle) {
         if (toggle == true) { // 트래킹 모드 실행되면 현재위치로 중심점 옮김
@@ -209,6 +249,20 @@ public class RouteActivity extends Activity {
         tMapView.setSightVisible(toggle); // 시야 표출 여부
         tMapView.setTrackingMode(toggle); // --> 트래킹모드 실행. gps 수신될때마다 변경, True일때 실행임
 
+    }
+
+    public double distanceTo(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
+        Location startPos = new Location("Point A");
+        Location endPos = new Location("Point B");
+
+        startPos.setLatitude(startLatitude);
+        startPos.setLongitude(startLongitude);
+        endPos.setLatitude(endLatitude);
+        endPos.setLongitude(endLongitude);
+
+        double distance = startPos.distanceTo(endPos);
+
+        return distance;
     }
 
 }

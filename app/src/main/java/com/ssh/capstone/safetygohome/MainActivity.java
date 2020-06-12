@@ -162,73 +162,21 @@ public class MainActivity extends AppCompatActivity {
         imageButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //show(v);
-                startActivity(Intent_siren);
+                imagebutton1_click();
             }
         });
 
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //show(v);
-                //Toast.makeText(MainActivity.this, address, Toast.LENGTH_SHORT).show();
-                if (bswitch_state == true) {
-                    if (mTimerRunning) {
-                        resetTimer();
-                        mCountDownTimer.cancel();
-                    } else {
-                        SharedPreferences emergency = getSharedPreferences(shared, 0);
-                        String number = emergency.getString("number", "");
-                        state = emergency.getBoolean("smscheck", false);
-                        if (state == true) {                // 경찰
-                            startTimer();
-                        } else if (state == false && number == "") {
-                            Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
-                        } else {
-                            startTimer();
-                        }
-
-                    }
-                } else {
-                    Toast.makeText(MainActivity.this, "설정에서 스위치를 켜세요", Toast.LENGTH_SHORT).show();
-                }
-
-                // 기능 확인시 주석풀고 ㄱㄱ
-                // 문자보내기
+                imagebutton2_click();
             }
         });
 
         imageButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //show(v);
-
-                // 기능확인시 주석 풀고 ㄱㄱ
-
-                if (aswitch_state == true) {
-                    SharedPreferences emergency = getSharedPreferences(shared, 0);
-                    state = emergency.getBoolean("callcheck", false);
-                    String number = emergency.getString("number", "");
-                    if (state == true) {            // 경찰
-                        Toast.makeText(getApplicationContext(), "비상연락", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01092086833"));    // 전화걸기
-                        startActivity(intent);
-                    } else {                        // 사용자 지정 연락
-                        if (number == "") {
-                            Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));    // 전화걸기
-                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-
-                                return;
-                            }
-                            startActivity(intent);
-                        }
-
-                    }
-                } else {
-                    Toast.makeText(MainActivity.this, "설정에서 스위치를 켜세요", Toast.LENGTH_SHORT).show();
-                }
+                imagebutton3_click();
             }
         });
 
@@ -238,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 setGps();
                 tMapView.setLocationPoint(longitude, latitude); // 현재위치로 표시될 좌표의 위도, 경도를 설정
                 tMapView.setCenterPoint(longitude, latitude, false); // 현재 위치로 이동
-                Toast.makeText(getApplicationContext(), "현재위치", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "현재위치", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -251,6 +199,60 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public void imagebutton1_click() {
+        startActivity(Intent_siren);
+    }
+
+    public void imagebutton2_click() {
+        if (bswitch_state == true) {
+            if (mTimerRunning) {
+                resetTimer();
+                mCountDownTimer.cancel();
+            } else {
+                SharedPreferences emergency = getSharedPreferences(shared, 0);
+                String number = emergency.getString("number", "");
+                state = emergency.getBoolean("smscheck", false);
+                if (state == true) {                // 경찰
+                    startTimer();
+                } else if (state == false && number == "") {
+                    Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
+                } else {
+                    startTimer();
+                }
+
+            }
+        } else {
+            Toast.makeText(MainActivity.this, "설정에서 스위치를 켜세요", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void imagebutton3_click() {
+        if (aswitch_state == true) {
+            SharedPreferences emergency = getSharedPreferences(shared, 0);
+            state = emergency.getBoolean("callcheck", false);
+            String number = emergency.getString("number", "");
+            if (state == true) {            // 경찰
+                Toast.makeText(getApplicationContext(), "비상연락", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01092086833"));    // 전화걸기
+                startActivity(intent);
+            } else {                        // 사용자 지정 연락
+                if (number == "") {
+                    Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));    // 전화걸기
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                        return;
+                    }
+                    startActivity(intent);
+                }
+
+            }
+        } else {
+            Toast.makeText(MainActivity.this, "설정에서 스위치를 켜세요", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void setTime(long milliseconds) {
         mStartTimeInMillis = milliseconds;

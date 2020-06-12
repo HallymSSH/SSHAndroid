@@ -22,6 +22,7 @@
         app:layout_constraintVertical_bias="0.0">
 
 
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -68,10 +69,24 @@
         android:id="@+id/imageButton5"
         android:layout_width="382dp"
         android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:background="#00FFFFFF"
+        android:text="장소, 주소 검색"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/linearLayoutTmap"
-        app:srcCompat="@android:drawable/toast_frame" />
+        app:srcCompat="@drawable/border" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="351dp"
+        android:layout_height="19dp"
+        android:text="장소, 주소 검색"
+        app:layout_constraintBottom_toBottomOf="@+id/imageButton5"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton5"
+        app:layout_constraintStart_toStartOf="@+id/imageButton5"
+        app:layout_constraintTop_toTopOf="@+id/imageButton5" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"

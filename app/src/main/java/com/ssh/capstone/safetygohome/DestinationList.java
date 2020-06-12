@@ -89,8 +89,8 @@ public class DestinationList extends AppCompatActivity {
                     new AlertDialog.Builder(DestinationList.this)
                             .setMessage("직선 거리가 30km 이내인 경우에만 도보 길찾기를 제공합니다.")
                             .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which){
-                                    Toast.makeText(getApplicationContext(), "확인버튼눌렀을때!@!@!@!@!@", Toast.LENGTH_SHORT).show();
+                                public void onClick(DialogInterface dialog, int which) {
+
                                 }
                             })
                             .show();
@@ -101,8 +101,7 @@ public class DestinationList extends AppCompatActivity {
                     startActivity(intent);
 
                      */
-                }
-                else {
+                } else {
                     Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
                     intent.putExtra("getLat", adapter.getItem(position).getPoint().getLatitude());
                     intent.putExtra("getLon", adapter.getItem(position).getPoint().getLongitude());
@@ -112,29 +111,6 @@ public class DestinationList extends AppCompatActivity {
         }));
 
     }
-
-    public void setGps() {
-        final LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // gps로 하기
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener);
-    }
-
-    private final LocationListener mLocationListener = new LocationListener() {
-        public void onLocationChanged(Location location) {
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-    };
 
     public double distanceTo(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
         Location startPos = new Location("Point A");
