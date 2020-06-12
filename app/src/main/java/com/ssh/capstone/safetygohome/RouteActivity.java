@@ -207,7 +207,7 @@ public class RouteActivity extends Activity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener); // 휴대폰으로 옮길 때 활성화 하기
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener); // 휴대폰으로 옮길 때 활성화 하기
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, mLocationListener); // 이거 네트워크 위치 잡는거
 
     }
@@ -240,9 +240,9 @@ public class RouteActivity extends Activity {
         if (toggle == true) { // 트래킹 모드 실행되면 현재위치로 중심점 옮김
             setGps();
             tMapView.setCenterPoint(longitude, latitude);
-            Toast.makeText(getApplicationContext(), "트래킹모드 true", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "트래킹모드 활성화", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), "트래킹모드 false", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "트래킹모드 비활성화", Toast.LENGTH_SHORT).show();
         }
 
         tMapView.setCompassMode(toggle);

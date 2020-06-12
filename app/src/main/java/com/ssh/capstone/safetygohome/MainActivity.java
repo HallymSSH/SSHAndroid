@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
         // 사이렌, 긴급상황, 경찰서, 메뉴버튼
         ImageButton imageButton1 = (ImageButton) findViewById(R.id.imageButton1);
         ImageButton imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
@@ -186,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
                 setGps();
                 tMapView.setLocationPoint(longitude, latitude); // 현재위치로 표시될 좌표의 위도, 경도를 설정
                 tMapView.setCenterPoint(longitude, latitude, false); // 현재 위치로 이동
-                //Toast.makeText(getApplicationContext(), "현재위치", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -323,7 +321,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mTextViewCountDown.setTextColor(textColorDefault);
         }
-        //Toast.makeText(this, String.valueOf(minutes), Toast.LENGTH_SHORT).show();
         mTextViewCountDown.setText(timeLeftFormatted);
 
     }
