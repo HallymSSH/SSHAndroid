@@ -245,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     startActivity(intent);
                 }
-
             }
         } else {
             Toast.makeText(MainActivity.this, "설정에서 스위치를 켜세요", Toast.LENGTH_SHORT).show();
@@ -271,16 +270,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 mTimerRunning = false;
-
                 SharedPreferences emergency = getSharedPreferences(shared, 0);
                 state = emergency.getBoolean("smscheck", false);
                 String number = emergency.getString("number", "");
                 if (state == true) {                // 경찰
-                    if (number == "") {
-                        Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
-                    }
                     Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
-                    sendSMS("821092086833", address);      // 문자보내기
+                    sendSMS("821092086833", address+ "주소 테스트 입니다.");      // 문자보내기
                 } else {                            // 사용자 지정 연락처
                     if (number == "") {
                         Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();

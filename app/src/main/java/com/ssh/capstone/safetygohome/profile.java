@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +30,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -143,10 +146,10 @@ public class profile extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
                             case R.id.Album:    // 앨범에서 가져오기
-                                Intent albom = new Intent(Intent.ACTION_PICK);
-                                albom.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                albom.setType("image/*");
-                                startActivityForResult(albom, GET_GALLERY_IMAGE);
+                                Intent gallery = new Intent(Intent.ACTION_PICK);
+                                gallery.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                gallery.setType("image/*");
+                                startActivityForResult(gallery, GET_GALLERY_IMAGE);
                                 break;
                             case R.id.basic:            // 기본이미지 설정
                                 profile_view.setImageResource(R.drawable.profile_icon);
@@ -173,7 +176,7 @@ public class profile extends AppCompatActivity {
                         profile.this,
                         android.R.style.Theme_DeviceDefault_Light_Dialog,listener,
                         year,month,day);
-                //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
                 dialog.show();
             }
         });
@@ -227,6 +230,7 @@ public class profile extends AppCompatActivity {
                 {
                     case  GET_GALLERY_IMAGE:
                         try{
+
                             InputStream in = getContentResolver().openInputStream(data.getData());
                             img = BitmapFactory.decodeStream(in);           // 비트맵으로 만들어서 저장
                             in.close();
@@ -244,8 +248,6 @@ public class profile extends AppCompatActivity {
                 }
             }
     }
-
-
 
     public void inputname() {
         FrameLayout container = new FrameLayout(this);
