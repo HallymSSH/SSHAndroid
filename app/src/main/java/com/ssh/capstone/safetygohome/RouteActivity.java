@@ -118,7 +118,7 @@ public class RouteActivity extends Activity {
         tMapView.setTMapPathIcon(start, end, pass);
 
         // 목적지 위도 경도 팝업 테스트용
-        Toast.makeText(getApplicationContext(), destLat + " / " + destLon, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getApplicationContext(), destLat + " / " + destLon, Toast.LENGTH_SHORT).show();
 
         // 목적지까지 라인 그리기
         // drawPedestrianPath(); 여기 주석처리여기 주석처리여기 주석처리
