@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import com.skt.Tmap.TMapPoint;
 import com.ssh.capstone.safetygohome.ContactData;
 
@@ -85,6 +84,31 @@ public class DatabaseClass {
         return true;
     }
 
+    //중복 저장 방지를 위한 검색
+    public boolean SearchUserForSave(String username, String usernum) {
+        try {
+            tableData = new TableData(m_ctx);
+
+            SQLiteDatabase db = tableData.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery("SELECT user_name, user_num from user_info WHERE user_name = '" + username + "' AND user_num = '" + usernum+"'", null);
+
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                 return false;
+            }
+            cursor.close();
+            db.close();
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.w("StrIdxOutOfBoundsExcept", e.getMessage());
+            return false;
+        } finally {
+            tableData.close();
+        }
+
+        return true;
+    }
+
     //데이터를 새로 추가할때 사용하는 함수
     public boolean SaveUser(String name, String num) {
         String query = null;
@@ -93,8 +117,12 @@ public class DatabaseClass {
             tableData = new TableData(m_ctx);
             SQLiteDatabase db = tableData.getReadableDatabase();
 
-            db.execSQL("insert into user_info (user_name, user_num) values ('" + name + "', '" + num + "')");
-            db.close();
+            boolean exist = SearchUserForSave(name,num);
+
+            if(exist == true) {
+                db.execSQL("insert into user_info (user_name, user_num) values ('" + name + "', '" + num + "')");
+                db.close();
+            }
         } catch (Exception e) {
             Log.w("Except", e.getMessage());
             return false;
