@@ -64,7 +64,7 @@
         app:layout_constraintStart_toEndOf="@id/imageButton1r"
         app:layout_constraintTop_toTopOf="@id/guideline"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_notifications_active_24px" />
+        app:srcCompat="@drawable/ic_baseline_local_post_office_24" />
 
     <TextView
         android:id="@+id/textView6"
@@ -88,7 +88,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageButton2r"
         app:layout_constraintTop_toTopOf="@id/guideline"
-        app:srcCompat="@drawable/ic_security_black_24dp" />
+        app:srcCompat="@drawable/ic_baseline_call_24" />
 
     <TextView
         android:id="@+id/textView7"
@@ -119,12 +119,14 @@
 
     <ToggleButton
         android:id="@+id/toggleButton"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/ic_tracking_on_off_button"
         android:text="ToggleButton"
+        android:textOn=""
+        android:textOff=""
         app:backgroundTint="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="@+id/routeLayoutTmap" />
