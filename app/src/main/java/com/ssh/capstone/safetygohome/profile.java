@@ -63,30 +63,30 @@ public class profile extends AppCompatActivity {
     Drawable temp2;
 
 
-   @Override
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_view);
         setting();
         setListener();
 
-       profile_view.setImageResource(R.drawable.profile_icon);
-       temp2 = getResources().getDrawable(R.drawable.profile_icon);
-       img = ((BitmapDrawable)temp2).getBitmap();
-       SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
-       String name = sharedPreferences.getString("name","");
-       String Birthday = sharedPreferences.getString("birthday","");
-       String sex = sharedPreferences.getString("sex","");
-       String Post1 = sharedPreferences.getString("post1","");
-       String Post2 = sharedPreferences.getString("post2","");
-       String profileimg = sharedPreferences.getString("profileimg","");
+        profile_view.setImageResource(R.drawable.profile_icon);
+        temp2 = getResources().getDrawable(R.drawable.profile_icon);
+        img = ((BitmapDrawable) temp2).getBitmap();
+        SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
+        String name = sharedPreferences.getString("name", "");
+        String Birthday = sharedPreferences.getString("birthday", "");
+        String sex = sharedPreferences.getString("sex", "");
+        String Post1 = sharedPreferences.getString("post1", "");
+        String Post2 = sharedPreferences.getString("post2", "");
+        String profileimg = sharedPreferences.getString("profileimg", "");
 
-       text_name.setText(name);
-       textView_Date.setText(Birthday);
-       textView_sex.setText(sex);
-       daum_result.setText(Post1);
-       daum_result2.setText(Post2);
-       profile_view.setImageBitmap(decodeBase64(profileimg));
+        text_name.setText(name);
+        textView_Date.setText(Birthday);
+        textView_sex.setText(sex);
+        daum_result.setText(Post1);
+        daum_result2.setText(Post2);
+        profile_view.setImageBitmap(decodeBase64(profileimg));
     }
 
     @Override
@@ -100,11 +100,11 @@ public class profile extends AppCompatActivity {
         String sex = textView_sex.getText().toString();
         String Post1 = daum_result.getText().toString();
         String Post2 = daum_result2.getText().toString();
-        editor.putString("post2",Post2);
-        editor.putString("post1",Post1);
-        editor.putString("sex",sex);
-        editor.putString("birthday",Birthday);
-        editor.putString("name",name);
+        editor.putString("post2", Post2);
+        editor.putString("post1", Post1);
+        editor.putString("sex", sex);
+        editor.putString("birthday", Birthday);
+        editor.putString("name", name);
         editor.putString("profileimg", encodeTobase64(img));
         editor.commit();
     }
@@ -114,16 +114,16 @@ public class profile extends AppCompatActivity {
         btn_birthday = (Button) findViewById(R.id.btn_birthday);
         btn_sex = (Button) findViewById(R.id.btn_sex);
         profile_view = (CircleImageView) findViewById((R.id.profile_image));
-        textView_Date = (TextView)findViewById(R.id.birthday);
+        textView_Date = (TextView) findViewById(R.id.birthday);
         textView_sex = (TextView) findViewById(R.id.textView_sex);
         text_name = (TextView) findViewById(R.id.textView);
         daum_result = (TextView) findViewById(R.id.daum_result);
         daum_result2 = (TextView) findViewById(R.id.daum_result2);
-        daum_view = new Intent(getApplicationContext(),daumView.class);
+        daum_view = new Intent(getApplicationContext(), daumView.class);
         listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                textView_Date.setText(year+"년 "+(month+1)+"월 "+dayOfMonth+"일 ");
+                textView_Date.setText(year + "년 " + (month + 1) + "월 " + dayOfMonth + "일 ");
 
             }
         };
@@ -139,12 +139,12 @@ public class profile extends AppCompatActivity {
         profile_view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(getApplicationContext(),v);
+                PopupMenu popupMenu = new PopupMenu(getApplicationContext(), v);
                 getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()){
+                        switch (item.getItemId()) {
                             case R.id.Album:    // 앨범에서 가져오기
                                 Intent gallery = new Intent(Intent.ACTION_PICK);
                                 gallery.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -174,8 +174,8 @@ public class profile extends AppCompatActivity {
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         profile.this,
-                        android.R.style.Theme_DeviceDefault_Light_Dialog,listener,
-                        year,month,day);
+                        android.R.style.Theme_DeviceDefault_Light_Dialog, listener,
+                        year, month, day);
 
                 dialog.show();
             }
@@ -184,7 +184,7 @@ public class profile extends AppCompatActivity {
         btn_sex.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String [] items = {"남성","여성"};
+                final String[] items = {"남성", "여성"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(profile.this);
                 builder.setTitle("성별을 선택하세요");
                 builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
@@ -208,7 +208,7 @@ public class profile extends AppCompatActivity {
         daum_result.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(daum_view,GET_ADDRESS);
+                startActivityForResult(daum_view, GET_ADDRESS);
             }
         });
 
@@ -224,29 +224,26 @@ public class profile extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            if (resultCode == RESULT_OK)
-            {
-                switch(requestCode)
-                {
-                    case  GET_GALLERY_IMAGE:
-                        try{
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case GET_GALLERY_IMAGE:
+                    try {
 
-                            InputStream in = getContentResolver().openInputStream(data.getData());
-                            img = BitmapFactory.decodeStream(in);           // 비트맵으로 만들어서 저장
-                            in.close();
-                            profile_view.setImageBitmap(img);
+                        InputStream in = getContentResolver().openInputStream(data.getData());
+                        img = BitmapFactory.decodeStream(in);           // 비트맵으로 만들어서 저장
+                        in.close();
+                        profile_view.setImageBitmap(img);
 
-                        } catch (Exception e)
-                        {
-                        }
+                    } catch (Exception e) {
+                    }
 
-                        break;
-                    case GET_ADDRESS:
-                        daum_result.setText(data.getStringExtra("result"));
-                        break;
+                    break;
+                case GET_ADDRESS:
+                    daum_result.setText(data.getStringExtra("result"));
+                    break;
 
-                }
             }
+        }
     }
 
     public void inputname() {
@@ -257,7 +254,7 @@ public class profile extends AppCompatActivity {
         params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
         editText.setLayoutParams(params);
         container.addView(editText);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
         builder.setView(container);
         builder.setTitle("이름 입력").setMessage("변경할 이름을 입력하세요");
 
@@ -281,12 +278,12 @@ public class profile extends AppCompatActivity {
 
         FrameLayout container = new FrameLayout(this);
         final EditText editText = new EditText(this);
-        FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
         params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
         editText.setLayoutParams(params);
         container.addView(editText);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
         builder.setView(container);
         builder.setTitle("상세 주소 입력").setMessage("나머지 주소를 입력하세요");
 
@@ -308,7 +305,7 @@ public class profile extends AppCompatActivity {
     }
 
     public static String encodeTobase64(Bitmap image) {
-       Bitmap immage = image;
+        Bitmap immage = image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         immage.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] b = baos.toByteArray();

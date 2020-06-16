@@ -16,11 +16,11 @@ import java.util.ArrayList;
 
 public class Contact_modify extends AppCompatActivity {
 
-    FrameLayout btn_yes,btn_no;
+    FrameLayout btn_yes, btn_no;
     EditText edit_name, edit_num;
-    String getName,getNum;          //수정할 사용자 정보
+    String getName, getNum;          //수정할 사용자 정보
     String name, num;               //바뀐 사용자 정보
-    Intent ToBook,FromBook;
+    Intent ToBook, FromBook;
     private DatabaseClass db;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +32,17 @@ public class Contact_modify extends AppCompatActivity {
     }
 
     public void setting() {
-        btn_yes = (FrameLayout)findViewById(R.id.btn_modify_yes);
-        btn_no = (FrameLayout)findViewById(R.id.btn_modify_no);
-        edit_name = (EditText)findViewById(R.id.edit_modify_name);
-        edit_num = (EditText)findViewById(R.id.edit_modify_num);
+        btn_yes = (FrameLayout) findViewById(R.id.btn_modify_yes);
+        btn_no = (FrameLayout) findViewById(R.id.btn_modify_no);
+        edit_name = (EditText) findViewById(R.id.edit_modify_name);
+        edit_num = (EditText) findViewById(R.id.edit_modify_num);
         ToBook = new Intent(com.ssh.capstone.safetygohome.Contact_modify.this,
                 com.ssh.capstone.safetygohome.contactbook_window.class);
         db = new DatabaseClass(this);
         FromBook = getIntent();
 
         getName = FromBook.getStringExtra("user_name");
-        getNum  = FromBook.getStringExtra("user_num");
+        getNum = FromBook.getStringExtra("user_num");
 
         edit_name.setText(getName);
         edit_num.setText(getNum);
@@ -69,7 +69,7 @@ public class Contact_modify extends AppCompatActivity {
         });
     }
 
-    public void Modify(){
+    public void Modify() {
         ArrayList<String> user_send = new ArrayList<>();
         name = edit_name.getText().toString();
         num = edit_num.getText().toString();

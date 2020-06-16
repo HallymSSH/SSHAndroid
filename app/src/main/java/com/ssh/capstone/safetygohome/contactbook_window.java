@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ssh.capstone.safetygohome.Database.DatabaseClass;
+
 import static com.ssh.capstone.safetygohome.Database.PreParingDB.initDB;
 
 public class contactbook_window extends AppCompatActivity {
@@ -55,11 +56,11 @@ public class contactbook_window extends AppCompatActivity {
         addItem();
     }
 
-    public void setting(){
-        btn_add2 = (FloatingActionButton)findViewById(R.id.floatingActionButton2);
+    public void setting() {
+        btn_add2 = (FloatingActionButton) findViewById(R.id.floatingActionButton2);
         btn_delete = (Button) findViewById(R.id.btn_delete);
-        edit_search = (EditText)findViewById(R.id.edit_search);
-        contact_listView = (ListView)findViewById(R.id.contact_listview);
+        edit_search = (EditText) findViewById(R.id.edit_search);
+        contact_listView = (ListView) findViewById(R.id.contact_listview);
         ToAdd = new Intent(com.ssh.capstone.safetygohome.contactbook_window.this,
                 com.ssh.capstone.safetygohome.listview_add.class);
         FromAdd = getIntent();
@@ -70,7 +71,7 @@ public class contactbook_window extends AppCompatActivity {
     }
 
     //listener 설정
-    public void setlistener(){
+    public void setlistener() {
 
         btn_add2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,9 +93,11 @@ public class contactbook_window extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 searchItem(edit_search.getText().toString());
@@ -104,10 +107,10 @@ public class contactbook_window extends AppCompatActivity {
     }
 
     //db 파일에서 가져온 정보를 listview 로
-    public void setlistview(){
-        db.GetUser(username,usernum);
+    public void setlistview() {
+        db.GetUser(username, usernum);
 
-        for(int i=0; i<username.size();i++) {
+        for (int i = 0; i < username.size(); i++) {
             adapter.addItem(username.get(i), usernum.get(i));
             items.add(new ContactData(username.get(i), usernum.get(i)));
         }
@@ -115,29 +118,29 @@ public class contactbook_window extends AppCompatActivity {
     }
 
     //새 정보 추가하기
-    public void addItem(){
+    public void addItem() {
         name = FromAdd.getStringExtra("name");
         num = FromAdd.getStringExtra("num");
 
-        if(name != null && num != null){
-            Log.i(name,num);
+        if (name != null && num != null) {
+            Log.i(name, num);
             db.SaveUser(name, num);
         }
         setlistview();
     }
 
     //정보 삭제하기
-    public void deleteItem(){
-        int count = adapter.getCount() ;
+    public void deleteItem() {
+        int count = adapter.getCount();
 
         item_position = adapter.getItems();
 
-        for(int i=0; i<items.size();i++){
-            Log.i(i+"번째 : ", items.get(i).getName()+"");
-            Log.i(i+"번째 : ", item_position.get(i)+"");
+        for (int i = 0; i < items.size(); i++) {
+            Log.i(i + "번째 : ", items.get(i).getName() + "");
+            Log.i(i + "번째 : ", item_position.get(i) + "");
         }
 
-        if(count > 0){
+        if (count > 0) {
             adapter.clear();
             db.DeleteUser(items, item_position);
             setlistview();
@@ -152,7 +155,7 @@ public class contactbook_window extends AppCompatActivity {
         adapter.clear();
 
         //검색창이 비었을 경우 보든 데이터를 가져온다
-        if(name.equals(""))
+        if (name.equals(""))
             setlistview();
 
             //검색창에 입력이 되면 해당 값을 검색함

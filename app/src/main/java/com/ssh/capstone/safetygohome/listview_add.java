@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 
 public class listview_add extends Activity {
 
-    FrameLayout btn_yes,btn_no, btn_tobook;
+    FrameLayout btn_yes, btn_no, btn_tobook;
     EditText edit_name, edit_num;
     String name, num;
     Intent ToBook;
@@ -29,10 +29,10 @@ public class listview_add extends Activity {
 
     //디스플레이 사이즈를 세팅
     private void setDisplaysize() {
-        WindowManager.LayoutParams layoutParams= new WindowManager.LayoutParams();
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
 
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        layoutParams.dimAmount= 0.7f;
+        layoutParams.dimAmount = 0.7f;
         getWindow().setAttributes(layoutParams);
 
         setContentView(R.layout.layout_add);
@@ -50,11 +50,11 @@ public class listview_add extends Activity {
     }
 
     public void setting() {
-        btn_yes = (FrameLayout)findViewById(R.id.btn_yes);
-        btn_no = (FrameLayout)findViewById(R.id.btn_no);
-        btn_tobook = (FrameLayout)findViewById(R.id.btn_tobook);
-        edit_name = (EditText)findViewById(R.id.edit_name);
-        edit_num = (EditText)findViewById(R.id.edit_num);
+        btn_yes = (FrameLayout) findViewById(R.id.btn_yes);
+        btn_no = (FrameLayout) findViewById(R.id.btn_no);
+        btn_tobook = (FrameLayout) findViewById(R.id.btn_tobook);
+        edit_name = (EditText) findViewById(R.id.edit_name);
+        edit_num = (EditText) findViewById(R.id.edit_num);
         ToBook = new Intent(com.ssh.capstone.safetygohome.listview_add.this,
                 com.ssh.capstone.safetygohome.contactbook_window.class);
     }
@@ -89,7 +89,7 @@ public class listview_add extends Activity {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(intent,0);
+                startActivityForResult(intent, 0);
             }
         });
     }
@@ -97,9 +97,9 @@ public class listview_add extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             Cursor cursor = getContentResolver().query(data.getData(), new String[]{ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                    ContactsContract.CommonDataKinds.Phone.NUMBER},null,null,null);
+                    ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null, null);
             cursor.moveToFirst();
             String sName = cursor.getString(0);
             String sNumber = cursor.getString(1);

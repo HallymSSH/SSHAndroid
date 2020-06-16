@@ -19,7 +19,7 @@ import androidx.annotation.Nullable;
 
 public class Emergencysms extends Activity {
 
-    Button close,save,btn_contect;
+    Button close, save, btn_contect;
     RadioGroup radioGroup;
     RadioButton police, rd_contact;
     EditText smsname, smsnum;
@@ -40,13 +40,12 @@ public class Emergencysms extends Activity {
         int width = (int) (dm.widthPixels * 0.8); // Display 사이즈의 90%(가로)
         getWindow().getAttributes().width = width;
 
-        //getWindow().getAttributes().height = height;
         setting();
         setlistner();
         SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
-        String Name = sharedPreferences.getString("name","");
-        String number = sharedPreferences.getString("number","");
-        Boolean State = sharedPreferences.getBoolean("smscheck",false);
+        String Name = sharedPreferences.getString("name", "");
+        String number = sharedPreferences.getString("number", "");
+        Boolean State = sharedPreferences.getBoolean("smscheck", false);
 
         if (State == true) {
             police.setChecked(true);
@@ -65,7 +64,7 @@ public class Emergencysms extends Activity {
         close = (Button) findViewById(R.id.btn_smsclose);
         save = (Button) findViewById(R.id.btn_smssave);
         btn_contect = (Button) findViewById(R.id.btn_smscontact);
-        intent = new Intent(getApplicationContext(),PreferenceActivity.class);
+        intent = new Intent(getApplicationContext(), PreferenceActivity.class);
         smsname = (EditText) findViewById(R.id.text_smsname);
         smsnum = (EditText) findViewById(R.id.text_smsnum);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupsms);
@@ -92,16 +91,16 @@ public class Emergencysms extends Activity {
                     String Name = smsname.getText().toString();
                     String Number = smsnum.getText().toString();
                     Boolean State = state;
-                    editor.putString("smsname",Name);
-                    editor.putString("smsnumber",Number);
-                    editor.putBoolean("smscheck",State);
+                    editor.putString("smsname", Name);
+                    editor.putString("smsnumber", Number);
+                    editor.putBoolean("smscheck", State);
                 } else {
                     String Name = smsname.getText().toString();
                     String Number = smsnum.getText().toString();
                     Boolean State = state;
-                    editor.putString("smsname",Name);
-                    editor.putString("smsnumber",Number);
-                    editor.putBoolean("smscheck",State);
+                    editor.putString("smsname", Name);
+                    editor.putString("smsnumber", Number);
+                    editor.putBoolean("smscheck", State);
                 }
 
                 editor.commit();
@@ -116,7 +115,7 @@ public class Emergencysms extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-                startActivityForResult(intent,0);
+                startActivityForResult(intent, 0);
 
             }
         });
@@ -124,13 +123,10 @@ public class Emergencysms extends Activity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == R.id.radiosms){
+                if (checkedId == R.id.radiosms) {
                     state = true;
-                    //Toast.makeText(Emergencycall.this, "112입니다.", Toast.LENGTH_SHORT).show();
-                }
-                else if(checkedId == R.id.radiosms2) {
+                } else if (checkedId == R.id.radiosms2) {
                     state = false;
-                    //Toast.makeText(Emergencycall.this, "사용자 연락처입니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -139,9 +135,9 @@ public class Emergencysms extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             Cursor cursor = getContentResolver().query(data.getData(), new String[]{ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                    ContactsContract.CommonDataKinds.Phone.NUMBER},null,null,null);
+                    ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null, null);
             cursor.moveToFirst();
             String sName = cursor.getString(0);
             String sNumber = cursor.getString(1);

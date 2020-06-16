@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class ContactAdapter extends BaseAdapter {
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
-    private ArrayList<ContactData> listViewItemList = new ArrayList<ContactData>() ;
+    private ArrayList<ContactData> listViewItemList = new ArrayList<ContactData>();
     ArrayList<Boolean> tag_position = new ArrayList<>();
 
     // ListViewAdapter의 생성자
@@ -25,7 +25,7 @@ public class ContactAdapter extends BaseAdapter {
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
     @Override
     public int getCount() {
-        return listViewItemList.size() ;
+        return listViewItemList.size();
     }
 
     // position에 위치한 데이터를 화면에 출력하는데 사용될 View를 리턴. : 필수 구현
@@ -41,9 +41,9 @@ public class ContactAdapter extends BaseAdapter {
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        TextView txt_name = (TextView) convertView.findViewById(R.id.txt_name) ;
-        TextView txt_num = (TextView) convertView.findViewById(R.id.txt_num) ;
-        CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.CheckBox);
+        TextView txt_name = (TextView) convertView.findViewById(R.id.txt_name);
+        TextView txt_num = (TextView) convertView.findViewById(R.id.txt_num);
+        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.CheckBox);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         ContactData listViewItem = listViewItemList.get(position);
@@ -59,10 +59,10 @@ public class ContactAdapter extends BaseAdapter {
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Tag! : ", v.getTag()+"");
-                if(tag_position.get((Integer) v.getTag()) == false)
+                Log.i("Tag! : ", v.getTag() + "");
+                if (tag_position.get((Integer) v.getTag()) == false)
                     tag_position.set((Integer) v.getTag(), true);
-                else if(tag_position.get((Integer) v.getTag()) == true)
+                else if (tag_position.get((Integer) v.getTag()) == true)
                     tag_position.set((Integer) v.getTag(), false);
             }
         });
@@ -73,8 +73,8 @@ public class ContactAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), Contact_modify.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("user_name",listViewItemList.get(position).getName());
-                intent.putExtra("user_num",listViewItemList.get(position).getNum());
+                intent.putExtra("user_name", listViewItemList.get(position).getName());
+                intent.putExtra("user_num", listViewItemList.get(position).getNum());
                 context.startActivity(intent);
             }
         });
@@ -84,8 +84,8 @@ public class ContactAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), Contact_modify.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("user_name",listViewItemList.get(position).getName());
-                intent.putExtra("user_num",listViewItemList.get(position).getNum());
+                intent.putExtra("user_name", listViewItemList.get(position).getName());
+                intent.putExtra("user_num", listViewItemList.get(position).getNum());
                 context.startActivity(intent);
             }
         });
@@ -102,14 +102,14 @@ public class ContactAdapter extends BaseAdapter {
     // 지정한 위치(position)에 있는 데이터 리턴 : 필수 구현
     @Override
     public Object getItem(int position) {
-        return listViewItemList.get(position) ;
+        return listViewItemList.get(position);
     }
 
-    public boolean isChecked(int position){
+    public boolean isChecked(int position) {
         return listViewItemList.get(position).getChecked();
     }
 
-    public ArrayList<Boolean> getItems(){
+    public ArrayList<Boolean> getItems() {
         return tag_position;
     }
 
@@ -123,7 +123,7 @@ public class ContactAdapter extends BaseAdapter {
         listViewItemList.add(item);
     }
 
-    public void clear(){
+    public void clear() {
         listViewItemList.clear();
     }
 }

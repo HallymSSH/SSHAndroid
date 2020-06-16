@@ -94,13 +94,7 @@ public class DestinationList extends AppCompatActivity {
                                 }
                             })
                             .show();
-                    /*
-                    Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
-                    intent.putExtra("getLat", adapter.getItem(position).getPoint().getLatitude());
-                    intent.putExtra("getLon", adapter.getItem(position).getPoint().getLongitude());
-                    startActivity(intent);
 
-                     */
                 } else {
                     Intent intent = new Intent(getApplicationContext(), RouteActivity.class);
                     intent.putExtra("getLat", adapter.getItem(position).getPoint().getLatitude());

@@ -14,11 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Siren_select extends AppCompatActivity {
-    Button btn_back,btn_siren1,btn_siren2,btn_siren3,btn_select1,btn_select2,btn_select3;
+    Button btn_back, btn_siren1, btn_siren2, btn_siren3, btn_select1, btn_select2, btn_select3;
     MediaPlayer mediaPlayer;
     String shared = "sirenfile";
     String result;
-    Boolean state1,state2,state3;
+    Boolean state1, state2, state3;
     SeekBar seekBar;
     AudioManager audioManager;
     int nMax;
@@ -70,7 +70,7 @@ public class Siren_select extends AppCompatActivity {
                 btn_siren1.setSelected(true);
                 btn_siren2.setSelected(false);
                 btn_siren3.setSelected(false);
-                if(mediaPlayer != null) {
+                if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     mediaPlayer = null;
                     btn_siren1.setSelected(false);
@@ -87,7 +87,7 @@ public class Siren_select extends AppCompatActivity {
                 btn_siren1.setSelected(false);
                 btn_siren2.setSelected(true);
                 btn_siren3.setSelected(false);
-                if(mediaPlayer != null) {
+                if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     mediaPlayer = null;
                     btn_siren2.setSelected(false);
@@ -104,7 +104,7 @@ public class Siren_select extends AppCompatActivity {
                 btn_siren1.setSelected(false);
                 btn_siren2.setSelected(false);
                 btn_siren3.setSelected(true);
-                if(mediaPlayer != null) {
+                if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     mediaPlayer = null;
                     btn_siren3.setSelected(false);
@@ -166,7 +166,7 @@ public class Siren_select extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress,0);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
             }
 
             @Override
@@ -185,19 +185,19 @@ public class Siren_select extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mediaPlayer != null) {
+        if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
         }
 
-        if (state1.equals(true)){
-            result="siren1";
-        } else if(state2.equals(true)) {
-            result="siren2";
-        } else if(state3.equals(true)){
-            result="siren3";
+        if (state1.equals(true)) {
+            result = "siren1";
+        } else if (state2.equals(true)) {
+            result = "siren2";
+        } else if (state3.equals(true)) {
+            result = "siren3";
         } else {
-            result="siren3";
+            result = "siren3";
         }
 
 
@@ -208,7 +208,7 @@ public class Siren_select extends AppCompatActivity {
         Boolean select3 = state3;
         String sound = result;
 
-        editor.putString("sound",sound);
+        editor.putString("sound", sound);
         editor.putBoolean("select1", select1);
         editor.putBoolean("select2", select2);
         editor.putBoolean("select3", select3);

@@ -42,20 +42,21 @@ public class PreferenceActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences(emergency, 0);
         String timeset = sharedPreferences.getString("timeset", "30");
-        Boolean aswitch = sharedPreferences.getBoolean("aswitch",false);
-        Boolean bswitch = sharedPreferences.getBoolean("bswitch",false);
+        Boolean aswitch = sharedPreferences.getBoolean("aswitch", false);
+        Boolean bswitch = sharedPreferences.getBoolean("bswitch", false);
         aSwitch.setChecked(aswitch);
         bSwitch.setChecked(bswitch);
         //Toast.makeText(this, timeset, Toast.LENGTH_SHORT).show();
         timeview.setText(timeset);
     }
+
     public void setting() {
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_info = (Button) findViewById(R.id.btn_info);
         btn_siren = (Button) findViewById(R.id.btn_siren);
         btn_emergency = (Button) findViewById(R.id.btn_emergency);
-        To_info = new Intent(getApplicationContext(),profile.class);
-        To_siren = new Intent(getApplicationContext(),Siren_select.class);
+        To_info = new Intent(getApplicationContext(), profile.class);
+        To_siren = new Intent(getApplicationContext(), Siren_select.class);
         To_emergency = new Intent(getApplicationContext(), Emergencycall.class);
         To_emergencysms = new Intent(getApplicationContext(), Emergencysms.class);
         timeview = (TextView) findViewById(R.id.emergency_time);
@@ -137,13 +138,13 @@ public class PreferenceActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void inputtime() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
         builder.setTitle("시간 입력").setMessage("변경할 시간을 입력하세요(분)");
         builder.setView(R.layout.dialog);
         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Dialog f= (Dialog) dialog;
+                Dialog f = (Dialog) dialog;
                 EditText input = (EditText) f.findViewById(R.id.dialogText);
                 int settime = Integer.parseInt(input.getText().toString());
                 String setnumber = String.valueOf(settime);
@@ -171,10 +172,10 @@ public class PreferenceActivity extends AppCompatActivity {
         Boolean aSwitch = aswitch_state;
         Boolean bSwitch = bswitch_state;
         //Toast.makeText(this, timesetting, Toast.LENGTH_SHORT).show();
-        editor.putBoolean("aswitch",aSwitch);
-        editor.putBoolean("bswitch",bSwitch);
+        editor.putBoolean("aswitch", aSwitch);
+        editor.putBoolean("bswitch", bSwitch);
         editor.putInt("timenumber", timeset);
-        editor.putString("timeset",timesetting);
+        editor.putString("timeset", timesetting);
         editor.commit();
     }
 }

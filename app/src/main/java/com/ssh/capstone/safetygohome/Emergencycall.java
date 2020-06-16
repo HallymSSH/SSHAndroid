@@ -22,7 +22,7 @@ import com.ssh.capstone.safetygohome.Database.DatabaseClass;
 import androidx.annotation.Nullable;
 
 public class Emergencycall extends Activity {
-    Button close,save,btn_contect;
+    Button close, save, btn_contect;
     RadioGroup radioGroup;
     RadioButton police, rd_contact;
     EditText name, num;
@@ -44,15 +44,13 @@ public class Emergencycall extends Activity {
         int width = (int) (dm.widthPixels * 0.8); // Display 사이즈의 90%(가로)
         getWindow().getAttributes().width = width;
 
-        //getWindow().getAttributes().height = height;
         setting();
         setlistner();
 
         SharedPreferences sharedPreferences = getSharedPreferences(shared, 0);
-        String Name = sharedPreferences.getString("name","");
-        String number = sharedPreferences.getString("number","");
-        Boolean State = sharedPreferences.getBoolean("callcheck",false);
-        //Toast.makeText(this, Name, Toast.LENGTH_SHORT).show();
+        String Name = sharedPreferences.getString("name", "");
+        String number = sharedPreferences.getString("number", "");
+        Boolean State = sharedPreferences.getBoolean("callcheck", false);
 
         if (State == true) {
             police.setChecked(true);
@@ -65,20 +63,20 @@ public class Emergencycall extends Activity {
         }
     }
 
-     public void setting() {
+    public void setting() {
         close = (Button) findViewById(R.id.btn_close);
         save = (Button) findViewById(R.id.btn_save);
         btn_contect = (Button) findViewById(R.id.btn_contect);
-        intent = new Intent(getApplicationContext(),PreferenceActivity.class);
+        intent = new Intent(getApplicationContext(), PreferenceActivity.class);
         name = (EditText) findViewById(R.id.text_name);
         num = (EditText) findViewById(R.id.text_num);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupcall);
         police = (RadioButton) findViewById(R.id.radiobutton);
         rd_contact = (RadioButton) findViewById(R.id.radiobutton2);
         db = new DatabaseClass(this);
-     }
+    }
 
-     public void setlistner() {
+    public void setlistner() {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,16 +95,16 @@ public class Emergencycall extends Activity {
                     String Name = name.getText().toString();
                     String Number = num.getText().toString();
                     Boolean State = state;
-                    editor.putString("name",Name);
-                    editor.putString("number",Number);
-                    editor.putBoolean("callcheck",State);
+                    editor.putString("name", Name);
+                    editor.putString("number", Number);
+                    editor.putBoolean("callcheck", State);
                 } else {
                     String Name = name.getText().toString();
                     String Number = num.getText().toString();
                     Boolean State = state;
-                    editor.putString("name",Name);
-                    editor.putString("number",Number);
-                    editor.putBoolean("callcheck",State);
+                    editor.putString("name", Name);
+                    editor.putString("number", Number);
+                    editor.putBoolean("callcheck", State);
                 }
                 editor.commit();
                 DbAdd();
@@ -122,7 +120,7 @@ public class Emergencycall extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-                startActivityForResult(intent,0);
+                startActivityForResult(intent, 0);
 
             }
         });
@@ -130,24 +128,21 @@ public class Emergencycall extends Activity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == R.id.radiobutton){
+                if (checkedId == R.id.radiobutton) {
                     state = true;
-                    //Toast.makeText(Emergencycall.this, "112입니다.", Toast.LENGTH_SHORT).show();
-                }
-                else if(checkedId == R.id.radiobutton2) {
+                } else if (checkedId == R.id.radiobutton2) {
                     state = false;
-                    //Toast.makeText(Emergencycall.this, "사용자 연락처입니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-     }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             Cursor cursor = getContentResolver().query(data.getData(), new String[]{ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                    ContactsContract.CommonDataKinds.Phone.NUMBER},null,null,null);
+                    ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null, null);
             cursor.moveToFirst();
             String sName = cursor.getString(0);
             String sNumber = cursor.getString(1);
@@ -158,7 +153,6 @@ public class Emergencycall extends Activity {
     }
 
     public void DbAdd() {
-        //Toast.makeText(this, num.getText().toString(), Toast.LENGTH_SHORT).show();
-        db.SaveUser(name.getText().toString(),num.getText().toString());
+        db.SaveUser(name.getText().toString(), num.getText().toString());
     }
 }

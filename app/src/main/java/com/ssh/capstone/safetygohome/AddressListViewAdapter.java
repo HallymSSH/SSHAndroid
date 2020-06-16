@@ -38,22 +38,8 @@ public class AddressListViewAdapter extends BaseAdapter {
 
         address_name = (TextView) convertView.findViewById(R.id.list_address);
         AddressListViewItem addressListViewItem = getItem(position);
-        // AddressListViewItem addressListViewItem = addressListViewItemList.get(position);
 
         address_name.setText(addressListViewItem.getName());
-
-        /*
-        // 클릭 이벤트
-        address_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoLoute.putExtra("dest", addressListViewItem.getPoint());
-                Toast.makeText(context, addressListViewItem.getPoint().toString(), Toast.LENGTH_SHORT).show(); // // final 붙음
-                gotoLoute = new Intent(com.ssh.capstone.safetygohome.DestinationList.this, com.ssh.capstone.safetygohome.RouteActivity.class);
-            }
-        });
-
-         */
 
         return convertView;
     }

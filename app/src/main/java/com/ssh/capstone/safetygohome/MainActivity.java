@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
                 String number = emergency.getString("number", "");
                 if (state == true) {                // 경찰
                     Toast.makeText(getApplicationContext(), "문자를 보냈습니다.", Toast.LENGTH_LONG).show();
-                    sendSMS("821092086833", address+ "주소 테스트 입니다.");      // 문자보내기
+                    sendSMS("821092086833", address + "주소 테스트 입니다.");      // 문자보내기
                 } else {                            // 사용자 지정 연락처
                     if (number == "") {
                         Toast.makeText(MainActivity.this, "연락처를 설정해주세요", Toast.LENGTH_SHORT).show();
@@ -371,45 +371,6 @@ public class MainActivity extends AppCompatActivity {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
     };
-
-    // 리스너 중단. 아직 사용은안함
-    public void stopLocation(){
-        lm.removeUpdates(mLocationListener);
-    }
-
-
-    protected void show(View view) {
-        String dialogTitle;
-        String dialogText;
-
-        if (view.getId() == R.id.imageButton1) {
-            dialogTitle = "사이렌";
-            dialogText = "사이렌 ㄱㄱ?";
-        } else if (view.getId() == R.id.imageButton2) {
-            dialogTitle = "긴급상황";
-            dialogText = "긴급상황 ㄱㄱ?";
-        } else {
-            dialogTitle = "경찰서 연락";
-            dialogText = "경찰서 ㄱㄱ?";
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(dialogTitle);
-        builder.setMessage(dialogText);
-        builder.setPositiveButton("예",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), "예", Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.setNegativeButton("아니오",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), "아니오", Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.show();
-    }
 
     // 황찬우
     //Button과 Intent 세팅

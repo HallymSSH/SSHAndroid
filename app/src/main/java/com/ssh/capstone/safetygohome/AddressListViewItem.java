@@ -15,8 +15,12 @@ public class AddressListViewItem {
         return this.nameStr;
     }
 
-    public TMapPoint setPoint(TMapPoint point) { return pointStr = point; }
+    public TMapPoint setPoint(TMapPoint point) {
+        return pointStr = point;
+    }
 
-    public TMapPoint getPoint() { return pointStr; }
+    public TMapPoint getPoint() {
+        return pointStr;
+    }
 
 }

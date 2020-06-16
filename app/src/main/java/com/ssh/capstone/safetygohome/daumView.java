@@ -27,7 +27,7 @@ public class daumView extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        WindowManager.LayoutParams layoutParams= new WindowManager.LayoutParams();
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
 
         layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         getWindow().setAttributes(layoutParams);
@@ -42,7 +42,7 @@ public class daumView extends Activity {
     }
 
     @SuppressLint("JavascriptInterface")
-    public void init_webView(){
+    public void init_webView() {
         // WebView 설정
         daum_webView = (WebView) findViewById(R.id.daum_webview);
 
@@ -53,7 +53,7 @@ public class daumView extends Activity {
         daum_webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
         // JavaScript이벤트에 대응할 함수를 정의 한 클래스를 붙임
-        daum_webView.addJavascriptInterface(new AndroidBridge(),"TestApp");
+        daum_webView.addJavascriptInterface(new AndroidBridge(), "TestApp");
         daum_webView.getSettings().setSupportMultipleWindows(false);
 
         // web client를 크롬으로 설정
@@ -72,9 +72,9 @@ public class daumView extends Activity {
                 public void run() {
                     result = String.format("%s %s", arg1, arg2);
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra("result",result);
+                    resultIntent.putExtra("result", result);
                     //daum_result.setText(String.format("%s %s", arg1, arg2));
-                    setResult(RESULT_OK,resultIntent);
+                    setResult(RESULT_OK, resultIntent);
                     // WebView를 초기화 하지않으면 재사용할 수 없음
                     init_webView();
                     finish();
