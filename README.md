@@ -40,6 +40,7 @@
 ## 스크린샷
 ### [PowerPoint Link](https://github.com/HallymSSH/SSHReport/blob/master/Document/SSH_%EC%95%88%EC%8B%AC%EA%B7%80%EA%B0%80%EA%B8%B8_%EC%98%81%EC%83%81%EC%A0%9C%EA%B1%B0.pptx)
 
+![스크린샷0](https://user-images.githubusercontent.com/50908525/85113651-9a0fa380-b252-11ea-90ca-a90c8f8b1316.png)
 ![스크린샷1](https://user-images.githubusercontent.com/50908525/85111575-7bf47400-b24f-11ea-9606-6ba957b7ef9c.png)
 ![스크린샷2](https://user-images.githubusercontent.com/50908525/85111558-77c85680-b24f-11ea-8191-995ebef59307.png)
 ![스크린샷3](https://user-images.githubusercontent.com/50908525/85111562-78f98380-b24f-11ea-9fa6-661eeb3f9ee9.png)
