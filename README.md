@@ -1,7 +1,7 @@
 # 2020년 1학기 한림대학교 소프트웨어융합대학<br>빅데이터 캡스톤디자인
 
 ## 프로젝트명 : 안심귀가길 도보안내
- [안심귀가길 도보안내 (회의 및 보고서 Repository)](https://github.com/HallymSSH/SSHReport)
+[안심귀가길 도보안내 (회의 및 보고서 Repository)](https://github.com/HallymSSH/SSHReport)
 
 ![1](https://user-images.githubusercontent.com/50908525/85112890-549ea680-b251-11ea-8cb3-3dca2931fb4c.png)
 ![2](https://user-images.githubusercontent.com/50908525/85112896-55cfd380-b251-11ea-9373-ca2520a27442.png)
