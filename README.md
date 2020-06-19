@@ -37,6 +37,9 @@
 
 ![그림1](https://user-images.githubusercontent.com/50908525/85111574-7b5bdd80-b24f-11ea-8603-53860f85845d.png)
 
+## 시연 동영상
+### [Link](https://github.com/HallymSSH/SSHReport/tree/master/Document/%EC%8B%9C%EC%97%B0%EB%8F%99%EC%98%81%EC%83%81)
+
 ## 스크린샷
 ### [PowerPoint Link](https://github.com/HallymSSH/SSHReport/blob/master/Document/SSH_%EC%95%88%EC%8B%AC%EA%B7%80%EA%B0%80%EA%B8%B8_%EC%98%81%EC%83%81%EC%A0%9C%EA%B1%B0.pptx)
 
